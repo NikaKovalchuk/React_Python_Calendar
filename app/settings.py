@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
 
-    'app.apps.AppConfig',
     'event',
     'user',
     'home',
@@ -75,7 +74,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'CalendarPR.urls'
+ROOT_URLCONF = 'app.urls'
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
@@ -96,7 +95,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'CalendarPR.wsgi.application'
+WSGI_APPLICATION = 'app.wsgi.application'
 
 
 # Database
