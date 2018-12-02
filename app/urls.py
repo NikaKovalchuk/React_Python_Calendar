@@ -18,10 +18,10 @@ from django.contrib import admin
 
 urlpatterns = [
 
-    url(r'user', include('user.urls')),
+    url(r'user', include('api.user.urls')),
     url(r'user', include('django.contrib.auth.urls')),
     url(r'accounts', include('allauth.urls')),
-    url(r'events', include('event.urls')),
+    url(r'events', include('api.event.urls')),
     url(r'admin', admin.site.urls),
-    url('', include('home.urls')),
+    url('', include('api.home.urls')),
 ]

@@ -1,7 +1,7 @@
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import  Event
-from user.models import CustomUser
+from api.user.models import CustomUser
 from .forms import EventChangeForm, EventCreationForm
 
 def eventList(request):

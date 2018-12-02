@@ -47,9 +47,9 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
 
-    'event',
-    'user',
-    'home',
+    'api.event',
+    'api.user',
+    'api.home',
 ]
 
 AUTH_USER_MODEL = 'user.CustomUser'
@@ -104,7 +104,7 @@ WSGI_APPLICATION = 'app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, '../../db.sqlite3'),
     }
 }
 
