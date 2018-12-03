@@ -142,5 +142,5 @@ class Calendar extends React.Component{
 
 ReactDOM.render(
     <Calendar/>,
-    document.getElementById('root')
+    document.getElementById('menuBar')
 );
