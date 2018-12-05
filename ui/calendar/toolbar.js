@@ -20,26 +20,30 @@ class MenuView extends React.Component{
     createList(){
         var list = []
         for (var i=0; i < 4; i++){
-            list.push(<option>{viewType[i]} la{i}</option>)
+            list.push(<option key={i}>{viewType[i]} la{i}</option>)
         }
         return list
     }
 
     render(){
         return(
-            <select>
-                {this.createList()}
-            </select>
+            <div>
+                <select>
+                    {this.createList()}
+                </select>
+            </div>
         )
     }
 }
 
 class CurrentDate extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      date: this.props.date};
+    constructor(props) {
+        super(props);
+        this.state = {
+            date: this.props.date
+        };
     }
+
   render() {
     return (
         <p>{this.state.date.toDateString()}</p>
@@ -104,26 +108,6 @@ class ControlButton extends React.Component{
   }
 }
 
-class Menu extends React.Component{
-    constructor(props){
-        super(props);
-        this.state = {
-            view: true
-        }
-        this.changeMenuView = this.changeMenuView.bind(this)
-    }
-
-    changeMenuView (){
-        this.state.view = !this.state.view
-    }
-
-    render() {
-        return(
-            <button onClick={this.changeMenuView}> Menu {this.state.view}</button>
-        )
-    }
-}
-
 class Toolbar extends React.Component{
    constructor(props) {
         super(props);
@@ -140,15 +124,24 @@ class Toolbar extends React.Component{
   render() {
     return (
         <div>
-          <Menu/>
-          <CurrentDate date={this.state.today}/>
-          <CurrentDate date={this.state.calendarDate}/>
-          <Today updateDate={this.updateDate} date={this.state.calendarDate}/>
-          <div>
-            <ControlButton type={buttonsType.back} updateDate={this.updateDate} date={this.state.calendarDate}/>
-            <ControlButton type={buttonsType.next} updateDate={this.updateDate} date={this.state.calendarDate}/>
+          <div className="toolbar-element" id="current-date-toolbar" >
+              <CurrentDate id="current-date-toolbar" date={this.state.calendarDate}/>
           </div>
-          <MenuView/>
+
+          <div className="toolbar-element" id="control-buttons-toolbar">
+              <Today id="today" updateDate={this.updateDate} date={this.state.calendarDate}/>
+              <div>
+                <ControlButton className="control-button" type={buttonsType.back} updateDate={this.updateDate} date={this.state.calendarDate}/>
+                <ControlButton className="control-button" type={buttonsType.next} updateDate={this.updateDate} date={this.state.calendarDate}/>
+              </div>
+          </div>
+
+          <div className="toolbar-element" id="menu-toolbar">
+            <MenuView/>
+            <div id="account-toolbar">
+                <p>Account</p>
+            </div>
+          </div>
         </div>
     )
   }

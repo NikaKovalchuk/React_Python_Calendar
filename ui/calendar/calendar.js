@@ -62,26 +62,32 @@ class Month extends React.Component {
   createTable(){
     var dateForCalendar = new Date(this.state.date.getFullYear(), this.state.date.getMonth());
     var row = []
+    var td = 0
+    var tr = 0
     var table = []
     var emptyRows = true
 
     while (dateForCalendar.getMonth() == this.state.date.getMonth()) {
       if (emptyRows){
         for (var i = 0; i < this.getDay(dateForCalendar); i++) {
-          row.push(<td></td>)
+          row.push(<td key={td}></td>)
+          td += 1
         }
         emptyRows = false
       }
       if (!emptyRows){
           if (dateForCalendar.getDate() == this.state.date.getDate())
           {
-            row.push(<td style={{color: 'blue'}}>{dateForCalendar.getDate()}</td>)
+            row.push(<td style={{color: 'blue'}} key={td}>{dateForCalendar.getDate()}</td>)
+            td += 1
           }
           else {
-              row.push(<td>{dateForCalendar.getDate()}</td>)
+              row.push(<td key={td}>{dateForCalendar.getDate()}</td>)
+              td += 1
           }
           if (this.getDay(dateForCalendar) % 7 == 6) {
-            table.push(<tr>{row}</tr>)
+            table.push(<tr key={tr}>{row}</tr>)
+            tr += 1
             row = []
           }
           dateForCalendar.setDate( dateForCalendar.getDate() + 1);
@@ -90,10 +96,11 @@ class Month extends React.Component {
 
     if (this.getDay(dateForCalendar) != 0) {
           for (var i = this.getDay(dateForCalendar); i < 7; i++) {
-            row.push(<td></td>);
+            row.push(<td key={td}></td>);
+            td += 1
           }
         }
-    table.push(<tr>{row}</tr>)
+    table.push(<tr key={tr}>{row}</tr>)
     return table
   }
 
@@ -127,12 +134,12 @@ class Calendar extends React.Component{
   render() {
     return (
         <div>
-          <CurrentDate today={this.state.date}/>
-          <div>
-            <ControlButton type={buttonsType.back} updateDate={this.updateDate} today={this.state.date}/>
-            <ControlButton type={buttonsType.next} updateDate={this.updateDate} today={this.state.date}/>
+          <CurrentDate id="current-date-calendar" today={this.state.date}/>
+          <div id="control-buttons-calendar">
+            <ControlButton className="control-button" type={buttonsType.back} updateDate={this.updateDate} today={this.state.date}/>
+            <ControlButton className="control-button" type={buttonsType.next} updateDate={this.updateDate} today={this.state.date}/>
           </div>
-          <Month today={this.state.date}/>
+          <Month id="current-month-calendar" today={this.state.date}/>
         </div>
     )
   }
