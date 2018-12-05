@@ -5,14 +5,14 @@ from api.user.models import CustomUser
 from .forms import EventChangeForm, EventCreationForm
 
 def eventList(request):
-    events = Event.objects.filter(create_date__lte=timezone.now()).order_by('start_date')
+    events = Event.objects.filter(create_date__lte=timezone.now(), delete=False).order_by('start_date')
     return render(request, 'event/event_list.html', {'events': events})
 
 def event(request, pk):
     event = get_object_or_404(Event, pk=pk)
     return render(request, 'event/event.html', {'event':event})
 
-def editEvent(request, pk):
+def edit(request, pk):
     event = get_object_or_404(Event, pk=pk)
     if request.method == "POST":
         form = EventChangeForm(request.POST, instance=event)
@@ -26,7 +26,7 @@ def editEvent(request, pk):
         form = EventChangeForm(instance=event)
     return render(request, 'event/edit_event.html', {'form': form})
 
-def createEvent(request):
+def create(request):
     if request.method == "POST":
         form = EventCreationForm(request.POST)
         if form.is_valid():
@@ -40,3 +40,10 @@ def createEvent(request):
     else:
         form = EventCreationForm()
     return render(request, 'event/edit_event.html', {'form':form})
+
+def remove(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    event.delete = True
+    event.delete_date = timezone.now()
+    event.save()
+    return eventList(request)
