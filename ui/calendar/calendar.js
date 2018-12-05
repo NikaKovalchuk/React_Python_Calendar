@@ -7,11 +7,23 @@ class CurrentDate extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      date: this.props.today};
+      date: this.props.today
+    };
+    this.convert = this.convert.bind(this)
+  }
+
+ convert(){
+        var year = this.state.date.getFullYear()
+        var locale = "en-us";
+        var month = this.state.date.toLocaleString(locale, {
+            month: "long"
+        });
+        return month+" "+ year
     }
+
   render() {
     return (
-        <p>{this.state.date.toDateString()}</p>
+        <p>{this.convert()}</p>
     )
   }
 }
@@ -78,7 +90,7 @@ class Month extends React.Component {
       if (!emptyRows){
           if (dateForCalendar.getDate() == this.state.date.getDate())
           {
-            row.push(<td style={{color: 'blue'}} key={td}>{dateForCalendar.getDate()}</td>)
+            row.push(<td id="today-td" key={td}>{dateForCalendar.getDate()}</td>)
             td += 1
           }
           else {
@@ -136,8 +148,8 @@ class Calendar extends React.Component{
         <div>
           <CurrentDate id="current-date-calendar" today={this.state.date}/>
           <div id="control-buttons-calendar">
-            <ControlButton className="control-button" type={buttonsType.back} updateDate={this.updateDate} today={this.state.date}/>
-            <ControlButton className="control-button" type={buttonsType.next} updateDate={this.updateDate} today={this.state.date}/>
+            <ControlButton  type={buttonsType.back} updateDate={this.updateDate} today={this.state.date}/>
+            <ControlButton  type={buttonsType.next} updateDate={this.updateDate} today={this.state.date}/>
           </div>
           <Month id="current-month-calendar" today={this.state.date}/>
         </div>

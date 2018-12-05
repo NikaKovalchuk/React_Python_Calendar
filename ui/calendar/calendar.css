@@ -1,4 +1,13 @@
 #menuBar{
-    width: 10%;
+    width: 15%;
     padding: 8px;
+}
+
+table{
+    text-align: center ;
+}
+
+#today-td {
+    background: black;
+    color: white;
 }

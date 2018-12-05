@@ -9,6 +9,16 @@ var viewType = {
     year:3
 }
 
+class Account extends React.Component{
+     render(){
+        return(
+            <div id="account-toolbar">
+                <button><a href={"./login.html"}>LOG</a></button>
+            </div>
+        )
+    }
+}
+
 class MenuView extends React.Component{
     constructor(props) {
         super(props);
@@ -42,11 +52,21 @@ class CurrentDate extends React.Component {
         this.state = {
             date: this.props.date
         };
+        this.convert=this.convert.bind(this)
+    }
+
+    convert(){
+        var year = this.state.date.getFullYear()
+        var locale = "en-us";
+        var month = this.state.date.toLocaleString(locale, {
+            month: "long"
+        });
+        return month+" "+ year
     }
 
   render() {
     return (
-        <p>{this.state.date.toDateString()}</p>
+        <p>{this.convert()}</p>
     )
   }
 }
@@ -87,21 +107,16 @@ class ControlButton extends React.Component{
           date: this.props.date,
           updateDate: this.props.updateDate
       }
-      this.decreaseMounth = this.decreaseMounth.bind(this)
-      this.increaseMounth = this.increaseMounth.bind(this)
   }
 
-  decreaseMounth (){return this.state.updateDate(this.state.date.setMonth(this.state.date.getMonth()-1))}
-
-  increaseMounth (){return this.state.updateDate(this.state.date.setMonth(this.state.date.getMonth()+1))}
 
   render() {
      return (
          <div>
            {this.state.type == buttonsType.back? (
-              <button onClick={this.decreaseMounth}>back</button>
+              <button>backView</button>
             ) : (
-              <button onClick={this.increaseMounth}>next</button>
+              <button>nextView</button>
             )}
          </div>
      );
@@ -137,10 +152,8 @@ class Toolbar extends React.Component{
           </div>
 
           <div className="toolbar-element" id="menu-toolbar">
-            <MenuView/>
-            <div id="account-toolbar">
-                <p>Account</p>
-            </div>
+              <MenuView/>
+              <Account/>
           </div>
         </div>
     )
