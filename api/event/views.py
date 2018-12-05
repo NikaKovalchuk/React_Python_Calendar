@@ -19,7 +19,6 @@ def editEvent(request, pk):
         if form.is_valid():
             post = form.save(commit=False)
             user = get_object_or_404(CustomUser, pk = request.user.pk)
-            post.user_set.add(user)
             post.update_date = timezone.now()
             post.save()
             return redirect('event', pk=post.pk)
@@ -34,7 +33,7 @@ def createEvent(request):
             post = form.save(commit=False)
             user = get_object_or_404(CustomUser, pk=request.user.pk)
             post.save()
-            post.user_set.add(user)
+            post.customuser_set.add(user)
             post.created_date = timezone.now()
             post.save()
             return redirect('event', pk=post.pk)

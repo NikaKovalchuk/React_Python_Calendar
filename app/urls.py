@@ -22,6 +22,6 @@ urlpatterns = [
     url(r'user/', include('django.contrib.auth.urls')),
     url(r'accounts/', include('allauth.urls')),
     url(r'events/', include('api.event.urls')),
-    url(r'admin/', admin.site.urls),
+    url(r'admin', admin.site.urls),
     url('', include('api.home.urls')),
 ]
