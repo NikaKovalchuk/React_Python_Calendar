@@ -76,6 +76,12 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'app.urls'
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}
+
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
 TEMPLATES = [

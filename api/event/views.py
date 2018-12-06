@@ -18,7 +18,6 @@ def edit(request, pk):
         form = EventChangeForm(request.POST, instance=event)
         if form.is_valid():
             post = form.save(commit=False)
-            user = get_object_or_404(User, pk = request.user.pk)
             post.update_date = timezone.now()
             post.save()
             return redirect('event', pk=post.pk)
