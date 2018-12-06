@@ -1,7 +1,7 @@
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import  Event
-from api.user.models import CustomUser
+from api.user.models import User
 from .forms import EventChangeForm, EventCreationForm
 
 def eventList(request):
@@ -18,7 +18,7 @@ def edit(request, pk):
         form = EventChangeForm(request.POST, instance=event)
         if form.is_valid():
             post = form.save(commit=False)
-            user = get_object_or_404(CustomUser, pk = request.user.pk)
+            user = get_object_or_404(User, pk = request.user.pk)
             post.update_date = timezone.now()
             post.save()
             return redirect('event', pk=post.pk)
@@ -31,9 +31,9 @@ def create(request):
         form = EventCreationForm(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
-            user = get_object_or_404(CustomUser, pk=request.user.pk)
+            user = get_object_or_404(User, pk=request.user.pk)
             post.save()
-            post.customuser_set.add(user)
+            post.user_set.add(user)
             post.created_date = timezone.now()
             post.save()
             return redirect('event', pk=post.pk)
