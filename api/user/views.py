@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import UserCreationForm, UserLogInForm, UserChangeForm, UserPasswordChangeForm
-from api.user.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
@@ -14,7 +13,8 @@ def signUpUser(request):
             password = form.cleaned_data['password1']
             user = authenticate(username=username, password=password)
             if user is not None:
-               return redirect('eventList')
+                form = UserLogInForm()
+                return render(request, 'user/login.html', {'form': form})
     else:
         form = UserCreationForm()
     return render(request, 'user/signup.html', {'form':form})
