@@ -1,6 +1,9 @@
-from django.shortcuts import render, redirect
-from .forms import UserCreationForm, UserLogInForm
+from django.shortcuts import render, redirect, get_object_or_404
+from .forms import UserCreationForm, UserLogInForm, UserChangeForm, UserPasswordChangeForm
+from api.user.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
 
 def signUpUser(request):
     if request.method == "POST":
@@ -34,3 +37,17 @@ def logInUser(request):
 def logOutUser(request):
 	logout(request)
 	return logInUser(request)
+
+def account(request):
+    if request.method == 'POST':
+        form = UserPasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('account')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = UserPasswordChangeForm(request.user)
+    return render(request, 'user/account.html', {'form':form})
