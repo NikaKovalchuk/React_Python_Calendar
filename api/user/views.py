@@ -39,15 +39,26 @@ def logOutUser(request):
 	return logInUser(request)
 
 def account(request):
+    changed_password_form = UserPasswordChangeForm(request.user)
+    edit_user_form = UserChangeForm(request.user)
     if request.method == 'POST':
-        form = UserPasswordChangeForm(request.user, request.POST)
-        if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)  # Important!
-            messages.success(request, 'Your password was successfully updated!')
-            return redirect('account')
+        if 'edit_user' in request.POST:
+            edit_user_form = UserChangeForm(request.user, request.POST)
+            if edit_user_form.is_valid():
+                edit_user_form.save()
+                messages.success(request, 'Your info was successfully updated!')
+                return redirect('account')
+            else:
+                messages.error(request, 'Please correct the error below.')
+        elif 'changed_password' in request.POST:
+            changed_password_form = UserPasswordChangeForm(request.user, request.POST)
+            if changed_password_form.is_valid():
+                user = changed_password_form.save()
+                update_session_auth_hash(request, user)  # Important!
+                messages.success(request, 'Your password was successfully updated!')
+                return redirect('account')
+            else:
+                messages.error(request, 'Please correct the error below.')
         else:
-            messages.error(request, 'Please correct the error below.')
-    else:
-        form = UserPasswordChangeForm(request.user)
-    return render(request, 'user/account.html', {'form':form})
+            return redirect('account')
+    return render(request, 'user/account.html', {'changed_password_form':changed_password_form, 'edit_user_form':edit_user_form})
