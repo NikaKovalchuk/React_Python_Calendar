@@ -7,7 +7,8 @@
 weqweq
             <h1>{{ event.title }}</h1>
 
-            <a href="" class="top-menu"><span class="glyphicon glyphicon-pencil"></span></a>
+            <a href="{% url 'editEvent' pk=event.pk %}" class="top-menu"><span class="glyphicon glyphicon-pencil"></span></a>
+            <a href="{% url 'removeEvent' pk=event.pk %}" class="top-menu"><span class="glyphicon glyphicon-trash"></span></a>
 
             <h3>{{ event.text }}</h3>
 

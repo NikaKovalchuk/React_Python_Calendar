@@ -13,5 +13,9 @@ class Event(models.Model):
     status = models.IntegerField(default=1, null=False, blank=True)
     price = models.IntegerField(null=True, blank=True)
 
+    delete = models.BooleanField(null=True, blank=True, default=False)
+    delete_date = models.DateTimeField(blank=True, null=True)
+
+
     def __str__ (self):
         return self.title

@@ -1,9 +1,12 @@
-{% extends 'home/../../home/event/base.html' %}
+<h2>Account</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ edit_user_form.as_p }}
+  <button name='edit_user' type="submit">Save</button>
+</form>
 
-{% block content %}
-    <h1> Account </h1>
-    <form method="POST" class="post-form">{% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="save btn btn-default">Save</button>
-    </form>
-{% endblock %}
+<form method="post">
+    {% csrf_token %}
+    {{ changed_password_form.as_p }}
+  <button name='changed_password' type="submit">Save</button>
+</form>
