@@ -5,7 +5,12 @@ from api.user.models import User
 from .forms import EventChangeForm, EventCreationForm
 
 def eventList(request):
-    events = Event.objects.filter(create_date__lte=timezone.now(), delete=False).order_by('start_date')
+    user = get_object_or_404(User, pk=request.user.pk)
+    events = Event.objects.filter(
+        create_date__lte=timezone.now(),
+        delete=False,
+        user__in=[user]
+    ).order_by('start_date')
     return render(request, 'event/event_list.html', {'events': events})
 
 def event(request, pk):
