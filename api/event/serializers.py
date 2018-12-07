@@ -1,17 +1,11 @@
-from marshmallow import Schema, fields
+from rest_framework import serializers
+from .models import Event
+from api.user.serializers import UserSerializer
 
-class EventSchema(Schema):
-    id = fields.Int(required=True)
-    title = fields.Str(required=True, max_length=100)
-    text = fields.Str(max_length=1000)
+class EventSerializer(serializers.HyperlinkedModelSerializer):
+    user = UserSerializer(source="get_users", many=True)
 
-    create_date = fields.DateTime(dump_to='createdtDate', required=True)
-    start_date = fields.DateTime(dump_to='startDate')
-    update_date = fields.DateTime(dump_to='updateDate')
-    finish_date = fields.DateTime(dump_to='finishDate')
-
-    status = fields.Int()
-    price = fields.Int()
-
-    delete = fields.Boolean()
-    delete_date = fields.DateTime(dump_to='deleteDate')
+    class Meta:
+        model = Event
+        fields = ('id', 'title', 'text', 'create_date', 'update_date', 'start_date', 'finish_date', 'status', 'price',
+                  'archived', 'archived_date', 'user')

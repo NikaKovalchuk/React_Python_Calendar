@@ -1,10 +1,10 @@
-from django.conf.urls import url
+from django.urls import path
+from rest_framework.urlpatterns import format_suffix_patterns
 from . import views
 
 urlpatterns = [
-    url(r'(?P<pk>\d+)/edit', views.edit, name='editEvent'),
-    url(r'(?P<pk>\d+)/remove', views.remove, name='removeEvent'),
-    url(r'(?P<pk>\d+)', views.event, name='event'),
-    url(r'new', views.create, name='createEvent'),
-    url('', views.eventList, name='eventList'),
+    path('<int:pk>', views.EventDetail.as_view()),
+    path('', views.EventList.as_view()),
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)
