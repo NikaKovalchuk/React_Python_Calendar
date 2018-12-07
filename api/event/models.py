@@ -31,6 +31,5 @@ class Event(models.Model):
         self.archived_date = datetime.now()
         self.save()
 
-
     def get_users(self):
         return self.user_set

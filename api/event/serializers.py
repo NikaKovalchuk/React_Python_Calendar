@@ -3,7 +3,7 @@ from .models import Event
 from api.user.serializers import UserSerializer
 
 class EventSerializer(serializers.HyperlinkedModelSerializer):
-    user = UserSerializer(source="get_users", many=True)
+    user = UserSerializer(source="get_users", many=True, read_only=True)
 
     class Meta:
         model = Event
