@@ -1,5 +1,7 @@
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.decorators import permission_classes
+
+from app.settings import ADMIN_USER_ID
 from .models import Event
 from.serializers import EventSerializer
 from api.event.permissions import IsOwnerOrReadOnly
@@ -8,11 +10,13 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-@permission_classes((IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly ))
+# @permission_classes((IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly ))
 class EventList(APIView):
 
     def get(self, request, format=None):
-        events = Event.objects.all()
+        events = Event.objects.filter(
+            user__in = [request.user.id]
+        )
         serializer_context = {
             'request': request,
         }
@@ -29,11 +33,19 @@ class EventList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@permission_classes((IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly ))
+# @permission_classes((IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly ))
 class EventDetail(APIView):
-    def get_object(self, pk):
+    def get_object(self, pk, request):
         try:
-            return Event.objects.get(pk=pk)
+            if request.user.id == ADMIN_USER_ID:
+                return Event.objects.filter(
+                    pk=pk
+                )
+            else:
+                return Event.objects.filter(
+                    pk=pk,
+                    user__in=[request.user.id]
+                )
         except Event.DoesNotExist:
             raise Http404
 
@@ -41,7 +53,7 @@ class EventDetail(APIView):
         serializer_context = {
             'request': request,
         }
-        event = self.get_object(pk)
+        event = self.get_object(pk,request)
         serializer = EventSerializer(event, context=serializer_context)
         return Response(serializer.data)
 
@@ -49,7 +61,7 @@ class EventDetail(APIView):
         serializer_context = {
             'request': request,
         }
-        event = self.get_object(pk)
+        event = self.get_object(pk, request)
         serializer = EventSerializer(event, data=request.data, context=serializer_context)
         if serializer.is_valid():
             serializer.save()
@@ -57,6 +69,6 @@ class EventDetail(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None):
-        event = self.get_object(pk)
+        event = self.get_object(pk, request)
         event.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

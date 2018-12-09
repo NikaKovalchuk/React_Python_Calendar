@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
 
     'rest_framework',
+    'import_export',
 
     'allauth',
     'allauth.account',
@@ -159,3 +160,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+ADMIN_USER_ID = 1

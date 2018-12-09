@@ -1,5 +1,7 @@
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.decorators import permission_classes
+
+from app.settings import ADMIN_USER_ID
 from .models import User
 from .serializers import UserSerializer
 from api.event.permissions import IsOwnerOrReadOnly
@@ -8,7 +10,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-@permission_classes((IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly ))
+# @permission_classes((IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly ))
 class UserList(APIView):
 
     def get(self, request, format=None):
@@ -29,11 +31,12 @@ class UserList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@permission_classes((IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly ))
+# @permission_classes((IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly ))
 class UserDetail(APIView):
-    def get_object(self, pk):
+    def get_object(self, pk, request):
         try:
-            return User.objects.get(pk=pk)
+            if request.user.id == ADMIN_USER_ID or request.user.id == pk:
+                return User.objects.get(pk=pk)
         except User.DoesNotExist:
             raise Http404
 
@@ -41,22 +44,22 @@ class UserDetail(APIView):
         serializer_context = {
             'request': request,
         }
-        event = self.get_object(pk)
-        serializer = UserSerializer(event, context=serializer_context)
+        user = self.get_object(pk, request)
+        serializer = UserSerializer(user, context=serializer_context)
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
         serializer_context = {
             'request': request,
         }
-        event = self.get_object(pk)
-        serializer = UserSerializer(event, data=request.data, context=serializer_context)
+        user = self.get_object(pk, request)
+        serializer = UserSerializer(user, data=request.data, context=serializer_context)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None):
-        event = self.get_object(pk)
-        event.delete()
+        user = self.get_object(pk, request)
+        user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
