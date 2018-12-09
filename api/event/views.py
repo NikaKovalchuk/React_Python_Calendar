@@ -1,53 +1,74 @@
-from django.utils import timezone
-from django.shortcuts import render, get_object_or_404, redirect
-from .models import  Event
-from api.user.models import User
-from .forms import EventChangeForm, EventCreationForm
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.decorators import permission_classes
 
-def eventList(request):
-    user = get_object_or_404(User, pk=request.user.pk)
-    events = Event.objects.filter(
-        create_date__lte=timezone.now(),
-        delete=False,
-        user__in=[user]
-    ).order_by('start_date')
-    return render(request, 'event/event_list.html', {'events': events})
+from app.settings import ADMIN_USER_ID
+from .models import Event
+from.serializers import EventSerializer
+from api.event.permissions import IsOwnerOrReadOnly
+from django.http import Http404
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 
-def event(request, pk):
-    event = get_object_or_404(Event, pk=pk)
-    return render(request, 'event/event.html', {'event':event})
+# @permission_classes((IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly ))
+class EventList(APIView):
 
-def edit(request, pk):
-    event = get_object_or_404(Event, pk=pk)
-    if request.method == "POST":
-        form = EventChangeForm(request.POST, instance=event)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.update_date = timezone.now()
-            post.save()
-            return redirect('event', pk=post.pk)
-    else:
-        form = EventChangeForm(instance=event)
-    return render(request, 'event/edit_event.html', {'form': form})
+    def get(self, request, format=None):
+        events = Event.objects.filter(
+            user__in = [request.user.id]
+        )
+        serializer_context = {
+            'request': request,
+        }
+        serializer = EventSerializer(events, many=True, context=serializer_context)
+        return Response(serializer.data)
 
-def create(request):
-    if request.method == "POST":
-        form = EventCreationForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            user = get_object_or_404(User, pk=request.user.pk)
-            post.save()
-            post.user_set.add(user)
-            post.created_date = timezone.now()
-            post.save()
-            return redirect('event', pk=post.pk)
-    else:
-        form = EventCreationForm()
-    return render(request, 'event/edit_event.html', {'form':form})
+    def post(self, request, format=None):
+        serializer_context = {
+            'request': request,
+        }
+        serializer = EventSerializer(data=request.data, context=serializer_context)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-def remove(request, pk):
-    event = get_object_or_404(Event, pk=pk)
-    event.delete = True
-    event.delete_date = timezone.now()
-    event.save()
-    return eventList(request)
+# @permission_classes((IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly ))
+class EventDetail(APIView):
+    def get_object(self, pk, request):
+        try:
+            if request.user.id == ADMIN_USER_ID:
+                return Event.objects.filter(
+                    pk=pk
+                )
+            else:
+                return Event.objects.filter(
+                    pk=pk,
+                    user__in=[request.user.id]
+                )
+        except Event.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        serializer_context = {
+            'request': request,
+        }
+        event = self.get_object(pk,request)
+        serializer = EventSerializer(event, context=serializer_context)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        serializer_context = {
+            'request': request,
+        }
+        event = self.get_object(pk, request)
+        serializer = EventSerializer(event, data=request.data, context=serializer_context)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        event = self.get_object(pk, request)
+        event.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
