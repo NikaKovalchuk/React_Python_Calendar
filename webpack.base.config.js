@@ -7,6 +7,7 @@ module.exports = {
   entry: {
     // Add as many entry points as you have container-react-components here
     home: './templates/controller/home/home',
+    base: './templates/controller/home/base',
     vendors: ['react'],
   },
 

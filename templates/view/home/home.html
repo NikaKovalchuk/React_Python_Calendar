@@ -1,7 +1,8 @@
 <!-- templates/home.html -->
 {% load webpack_loader %}
 {% block content %}
-    <div id="root"></div>
+    <div id="toolbar"></div>
+    <div id="content"></div>
     {% render_bundle 'vendors' %}
     {% render_bundle 'home' %}
 {% endblock %}
