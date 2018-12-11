@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'django.contrib.sites',
 
     'rest_framework',
-    'import_export',
+    #'import_export',
+    'webpack_loader',
 
     'allauth',
     'allauth.account',
@@ -95,7 +96,7 @@ PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(PROJECT_ROOT, 'templates')]
+        'DIRS': [os.path.join(BASE_DIR, 'templates')]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -162,3 +163,14 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 ADMIN_USER_ID = 1
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'templates/../templates/static'),
+]
+
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'BUNDLE_DIR_NAME': 'bundles/local/',  # end with slash
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats-local.json'),
+    }
+}
