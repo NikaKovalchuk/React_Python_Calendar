@@ -4,20 +4,23 @@
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
         <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="{% static 'css/blog.css' %}">
     </head>
     <body>
-    <div id="pageHeader"></div>
-    {% render_bundle 'vendors' %}
-    {% render_bundle 'base' %}
+    {% load webpack_loader %}
+    {% load static %}
+
+    <div id="header"></div>
     <div class="content container">
         <div class="row">
-            <div class="col-md-8">
-            {% block content %}
-            {% endblock %}
+        <div class="col-md-8">
+                {% block content %}
+                {% endblock %}
             </div>
         </div>
     </div>
 
+    {% render_bundle 'vendors' %}
+    {% render_bundle 'base' %}
+    {% render_bundle 'home' %}
     </body>
 </html>

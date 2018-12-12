@@ -7,6 +7,7 @@ import * as counterActions from "../actions/counterActions"
 import CurrentDate from "../components/CurrentDate"
 import Month from "../components/Month"
 import ControlButton from "../components/ControlButton"
+import Today from "../components/Today";
 
 const styles = {
   button: {
@@ -53,6 +54,7 @@ export default class HomeContainer extends React.Component {
               <div id="control-buttons-calendar">
                 <ControlButton  type={buttonsType.back} updateDate={this.updateDate} today={this.state.date}/>
                 <ControlButton  type={buttonsType.next} updateDate={this.updateDate} today={this.state.date}/>
+                <Today id="today" updateDate={this.updateDate} date={this.state.date}/>
               </div>
             <Month id="current-month-calendar" today={this.state.date}/>
             <div style={[styles.button]} onClick={() => this.handleClick()}>INCREASE</div>
