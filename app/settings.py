@@ -166,6 +166,7 @@ ADMIN_USER_ID = 1
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'templates/../templates/static'),
     os.path.join(BASE_DIR, 'templates/static/image'),
+    os.path.join(BASE_DIR, 'templates/static/style'),
 ]
 
 WEBPACK_LOADER = {

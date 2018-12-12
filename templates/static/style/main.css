@@ -1,0 +1,63 @@
+body{
+    margin: 0px;
+}
+
+#page div{
+    display: inline-block;
+}
+
+#toolBar{
+    padding: 8px;
+    width: 99%;
+    background: lightgrey;
+    border-bottom: 1px solid gray;
+}
+
+#toolBar div {
+    display: inline-block;
+}
+
+.toolbar-element {
+    display: inline-block;
+    padding: 5px;
+}
+
+.logo {
+    width : 30px;
+}
+
+
+
+#current-date-toolbar{
+    width: 10%;
+}
+
+#control-buttons-toolbar div{
+    display: inline-block;
+}
+
+#menu-toolbar{
+    float:right;
+}
+
+#menu-toolbar div{
+    display: inline-block;
+}
+
+#account-toolbar{
+    margin-left: 15px;
+}
+
+#menuBar{
+    width: 15%;
+    padding: 8px;
+}
+
+table{
+    text-align: center ;
+}
+
+#today-td {
+    background: black;
+    color: white;
+}

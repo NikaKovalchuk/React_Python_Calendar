@@ -25,7 +25,7 @@ export default class MenuView extends React.Component{
 
     render(){
         return(
-            <div>
+            <div className="toolbar-element">
                 <select>
                     {this.createList()}
                 </select>

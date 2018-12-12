@@ -44,7 +44,7 @@ export default class BaseComponent extends React.Component {
     return (
       <div id={"toolbar"}>
           <Logo/>
-          <div className="toolbar-element" id="menu-toolbar">
+          <div id="menu-toolbar">
               <MenuView/>
               <Account/>
           </div>
