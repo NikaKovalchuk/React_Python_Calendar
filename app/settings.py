@@ -29,7 +29,11 @@ ALLOWED_HOSTS = []
 
 LOGIN_REDIRECT_URL = 'home'
 
-LOGOUT_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'accounts/login'
+
+ACCOUNT_LOGOUT_REDIRECT_URL ="/accounts/login"
+
+ACCOUNT_LOGOUT_ON_GET = True
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
