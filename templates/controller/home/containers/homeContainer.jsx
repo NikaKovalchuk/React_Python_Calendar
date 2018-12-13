@@ -32,7 +32,8 @@ export default class HomeContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      date: new Date()};
+      date: new Date()
+    };
   }
 
   handleClick() {
@@ -44,25 +45,27 @@ export default class HomeContainer extends React.Component {
     this.setState({ date: value })
   }
 
+
   render() {
     let {counters} = this.props
     return (
-      <div className="container">
-        <div className="row">
-          <div className="col-sm-12">
-            <CurrentDate id="current-date-calendar" today={this.state.date}/>
-              <div id="control-buttons-calendar">
-                <ControlButton  type={buttonsType.back} updateDate={this.updateDate} today={this.state.date}/>
-                <ControlButton  type={buttonsType.next} updateDate={this.updateDate} today={this.state.date}/>
-                <Today id="today" updateDate={this.updateDate} date={this.state.date}/>
-              </div>
-            <Month id="current-month-calendar" today={this.state.date}/>
-            <div style={[styles.button]} onClick={() => this.handleClick()}>INCREASE</div>
-            <p style={[styles.counter]}>{counters.clicks}</p>
-            <p>{process.env.BASE_API_URL}</p>
+        <div className="row" id="content">
+          <div className="col-sm-4 col-lg-2" id="calendar">
+              <CurrentDate id="current-date-calendar" today={this.state.date}/>
+                <div id="control-buttons-calendar">
+                  <ControlButton  type={buttonsType.back} updateDate={this.updateDate} today={this.state.date}/>
+                  <ControlButton  type={buttonsType.next} updateDate={this.updateDate} today={this.state.date}/>
+                  <Today id="today" updateDate={this.updateDate} date={this.state.date}/>
+                </div>
+              <Month id="current-month-calendar" today={this.state.date}/>
+              <div style={[styles.button]} onClick={() => this.handleClick()}>INCREASE</div>
+              <p style={[styles.counter]}>{counters.clicks}</p>
+              <p>{process.env.BASE_API_URL}</p>
+          </div>
+          <div className="col-sm-8 col-lg-10" id="work-space">
+            sadasdasd
           </div>
         </div>
-      </div>
     )
   }
 }

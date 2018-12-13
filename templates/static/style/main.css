@@ -7,8 +7,8 @@ body{
 }
 
 #toolBar{
-    padding: 8px;
-    width: 99%;
+    padding:8px;
+    position: relative;
     background: lightgrey;
     border-bottom: 1px solid gray;
 }
@@ -25,8 +25,6 @@ body{
 .logo {
     width : 30px;
 }
-
-
 
 #current-date-toolbar{
     width: 10%;
@@ -48,13 +46,33 @@ body{
     margin-left: 15px;
 }
 
-#menuBar{
-    width: 15%;
+/* ******************************/
+
+#calendar{
+   text-align: center;
+}
+
+#content{
+    width: 100%;
     padding: 8px;
+}
+
+#content div{
+    display: inline-block;
+}
+
+#workspace{
 }
 
 table{
     text-align: center ;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+#table {
+    margin-bottom: 20px;
+    margin-top: 20px;
 }
 
 #today-td {

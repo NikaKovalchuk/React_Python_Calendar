@@ -61,16 +61,18 @@ export default class CurrentDate extends React.Component {
 
   render(){
       return(
-         <table>
-           <thead>
-           <tr>
-              <td>пн</td><td>вт</td><td>ср</td><td>чт</td><td>пт</td><td>сб</td><td>вс</td>
-           </tr>
-           </thead>
-           <tbody>
-              {this.createTable()}
-           </tbody>
-        </table>
+          <div className="table">
+             <table>
+               <thead>
+               <tr>
+                  <td>пн</td><td>вт</td><td>ср</td><td>чт</td><td>пт</td><td>сб</td><td>вс</td>
+               </tr>
+               </thead>
+               <tbody>
+                  {this.createTable()}
+               </tbody>
+            </table>
+          </div>
       )
   }
 }

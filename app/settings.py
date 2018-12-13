@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'django.contrib.sites',
 
     'rest_framework',
-    #'import_export',
     'webpack_loader',
 
     'allauth',
