@@ -1,0 +1,31 @@
+#calendar{
+   text-align: center;
+}
+
+#content{
+    width: 100%;
+    padding: 8px;
+}
+
+#content div{
+    display: inline-block;
+}
+
+#workspace{
+}
+
+table{
+    text-align: center ;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+#table {
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+#today-td {
+    background: black;
+    color: white;
+}
