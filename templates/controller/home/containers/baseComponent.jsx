@@ -27,6 +27,14 @@ const buttonsType = {
   counters: state.counters,
 }))
 
+class AddEvent extends React.Component{
+    render() {
+        return (
+            <button><a href={`/event/`}>Add event</a></button>
+        )
+    }
+}
+
 @Radium
 export default class BaseComponent extends React.Component {
   constructor(props) {
@@ -45,6 +53,7 @@ export default class BaseComponent extends React.Component {
       <div id={"toolbar"}>
           <Logo/>
           <div id="menu-toolbar">
+              <AddEvent/>
               <MenuView/>
               <Account/>
           </div>

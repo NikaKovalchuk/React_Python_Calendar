@@ -36,11 +36,6 @@ export default class HomeContainer extends React.Component {
     };
   }
 
-  handleClick() {
-    let {dispatch} = this.props;
-    dispatch(counterActions.increaseCounter())
-  }
-
   updateDate =(value) => {
     this.setState({ date: value })
   }
@@ -57,10 +52,7 @@ export default class HomeContainer extends React.Component {
                   <ControlButton  type={buttonsType.next} updateDate={this.updateDate} today={this.state.date}/>
                   <Today id="today" updateDate={this.updateDate} date={this.state.date}/>
                 </div>
-              <Month id="current-month-calendar" today={this.state.date}/>
-              <div style={[styles.button]} onClick={() => this.handleClick()}>INCREASE</div>
-              <p style={[styles.counter]}>{counters.clicks}</p>
-              <p>{process.env.BASE_API_URL}</p>
+              <Month id="current-month-calendar" today={this.state.date} updateDate={this.updateDate}/>
           </div>
           <div className="col-sm-8 col-lg-10" id="work-space">
             sadasdasd

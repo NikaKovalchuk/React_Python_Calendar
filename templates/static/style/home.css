@@ -25,7 +25,10 @@ table{
     margin-top: 20px;
 }
 
+td{
+    cursor: pointer;
+}
+
 #today-td {
-    background: black;
-    color: white;
+    background: lightsteelblue;
 }

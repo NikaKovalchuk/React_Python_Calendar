@@ -1,10 +1,12 @@
 import React from "react"
+import * as counterActions from "../actions/counterActions";
 
 export default class CurrentDate extends React.Component {
   constructor(props) {
       super(props);
       this.state = {
-          date: this.props.today
+          date: this.props.today,
+          updateDate: this.props.updateDate
       };
   }
 
@@ -12,6 +14,11 @@ export default class CurrentDate extends React.Component {
     var day = date.getDay();
     if (day == 0) day = 7;
     return day - 1;
+  }
+
+  handleClick(date) {
+    this.state.updateDate(date)
+    console.log(date)
   }
 
   createTable(){
@@ -33,15 +40,15 @@ export default class CurrentDate extends React.Component {
       if (!emptyRows){
           if (dateForCalendar.getDate() == this.state.date.getDate())
           {
-            row.push(<td id="today-td" key={td}>{dateForCalendar.getDate()}</td>)
+            row.push(<td id="today-td" key={td} onClick={() => this.handleClick(dateForCalendar)} >{dateForCalendar.getDate()}</td>)
             td += 1
           }
           else {
-              row.push(<td key={td}>{dateForCalendar.getDate()}</td>)
+              row.push(<td key={td} onClick={() => this.handleClick(dateForCalendar)} >{dateForCalendar.getDate()}</td>)
               td += 1
           }
           if (this.getDay(dateForCalendar) % 7 == 6) {
-            table.push(<tr key={tr}>{row}</tr>)
+            table.push(<tr key={tr} onClick={() => this.handleClick(dateForCalendar)}>{row}</tr>)
             tr += 1
             row = []
           }
