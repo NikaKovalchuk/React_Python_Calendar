@@ -1,5 +1,4 @@
 import React from "react"
-import * as counterActions from "../actions/counterActions";
 
 export default class CurrentDate extends React.Component {
   constructor(props) {
@@ -17,8 +16,7 @@ export default class CurrentDate extends React.Component {
   }
 
   handleClick(date) {
-    this.state.updateDate(date)
-    console.log(date)
+    return this.state.updateDate(date)
   }
 
   createTable(){
