@@ -29,7 +29,11 @@ ALLOWED_HOSTS = []
 
 LOGIN_REDIRECT_URL = 'home'
 
-LOGOUT_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'accounts/login'
+
+ACCOUNT_LOGOUT_REDIRECT_URL ="/accounts/login"
+
+ACCOUNT_LOGOUT_ON_GET = True
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
@@ -48,7 +52,6 @@ INSTALLED_APPS = [
     'django.contrib.sites',
 
     'rest_framework',
-    #'import_export',
     'webpack_loader',
 
     'allauth',
@@ -96,7 +99,7 @@ PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
+        'DIRS': [os.path.join(BASE_DIR, 'templates/view')]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -156,7 +159,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
@@ -166,6 +168,8 @@ ADMIN_USER_ID = 1
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'templates/../templates/static'),
+    os.path.join(BASE_DIR, 'templates/static/image'),
+    os.path.join(BASE_DIR, 'templates/static/style'),
 ]
 
 WEBPACK_LOADER = {

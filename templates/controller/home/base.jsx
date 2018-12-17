@@ -10,7 +10,7 @@ import { Provider } from "react-redux"
 import thunk from "redux-thunk"
 
 import * as reducers from "./reducers"
-import PageHeader from "./containers/PageHeader"
+import BaseComponent from "./containers/baseComponent";
 
 let finalCreateStore = compose(
   applyMiddleware(thunk),
@@ -19,14 +19,14 @@ let finalCreateStore = compose(
 let reducer = combineReducers(reducers)
 let store = finalCreateStore(reducer)
 
-class pageHeader extends React.Component {
+class PageHeader extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <PageHeader />
+        <BaseComponent />
       </Provider>
     )
   }
 }
 
-render(<pageHeader/>, document.getElementById('pageHeader'))
+render(<PageHeader/>, document.getElementById('header'))

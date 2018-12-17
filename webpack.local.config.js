@@ -13,6 +13,16 @@ config.entry = {
     'webpack/hot/only-dev-server',
     './templates/controller/home/home',
   ],
+  base: [
+    'webpack-dev-server/client?http://' + ip + ':3000',
+    'webpack/hot/only-dev-server',
+    './templates/controller/home/base',
+  ],
+  event_list: [
+    'webpack-dev-server/client?http://' + ip + ':3000',
+    'webpack/hot/only-dev-server',
+    './templates/controller/home/event_list',
+  ],
 }
 
 config.output.publicPath = 'http://' + ip + ':3000' + '/assets/bundles/'
