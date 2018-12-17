@@ -96,6 +96,8 @@ REST_FRAMEWORK = {
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
