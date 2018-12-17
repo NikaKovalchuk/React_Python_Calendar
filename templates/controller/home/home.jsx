@@ -29,4 +29,4 @@ class Home extends React.Component {
   }
 }
 
-render(<Home/>, document.getElementById('content'))
+render(<Home/>, document.getElementById('body-content'))

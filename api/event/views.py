@@ -1,10 +1,10 @@
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.decorators import permission_classes
+from rest_framework.renderers import TemplateHTMLRenderer
 
 from app.settings import ADMIN_USER_ID
 from .models import Event
 from.serializers import EventSerializer
-from api.event.permissions import IsOwnerOrReadOnly
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -12,6 +12,8 @@ from rest_framework import status
 
 # @permission_classes((IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly ))
 class EventList(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'event/list.html'
 
     def get(self, request, format=None):
         events = Event.objects.filter(
@@ -21,7 +23,7 @@ class EventList(APIView):
             'request': request,
         }
         serializer = EventSerializer(events, many=True, context=serializer_context)
-        return Response(serializer.data)
+        return Response({'serializer': serializer, 'events': events})
 
     def post(self, request, format=None):
         serializer_context = {

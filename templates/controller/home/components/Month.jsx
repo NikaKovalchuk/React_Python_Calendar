@@ -4,7 +4,8 @@ export default class CurrentDate extends React.Component {
   constructor(props) {
       super(props);
       this.state = {
-          date: this.props.today
+          date: this.props.today,
+          updateDate: this.props.updateDate
       };
   }
 
@@ -12,6 +13,10 @@ export default class CurrentDate extends React.Component {
     var day = date.getDay();
     if (day == 0) day = 7;
     return day - 1;
+  }
+
+  handleClick(date) {
+    return this.state.updateDate(date)
   }
 
   createTable(){
@@ -33,15 +38,15 @@ export default class CurrentDate extends React.Component {
       if (!emptyRows){
           if (dateForCalendar.getDate() == this.state.date.getDate())
           {
-            row.push(<td id="today-td" key={td}>{dateForCalendar.getDate()}</td>)
+            row.push(<td id="today-td" key={td} onClick={() => this.handleClick(dateForCalendar)} >{dateForCalendar.getDate()}</td>)
             td += 1
           }
           else {
-              row.push(<td key={td}>{dateForCalendar.getDate()}</td>)
+              row.push(<td key={td} onClick={() => this.handleClick(dateForCalendar)} >{dateForCalendar.getDate()}</td>)
               td += 1
           }
           if (this.getDay(dateForCalendar) % 7 == 6) {
-            table.push(<tr key={tr}>{row}</tr>)
+            table.push(<tr key={tr} onClick={() => this.handleClick(dateForCalendar)}>{row}</tr>)
             tr += 1
             row = []
           }
@@ -61,16 +66,18 @@ export default class CurrentDate extends React.Component {
 
   render(){
       return(
-         <table>
-           <thead>
-           <tr>
-              <td>пн</td><td>вт</td><td>ср</td><td>чт</td><td>пт</td><td>сб</td><td>вс</td>
-           </tr>
-           </thead>
-           <tbody>
-              {this.createTable()}
-           </tbody>
-        </table>
+          <div className="table">
+             <table>
+               <thead>
+               <tr>
+                  <td>пн</td><td>вт</td><td>ср</td><td>чт</td><td>пт</td><td>сб</td><td>вс</td>
+               </tr>
+               </thead>
+               <tbody>
+                  {this.createTable()}
+               </tbody>
+            </table>
+          </div>
       )
   }
 }

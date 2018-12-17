@@ -1,0 +1,31 @@
+#toolBar{
+    padding:8px;
+    position: relative;
+    background: lightgrey;
+    border-bottom: 1px solid gray;
+}
+
+#toolBar div {
+    display: inline-block;
+}
+
+.toolbar-element {
+    display: inline-block;
+    padding: 5px;
+}
+
+.logo {
+    width : 30px;
+}
+
+#menu-toolbar{
+    float:right;
+}
+
+#menu-toolbar div{
+    display: inline-block;
+}
+
+#account-toolbar{
+    margin-left: 15px;
+}
