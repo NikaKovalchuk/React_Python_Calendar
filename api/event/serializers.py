@@ -7,5 +7,11 @@ class EventSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Event
-        fields = ('id', 'title', 'text', 'create_date', 'update_date', 'start_date', 'finish_date', 'status', 'price',
-                  'archived', 'archived_date', 'user')
+        fields = ('id', 'title', 'text', 'start_date', 'finish_date', 'status', 'price', 'archived', 'user')
+
+    def validate(self, value):
+        if value['start_date']:
+            if value['finish_date']:
+                if value['start_date'] > value['finish_date']:
+                    raise serializers.ValidationError("finish must occur after start")
+        return value

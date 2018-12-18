@@ -74,7 +74,10 @@ AUTHENTICATION_BACKENDS = (
 SITE_ID = 1
 
 ACCOUNT_EMAIL_REQUIRED = True
+
 ACCOUNT_USERNAME_REQUIRED = False
+
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -95,6 +98,8 @@ REST_FRAMEWORK = {
 }
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+
+ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 TEMPLATES = [
     {

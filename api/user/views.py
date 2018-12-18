@@ -35,8 +35,9 @@ class UserList(APIView):
 class UserDetail(APIView):
     def get_object(self, pk, request):
         try:
-            if request.user.id == ADMIN_USER_ID or request.user.id == pk:
-                return User.objects.get(pk=pk)
+            return User.objects.filter(
+                pk=pk
+            ).first()
         except User.DoesNotExist:
             raise Http404
 
