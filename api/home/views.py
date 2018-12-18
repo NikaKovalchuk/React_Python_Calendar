@@ -17,3 +17,6 @@ def api_root(request, format=None):
         'users': reverse('user-list', request=request, format=format),
         'events': reverse('event-list', request=request, format=format)
     })
+
+class HomePageView(TemplateView):
+    template_name = 'home/home.html'
