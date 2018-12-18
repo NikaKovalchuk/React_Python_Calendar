@@ -12,18 +12,18 @@ from rest_framework import status
 
 # @permission_classes((IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly ))
 class EventList(APIView):
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'event/list.html'
+    #renderer_classes = [TemplateHTMLRenderer]
+    #template_name = 'event/list.html'
 
     def get(self, request, format=None):
         events = Event.objects.filter(
-            user__in = [request.user.id]
+           #user__in = [request.user.id]
         )
         serializer_context = {
             'request': request,
         }
         serializer = EventSerializer(events, many=True, context=serializer_context)
-        return Response({'serializer': serializer, 'events': events})
+        return Response(serializer.data)
 
     def post(self, request, format=None):
         serializer_context = {
@@ -42,12 +42,12 @@ class EventDetail(APIView):
             if request.user.id == ADMIN_USER_ID:
                 return Event.objects.filter(
                     pk=pk
-                )
+                ).first()
             else:
                 return Event.objects.filter(
                     pk=pk,
-                    user__in=[request.user.id]
-                )
+                   # user__in=[request.user.id]
+                ).first()
         except Event.DoesNotExist:
             raise Http404
 
@@ -55,8 +55,14 @@ class EventDetail(APIView):
         serializer_context = {
             'request': request,
         }
-        event = self.get_object(pk,request)
-        serializer = EventSerializer(event, context=serializer_context)
+        if request.user.id == ADMIN_USER_ID:
+            event = Event.objects.filter(pk=pk)
+        else:
+            event = Event.objects.filter(
+                pk=pk,
+                # user__in=[request.user.id]
+            )
+        serializer = EventSerializer(event, context=serializer_context, many=True)
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
