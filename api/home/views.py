@@ -19,4 +19,5 @@ def api_root(request, format=None):
     })
 
 class HomePageView(TemplateView):
-    template_name = 'home/home.html'
+    pass
+    #template_name = 'home/home.html'
