@@ -104,8 +104,7 @@ ACCOUNT_EMAIL_VERIFICATION = 'none'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates/view')]
-        ,
+        'DIRS': [os.path.join(BASE_DIR, "templates"), ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -171,15 +170,9 @@ STATIC_URL = '/static/'
 
 ADMIN_USER_ID = 1
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'templates/../templates/static'),
-    os.path.join(BASE_DIR, 'templates/static/image'),
-    os.path.join(BASE_DIR, 'templates/static/style'),
-]
-
 WEBPACK_LOADER = {
     'DEFAULT': {
-        'BUNDLE_DIR_NAME': 'bundles/local/',  # end with slash
-        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats-local.json'),
-    }
+            'BUNDLE_DIR_NAME': 'bundles/',
+            'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.dev.json'),
+        }
 }

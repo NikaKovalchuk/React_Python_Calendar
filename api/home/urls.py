@@ -11,7 +11,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
     path(r'all/', views.api_root),
-    path(r'', views.HomePageView.as_view(), name="home"),
+    path(r'', generic.TemplateView.as_view(template_name="index.html")), #views.HomePageView.as_view(), name="home"),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
