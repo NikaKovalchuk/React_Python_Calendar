@@ -15,12 +15,21 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.conf import settings
+from django.views.generic import TemplateView
+
+react_routes = getattr(settings, 'REACT_ROUTES', [])
 
 urlpatterns = [
 
-    url(r'user/', include('api.user.urls')),
-    url(r'event/', include('api.event.urls')),
-    url(r'admin', admin.site.urls),
-    url(r'^accounts/', include('allauth.urls')),
+    url(r'api/user/', include('api.user.urls')),
+    url(r'api/event/', include('api.event.urls')),
+    url(r'api/admin', admin.site.urls),
+    url(r'api/auth/', include('allauth.urls')),
     url('', include('api.home.urls')),
 ]
+
+for route in react_routes:
+    urlpatterns += [
+        url('{}'.format(route), TemplateView.as_view(template_name='home/home.html'))
+    ]

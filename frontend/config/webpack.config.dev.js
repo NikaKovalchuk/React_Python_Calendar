@@ -24,7 +24,7 @@ const BundleTracker = require('webpack-bundle-tracker');
 // In development, we always serve from the root. This makes config easier.
 const publicPath = 'http://localhost:3000/';
 // `publicUrl` is just like `publicPath`, but we will provide it to our app
-// as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript.
+// as %PUBLIC_URL% in `home.html` and `process.env.PUBLIC_URL` in JavaScript.
 // Omit trailing slash as %PUBLIC_PATH%/xyz looks better than %PUBLIC_PATH%xyz.
 const publicUrl = 'http://localhost:3000/';
 // Get environment variables to inject into our app.
@@ -338,13 +338,13 @@ module.exports = {
     ],
   },
   plugins: [
-    // Generates an `index.html` file with the <script> injected.
+    // Generates an `home.html` file with the <script> injected.
     new HtmlWebpackPlugin({
       inject: true,
       template: paths.appHtml,
     }),
-    // Makes some environment variables available in index.html.
-    // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
+    // Makes some environment variables available in home.html.
+    // The public URL is available as %PUBLIC_URL% in home.html, e.g.:
     // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
     // In development, this will be an empty string.
     new InterpolateHtmlPlugin(HtmlWebpackPlugin, env.raw),
@@ -373,7 +373,7 @@ module.exports = {
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     // Generate a manifest file which contains a mapping of all asset filenames
     // to their corresponding output file so that tools can pick it up without
-    // having to parse `index.html`.
+    // having to parse `home.html`.
     new ManifestPlugin({
       fileName: 'asset-manifest.json',
       publicPath: publicPath,

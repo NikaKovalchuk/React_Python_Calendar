@@ -176,3 +176,8 @@ WEBPACK_LOADER = {
             'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.dev.json'),
         }
 }
+
+REACT_ROUTES = [
+    'login',
+    'event',
+]
