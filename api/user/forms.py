@@ -1,15 +1,16 @@
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
-from api.user.models import User
 from django import forms
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
+
+from api.user.models import User
+
 
 class UserCreationForm(UserCreationForm):
-
     class Meta(UserCreationForm):
         model = User
         fields = UserCreationForm.Meta.fields
 
-class UserChangeForm(forms.Form):
 
+class UserChangeForm(forms.Form):
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'email']
@@ -23,7 +24,7 @@ class UserChangeForm(forms.Form):
     last_name = forms.CharField(label='last_name', max_length=100)
     email = forms.EmailField(label='email', max_length=100)
 
-# TODO: check username
+    # TODO: check username
     def save(self):
         self.user.username = self.fields['username']
         self.user.first_name = self.fields['first_name']
@@ -31,12 +32,12 @@ class UserChangeForm(forms.Form):
         self.user.email = self.fields['email']
         self.user.save()
 
-class UserPasswordChangeForm(PasswordChangeForm):
 
+class UserPasswordChangeForm(PasswordChangeForm):
     class Meta(PasswordChangeForm):
         model = User
 
-class UserLogInForm(AuthenticationForm):
 
+class UserLogInForm(AuthenticationForm):
     class Meta(AuthenticationForm):
         model = User

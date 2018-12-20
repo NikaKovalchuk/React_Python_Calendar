@@ -1,6 +1,8 @@
 from rest_framework import serializers
-from .models import User
+
 from api.event.models import Event
+from .models import User
+
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     event = serializers.HyperlinkedRelatedField(many=True, queryset=Event.objects.all(), view_name='event-detail')

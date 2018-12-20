@@ -1,14 +1,11 @@
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from rest_framework.decorators import permission_classes
+from django.http import Http404
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from app.settings import ADMIN_USER_ID
 from .models import User
 from .serializers import UserSerializer
-from api.event.permissions import IsOwnerOrReadOnly
-from django.http import Http404
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
+
 
 # @permission_classes((IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly ))
 class UserList(APIView):
@@ -30,6 +27,7 @@ class UserList(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 # @permission_classes((IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly ))
 class UserDetail(APIView):

@@ -1,25 +1,26 @@
-from django.views.generic import TemplateView
+from django.http import Http404
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from app.settings import ADMIN_USER_ID
 from .models import Event
-from.serializers import EventSerializer
-from django.http import Http404
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
+from .serializers import EventSerializer
+
 
 # @permission_classes((IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly ))
 class EventList(APIView):
 
     def get(self, request, format=None):
         events = Event.objects.filter(
-           #user__in = [request.user.id]
+            # user__in = [request.user.id]
         )
         serializer_context = {
             'request': request,
         }
         serializer = EventSerializer(events, many=True, context=serializer_context)
         return Response(serializer.data)
+
 
 # @permission_classes((IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly ))
 class EventDetail(APIView):
@@ -32,7 +33,7 @@ class EventDetail(APIView):
             else:
                 return Event.objects.filter(
                     pk=pk,
-                   # user__in=[request.user.id]
+                    # user__in=[request.user.id]
                 ).first()
         except Event.DoesNotExist:
             raise Http404

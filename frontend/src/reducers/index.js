@@ -1,10 +1,10 @@
-import { combineReducers } from 'redux';
+import {combineReducers} from 'redux';
 import events from "./events";
 import auth from "./auth";
 
 
 const app = combineReducers({
-  events, auth
+    events, auth
 })
 
 export default app;

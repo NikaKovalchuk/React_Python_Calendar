@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
-import {Route, Switch, BrowserRouter} from 'react-router-dom';
+import React, {Component} from 'react';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
 
-import { Provider } from "react-redux";
+import {Provider} from "react-redux";
 import app from "./reducers";
 
 import Events from "./components/Events";
 import Login from "./components/Login"
 import NotFound from "./components/NotFound";
-import { createStore, applyMiddleware } from "redux";
+import {applyMiddleware, createStore} from "redux";
 import thunk from "redux-thunk";
 
 let store = createStore(app, applyMiddleware(thunk));

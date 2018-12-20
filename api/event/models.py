@@ -1,5 +1,7 @@
-from django.db import models
 from datetime import datetime
+
+from django.db import models
+
 
 class Event(models.Model):
     id = models.AutoField(primary_key=True)
@@ -16,12 +18,12 @@ class Event(models.Model):
     archived_date = models.DateTimeField(blank=True, null=True)
 
     class Meta:
-        ordering = ('create_date', )
+        ordering = ('create_date',)
 
     def __unicode__(self):
         return self.title
 
-    def __str__ (self):
+    def __str__(self):
         return self.title
 
     def save(self, force_insert=False, force_update=False, using=None,
