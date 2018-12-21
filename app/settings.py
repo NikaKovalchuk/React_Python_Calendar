@@ -24,17 +24,21 @@ SECRET_KEY = 'e9cnan3!cy=+v(wyf_^0@@^q1b^vkqr61wg9nj03-v$9h#@ngi'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '0.0.0.0', '127.0.0.1']
 
 LOGIN_REDIRECT_URL = 'home'
 
-LOGOUT_REDIRECT_URL = 'accounts/login'
+LOGOUT_REDIRECT_URL = '/login'
 
-ACCOUNT_LOGOUT_REDIRECT_URL = "/accounts/login"
+ACCOUNT_LOGOUT_REDIRECT_URL = "/login"
 
 ACCOUNT_LOGOUT_ON_GET = True
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+      'rest_framework.authentication.TokenAuthentication',
+      'rest_framework.authentication.SessionAuthentication',
+    ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
 }
@@ -90,11 +94,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'app.urls'
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
-    )
-}
+
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 

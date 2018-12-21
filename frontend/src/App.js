@@ -1,31 +1,73 @@
 import React, {Component} from 'react';
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import {BrowserRouter, Redirect, Route, Switch} from 'react-router-dom';
 
-import {Provider} from "react-redux";
+import {connect, Provider} from "react-redux";
 import app from "./reducers";
-
+import {auth} from "./actions";
 import Events from "./components/Events";
 import Login from "./components/Login"
-import NotFound from "./components/NotFound";
 import {applyMiddleware, createStore} from "redux";
 import thunk from "redux-thunk";
 
 let store = createStore(app, applyMiddleware(thunk));
 
-class App extends Component {
-  render() {
-    return (
-      <Provider store={store}>
-        <BrowserRouter>
-          <Switch>
-            <Route exact path="/event" component={Events} />
-            <Route exact path="/login" component={Login} />
-            <Route component={NotFound} />
-          </Switch>
-        </BrowserRouter>
-      </Provider>
-    );
-  }
+class RootContainerComponent extends Component {
+    componentDidMount() {
+        this.props.loadUser();
+    }
+
+    PrivateRoute = ({component: ChildComponent, ...rest}) => {
+        return <Route {...rest} render={props => {
+            if (this.props.auth.isLoading) {
+                return <em>Loading...</em>;
+            } else if (!this.props.auth.isAuthenticated) {
+                return <Redirect to="/login"/>;
+            } else {
+                return <ChildComponent {...props} />
+            }
+        }}/>
+    }
+
+
+    render() {
+        let {PrivateRoute} = this;
+        return (
+            <Provider store={store}>
+                <BrowserRouter>
+                    <Switch>
+                        <PrivateRoute exact path="/" component={Events}/>
+                        <PrivateRoute exact path="/event" component={Events}/>
+                        <Route exact path="/login" component={Login}/>
+                    </Switch>
+                </BrowserRouter>
+            </Provider>
+        );
+    }
 }
 
-export default App;
+
+const mapStateToProps = state => {
+    return {
+        auth: state.auth,
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        loadUser: () => {
+            return dispatch(auth.loadUser());
+        }
+    }
+}
+
+let RootContainer = connect(mapStateToProps, mapDispatchToProps)(RootContainerComponent);
+
+export default class App extends Component {
+    render() {
+        return (
+            <Provider store={store}>
+                <RootContainer/>
+            </Provider>
+        )
+    }
+}

@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {events} from "../actions";
-import {Link} from 'react-router-dom';
+import {auth, events} from "../actions";
 
 
 class Events extends Component {
@@ -37,7 +36,9 @@ class Events extends Component {
         return (
             <div>
                 <h2>Welcome to PonyNote!</h2>
-                <Link to="/contact">Click Here</Link> to contact us! 404
+                <div style={{textAlign: "right"}}>
+                    {this.props.user.username} (<a onClick={this.props.logout}>logout</a>)
+                </div>
                 <hr/>
 
                 <h3>Add new note</h3>
@@ -76,8 +77,10 @@ class Events extends Component {
 const mapStateToProps = state => {
     return {
         events: state.events,
+        user: state.auth.user,
     }
 }
+
 
 const mapDispatchToProps = dispatch => {
     return {
@@ -93,6 +96,7 @@ const mapDispatchToProps = dispatch => {
         fetchEvents: () => {
             dispatch(events.fetchEvents());
         },
+        logout: () => dispatch(auth.logout()),
     }
 }
 
