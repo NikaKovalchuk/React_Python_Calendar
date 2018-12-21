@@ -13,12 +13,8 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
-from django.views.generic import TemplateView
-
-react_routes = getattr(settings, 'REACT_ROUTES', [])
 
 urlpatterns = [
 
@@ -28,8 +24,3 @@ urlpatterns = [
     url(r'api/auth/', include('allauth.urls')),
     url('', include('api.home.urls')),
 ]
-
-for route in react_routes:
-    urlpatterns += [
-        url('{}'.format(route), TemplateView.as_view(template_name='home/home.html'))
-    ]

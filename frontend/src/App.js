@@ -6,6 +6,8 @@ import app from "./reducers";
 import {auth} from "./actions";
 import Events from "./components/Events";
 import Login from "./components/Login"
+import Register from "./components/Registration"
+import NotFound from "./components/NotFound"
 import {applyMiddleware, createStore} from "redux";
 import thunk from "redux-thunk";
 
@@ -35,9 +37,11 @@ class RootContainerComponent extends Component {
             <Provider store={store}>
                 <BrowserRouter>
                     <Switch>
-                        <PrivateRoute exact path="/" component={Events}/>
-                        <PrivateRoute exact path="/event" component={Events}/>
+                        <Route exact path="/event" component={Events}/>
                         <Route exact path="/login" component={Login}/>
+                        <Route exact path="/registration" component={Register}/>
+                        <Route exact path="/" component={Events}/>
+                        <Route exact path="*" component={NotFound}/>
                     </Switch>
                 </BrowserRouter>
             </Provider>

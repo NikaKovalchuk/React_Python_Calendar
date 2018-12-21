@@ -6,13 +6,12 @@ export const loadUser = () => {
 
         let headers = {
             "Content-Type": "application/json",
-            "X-CSRFToken": getCookie("csrftoken")
         };
 
         if (token) {
             headers["Authorization"] = `Token ${token}`;
         }
-        return fetch("/api/user/current", {headers,})
+        return fetch("http://localhost:8000/api/user/current", {headers,})
             .then(res => {
                 if (res.status < 500) {
                     return res.json().then(data => {
@@ -37,10 +36,11 @@ export const loadUser = () => {
 
 export const login = (username, password) => {
   return (dispatch, getState) => {
-    let headers = {"Content-Type": "application/json", "X-CSRFToken": getCookie("csrftoken") };
-    let body = JSON.stringify({username, password});
+    let headers = {"Content-Type": "application/json"};
+    var login = username
+    let body = JSON.stringify({login, password});
 
-    return fetch("/api/auth/login/", {headers, body, method: "POST"})
+    return fetch("http://localhost:8000/api/auth/login/", {headers, body, method: "POST"})
       .then(res => {
         if (res.status < 500) {
           return res.json().then(data => {
@@ -68,9 +68,9 @@ export const login = (username, password) => {
 
 export const logout = () => {
   return (dispatch, getState) => {
-    let headers = {"Content-Type": "application/json", "X-CSRFToken": getCookie("csrftoken") };
+    let headers = {"Content-Type": "application/json"};
 
-    return fetch("/api/auth/logout/", {headers, body: "", method: "POST"})
+    return fetch("http://localhost:8000/api/auth/logout/", {headers, body: "", method: "POST"})
       .then(res => {
         if (res.status === 204) {
           return {status: res.status, data: {}};
@@ -94,19 +94,3 @@ export const logout = () => {
       })
   }
 }
-
-function getCookie(c_name)
-{
-    if (document.cookie.length > 0)
-    {
-        var c_start = document.cookie.indexOf(c_name + "=");
-        if (c_start != -1)
-        {
-            c_start = c_start + c_name.length + 1;
-            var c_end = document.cookie.indexOf(";", c_start);
-            if (c_end == -1) c_end = document.cookie.length;
-            return unescape(document.cookie.substring(c_start,c_end));
-        }
-    }
-    return "";
- }

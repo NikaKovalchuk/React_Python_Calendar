@@ -2,7 +2,7 @@ export const addEvent = text => {
     return dispatch => {
         let headers = {"Content-Type": "application/json"};
         let body = JSON.stringify({text,});
-        return fetch("/api/event/", {headers, method: "POST", body})
+        return fetch("http://localhost:8000/api/event/", {headers, method: "POST", body})
             .then(res => res.json())
             .then(event => {
                 return dispatch({
@@ -20,7 +20,7 @@ export const updateEvent = (index, text) => {
         let body = JSON.stringify({text,});
         let eventId = getState().events[index].id;
 
-        return fetch(`/api/event/${eventId}/`, {headers, method: "PUT", body})
+        return fetch(`http://localhost:8000/api/event/${eventId}/`, {headers, method: "PUT", body})
             .then(res => res.json())
             .then(event => {
                 return dispatch({
@@ -42,7 +42,7 @@ export const deleteEvent = id => {
 export const fetchEvents = () => {
     return dispatch => {
         let headers = {"Content-Type": "application/json"};
-        return fetch("/api/event/", {headers,})
+        return fetch("http://localhost:8000/api/event/", {headers,})
             .then(res => res.json())
             .then(events => {
                 return dispatch({

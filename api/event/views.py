@@ -1,10 +1,12 @@
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from tablib import Dataset
 
 from app.settings import ADMIN_USER_ID
 from .models import Event
+from .resources import EventResource
 from .serializers import EventSerializer
 
 
@@ -77,3 +79,26 @@ class EventDetail(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class EventsExport(APIView):
+
+    # export
+    def get(self, request):
+        event_resource = EventResource()
+        dataset = event_resource.export()
+        response = HttpResponse(dataset.json, content_type='application/json')
+        response['Content-Disposition'] = 'attachment; filename="calendar.json"'
+        return response
+
+    # import
+    def post(self, request):
+        event_resource = EventResource()
+        dataset = Dataset()
+        new_events = request.FILES['file']
+
+        imported_data = dataset.load(new_events.read())
+        result = event_resource.import_data(dataset, dry_run=True)
+
+        if not result.has_errors():
+            event_resource.import_data(dataset, dry_run=False)  # Actually import now

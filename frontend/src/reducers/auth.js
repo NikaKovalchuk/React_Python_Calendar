@@ -17,7 +17,17 @@ export default function auth(state = initialState, action) {
 
         case 'USER_LOADED':
             console.log('USER_LOADED')
-            return {...state, isAuthenticated: true, isLoading: false, user: action.user};
+            var logedin = false
+            for (var field=0; field<action.user.length; field++){
+                if (action.user[field]!==""||action.user[field]!==""){
+                    logedin = true
+                }
+            }
+            if (logedin) {
+                return {...state, isAuthenticated: true, isLoading: false, user: action.user};
+            } else {
+                return {...state, isAuthenticated: false, isLoading: false, user: null};
+            }
         case 'LOGIN_SUCCESSFUL':
             console.log('LOGIN_SUCCESSFUL')
             localStorage.setItem("token", action.data.token);

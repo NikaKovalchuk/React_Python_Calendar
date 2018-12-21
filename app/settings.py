@@ -43,6 +43,8 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10
 }
 
+IMPORT_EXPORT_USE_TRANSACTIONS = True
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -54,6 +56,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
 
+    'import_export',
     'rest_framework',
     'webpack_loader',
 
@@ -82,7 +85,11 @@ ACCOUNT_USERNAME_REQUIRED = False
 
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 
+CSRF_COOKIE_SECURE = True
+
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -93,8 +100,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'app.urls'
-
-
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
@@ -173,7 +178,8 @@ WEBPACK_LOADER = {
     }
 }
 
-REACT_ROUTES = [
-    'login',
-    'event',
-]
+CORS_ORIGIN_WHITELIST = (
+    'localhost:3000',
+    '127.0.0.1:3000',
+    '0.0.0.0:3000'
+)

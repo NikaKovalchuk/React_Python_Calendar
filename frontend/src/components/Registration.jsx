@@ -5,7 +5,7 @@ import {Link, Redirect} from "react-router-dom";
 import {auth} from "../actions";
 
 
-class Login extends Component {
+class Register extends Component {
 
     state = {
         username: "",
@@ -23,7 +23,7 @@ class Login extends Component {
         }
         return (
             <form onSubmit={this.onSubmit}>
-                <h2>Login</h2>
+                <h2>Registration</h2>
                 {this.props.errors.length > 0 && (
                     <ul>
                         {this.props.errors.map(error => (
@@ -44,11 +44,17 @@ class Login extends Component {
                         onChange={e => this.setState({password: e.target.value})}/>
                 </p>
                 <p>
-                    <button type="submit">Login</button>
+                    <label htmlFor="password">Repeat password</label>
+                    <input
+                        type="password" id="password"
+                        onChange={e => this.setState({password: e.target.value})}/>
+                </p>
+                <p>
+                    <button type="submit">Registration</button>
                 </p>
 
                 <p>
-                    Don't have an account? <Link to="/registration">Register</Link>
+                    Have an account? <Link to="/login">Login</Link>
                 </p>
             </form>
         )
@@ -77,4 +83,4 @@ const mapDispatchToProps = dispatch => {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Register);
