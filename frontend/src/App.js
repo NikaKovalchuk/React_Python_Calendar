@@ -4,7 +4,8 @@ import {BrowserRouter, Redirect, Route, Switch} from 'react-router-dom';
 import {connect, Provider} from "react-redux";
 import app from "./reducers";
 import {auth} from "./actions";
-import Events from "./components/Events";
+import Event from "./components/Event";
+import EventForm from "./components/EventForm";
 import Login from "./components/Login"
 import Register from "./components/Registration"
 import NotFound from "./components/NotFound"
@@ -32,15 +33,16 @@ class RootContainerComponent extends Component {
 
 
     render() {
-        let {PrivateRoute} = this;
         return (
             <Provider store={store}>
                 <BrowserRouter>
                     <Switch>
-                        <Route exact path="/event" component={Events}/>
+                        <Route exact path="/event/new/" component={EventForm}/>
+                        <Route exact path="/event/edit/:id" component={EventForm}/>
+                        <Route exact path="/event/:id" component={Event}/>
                         <Route exact path="/login" component={Login}/>
                         <Route exact path="/registration" component={Register}/>
-                        <Route exact path="/" component={Events}/>
+                        <Route exact path="/account" component={Register}/>
                         <Route exact path="*" component={NotFound}/>
                     </Switch>
                 </BrowserRouter>

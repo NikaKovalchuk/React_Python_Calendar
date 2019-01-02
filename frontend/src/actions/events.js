@@ -1,7 +1,7 @@
-export const addEvent = text => {
+export const addEvent = (body) => {
     return dispatch => {
         let headers = {"Content-Type": "application/json"};
-        let body = JSON.stringify({text,});
+        body = JSON.stringify(body)
         return fetch("http://localhost:8000/api/event/", {headers, method: "POST", body})
             .then(res => res.json())
             .then(event => {
@@ -33,9 +33,16 @@ export const updateEvent = (index, text) => {
 }
 
 export const deleteEvent = id => {
-    return {
-        type: 'DELETE_EVENT',
-        id
+    return dispatch => {
+        let headers = {"Content-Type": "application/json"};
+        return fetch("http://localhost:8000/api/event/"+ id , {headers, method: "DELETE",})
+            .then(res => res.json())
+            .then(events => {
+                return dispatch({
+                    type: 'DELETE_EVENT',
+                    id
+                })
+            })
     }
 }
 
@@ -47,6 +54,20 @@ export const fetchEvents = () => {
             .then(events => {
                 return dispatch({
                     type: 'FETCH_EVENTS',
+                    events
+                })
+            })
+    }
+}
+
+export const loadEvent = id => {
+    return dispatch => {
+        let headers = {"Content-Type": "application/json"};
+        return fetch("http://localhost:8000/api/event/" + id , {headers,  method: "GET",})
+            .then(res => res.json())
+            .then(events => {
+                return dispatch({
+                    type: 'LOAD_EVENT',
                     events
                 })
             })

@@ -7,7 +7,7 @@ from tablib import Dataset
 from app.settings import ADMIN_USER_ID
 from .models import Event
 from .resources import EventResource
-from .serializers import EventSerializer
+from .serializers import EventSerializer, NewEventSerializer
 
 
 # @permission_classes((IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly ))
@@ -22,6 +22,16 @@ class EventList(APIView):
         }
         serializer = EventSerializer(events, many=True, context=serializer_context)
         return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer_context = {
+            'request': request,
+        }
+        serializer = NewEventSerializer(data=request.data, context=serializer_context)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # @permission_classes((IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly ))
@@ -70,15 +80,6 @@ class EventDetail(APIView):
         event.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    def post(self, request, format=None):
-        serializer_context = {
-            'request': request,
-        }
-        serializer = EventSerializer(data=request.data, context=serializer_context)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class EventsExport(APIView):
