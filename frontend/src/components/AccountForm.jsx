@@ -25,11 +25,13 @@ class EventForm extends Component {
     }
 
     onSubmit = (model) => {
-       if (this.state.id === null) {
+
+       if (this.state.updateEventId === null) {
             this.props.addEvent(model);
        } else {
-           this.props.updateEvent(this.state.id, model)
+           this.props.updateEvent(this.state.updateEventId, model)
        }
+       this.props.addEvent(model)
     }
 
     render() {
@@ -63,11 +65,11 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        addEvent: (model) => {
-            return dispatch(events.addEvent(model));
+        addEvent: (text) => {
+            return dispatch(events.addEvent(text));
         },
-        updateEvent: (id, model) => {
-            return dispatch(events.updateEvent(id, model));
+        updateEvent: (id, text) => {
+            return dispatch(events.updateEvent(id, text));
         },
         deleteEvent: (id) => {
             dispatch(events.deleteEvent(id));

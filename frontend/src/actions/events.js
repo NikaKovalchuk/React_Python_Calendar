@@ -2,6 +2,7 @@ export const addEvent = (body) => {
     return dispatch => {
         let headers = {"Content-Type": "application/json"};
         body = JSON.stringify(body)
+        console.log(body)
         return fetch("http://localhost:8000/api/event/", {headers, method: "POST", body})
             .then(res => res.json())
             .then(event => {
@@ -13,14 +14,12 @@ export const addEvent = (body) => {
     }
 }
 
-export const updateEvent = (index, text) => {
+export const updateEvent = (index, body) => {
     return (dispatch, getState) => {
 
         let headers = {"Content-Type": "application/json"};
-        let body = JSON.stringify({text,});
-        let eventId = getState().events[index].id;
 
-        return fetch(`http://localhost:8000/api/event/${eventId}/`, {headers, method: "PUT", body})
+        return fetch("http://localhost:8000/api/event/${index}/", {headers, method: "PUT", body})
             .then(res => res.json())
             .then(event => {
                 return dispatch({

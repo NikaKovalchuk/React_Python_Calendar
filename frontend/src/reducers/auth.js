@@ -26,15 +26,18 @@ export default function auth(state = initialState, action) {
             if (logedin) {
                 return {...state, isAuthenticated: true, isLoading: false, user: action.user};
             } else {
-                return {...state, isAuthenticated: false, isLoading: false, user: null};
+                return {...state, isAuthenticated: false, isLoading: false, user: action.user}; // TODO: change user to null
             }
+
         case 'LOGIN_SUCCESSFUL':
             console.log('LOGIN_SUCCESSFUL')
             localStorage.setItem("token", action.data.token);
             return {...state, ...action.data, isAuthenticated: true, isLoading: false, errors: null};
 
         case 'AUTHENTICATION_ERROR':
+
         case 'LOGIN_FAILED':
+
         case 'LOGOUT_SUCCESSFUL':
             console.log('LOGOUT_SUCCESSFUL')
             localStorage.removeItem("token");
@@ -42,6 +45,10 @@ export default function auth(state = initialState, action) {
                 ...state, errors: action.data, token: null, user: null,
                 isAuthenticated: false, isLoading: false
             };
+
+        case 'REGISTRATION_FAILED':
+
+        case 'REGISTRATION_FAILED':
 
         default:
             console.log('default')
