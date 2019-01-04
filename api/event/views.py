@@ -81,7 +81,6 @@ class EventDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-
 class EventsExport(APIView):
 
     # export

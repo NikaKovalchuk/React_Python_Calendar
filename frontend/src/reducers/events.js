@@ -1,18 +1,14 @@
 const initialState = [];
 
 export default function events(state = initialState, action) {
-    let eventList = state.slice();
 
     switch (action.type) {
 
         case 'ADD_EVENT':
-            return [...state, ...action.events];
+            return [...state];
 
         case 'UPDATE_EVENT':
-            let eventToUpdate = eventList[action.index]
-            eventToUpdate.text = action.event.text;
-            eventList.splice(action.index, 1, eventToUpdate);
-            return eventList;
+            return [...state];
 
         case 'DELETE_EVENT':
             return [...state, ...action.events];

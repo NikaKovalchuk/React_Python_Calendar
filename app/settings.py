@@ -26,11 +26,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '0.0.0.0', '127.0.0.1']
 
-LOGIN_REDIRECT_URL = 'home'
+ACCOUNT_EMAIL_REQUIRED = True
 
-LOGOUT_REDIRECT_URL = '/login'
-
-ACCOUNT_LOGOUT_REDIRECT_URL = "/login"
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 ACCOUNT_LOGOUT_ON_GET = True
 
@@ -178,5 +176,5 @@ WEBPACK_LOADER = {
 CORS_ORIGIN_WHITELIST = (
     'localhost:3000',
     '127.0.0.1:3000',
-    '0.0.0.0:3000'
+    '0.0.0.0:3000',
 )

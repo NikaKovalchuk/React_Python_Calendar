@@ -20,7 +20,6 @@ class EventSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class NewEventSerializer(serializers.HyperlinkedModelSerializer):
-
     class Meta:
         model = Event
         fields = ('title', 'text', 'start_date', 'finish_date', 'price')
@@ -31,4 +30,3 @@ class NewEventSerializer(serializers.HyperlinkedModelSerializer):
                 if value['start_date'] > value['finish_date']:
                     raise serializers.ValidationError("finish must occur after start")
         return value
-

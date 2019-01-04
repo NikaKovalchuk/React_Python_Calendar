@@ -16,7 +16,7 @@ class Register extends Component {
     }
 
     onSubmit = (model) => {
-       this.props.registration(model);
+        this.props.registration(model);
     }
 
     render() {
@@ -26,15 +26,23 @@ class Register extends Component {
         return (
             <div>
                 <DynamicForm className="form"
-                     title = "Registration"
-                     data = {this.state.user}
-                     model = {[
-                        {key: "username", label: "Username", type : "email", props:{required: true}},
-                        {key: "password", label: "Password", type : "password", props:{required: true}},
-                        {key: "password2", label: "Password (repeat)", type:"password", props:{required: true}},
-                     ]}
-                     onSubmit = {(model) => this.onSubmit(model)}
-                 />
+                             title="Registration"
+                             data={this.state.user}
+                             model={[
+                                 {key: "email", label: "Email", type: "email", props: {required: true}},
+                                 {key: "password1", label: "Password", type: "password", props: {required: true}},
+                                 {
+                                     key: "password2",
+                                     label: "Password (repeat)",
+                                     type: "password",
+                                     props: {required: true}
+                                 },
+                             ]}
+                             onSubmit={(model) => this.onSubmit(model)}
+                />
+                <p className={"info"}>
+                    Don't have an account? <Link to="/login">Login</Link>
+                </p>
             </div>
         )
     }

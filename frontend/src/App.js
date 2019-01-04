@@ -6,9 +6,9 @@ import app from "./reducers";
 import {auth} from "./actions";
 import Event from "./components/Event";
 import EventForm from "./components/EventForm";
-import Account from "./components/Account";
-import AccountForm from "./components/AccountForm";
+import ToolBar from "./components/ToolBar";
 import Login from "./components/Login"
+import Settings from "./components/Settings"
 import Register from "./components/Registration"
 import NotFound from "./components/NotFound"
 import {applyMiddleware, createStore} from "redux";
@@ -37,19 +37,21 @@ class RootContainerComponent extends Component {
     render() {
         return (
             <Provider store={store}>
+                <ToolBar/>
                 <BrowserRouter>
+                    <div id={"content"}>
                     <Switch>
                         <Route exact path="/event/new/" component={EventForm}/>
                         <Route exact path="/event/edit/:id" component={EventForm}/>
                         <Route exact path="/event/:id" component={Event}/>
 
-                        <Route exact path="/account" component={Account}/>
-                        <Route exact path="/account/edit" component={AccountForm}/>
                         <Route exact path="/login" component={Login}/>
                         <Route exact path="/registration" component={Register}/>
+                        <Route exact path="/settings" component={Settings}/>
 
                         <Route exact path="*" component={NotFound}/>
                     </Switch>
+                    </div>
                 </BrowserRouter>
             </Provider>
         );

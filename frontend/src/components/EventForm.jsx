@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {auth, events} from "../actions";
+import {events} from "../actions";
 import DynamicForm from "./DynamicForm"
 
 class EventForm extends Component {
@@ -15,21 +15,25 @@ class EventForm extends Component {
     }
 
     componentDidMount() {
-        if(this.state.id !== null) {
+        if (this.state.id !== null) {
             this.props.loadEvent(this.state.id).then(response => {
-              this.setState({
-                event : this.props.events[0]
-              });
+                this.setState({
+                    event: this.props.events[0]
+                });
             });
         }
     }
 
+    componentWillReceiveProps(nextProps) {
+        console.log(nextProps)
+    }
+
     onSubmit = (model) => {
-       if (this.state.id === null) {
-            this.props.addEvent(model);
-       } else {
-           this.props.updateEvent(this.state.id, model)
-       }
+        if (this.state.id === null) {
+            this.props.addEvent(model)
+        } else {
+            this.props.updateEvent(this.state.id, model)
+        }
     }
 
     render() {

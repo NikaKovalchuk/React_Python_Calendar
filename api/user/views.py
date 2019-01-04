@@ -67,8 +67,6 @@ class CurrentUser(APIView):
     def get_object(self, request):
         try:
             id = request.user.id
-            if id == None:
-                id = 1
             return User.objects.filter(
                 pk=id
             ).first()
