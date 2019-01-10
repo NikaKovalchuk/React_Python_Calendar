@@ -78,7 +78,7 @@ export default class DynamicForm extends React.Component {
                                        this.onChange(e, o.name)
                                    }}
                             />
-                            <label key={"ll" + o.key}>{o.label}</label>
+                            <label key={"ll" + o.key}>{o.name}</label>
                         </React.Fragment>
                     );
                 });
@@ -152,14 +152,14 @@ export default class DynamicForm extends React.Component {
         let title = this.props.title || "Dynamic Form";
 
         return (
-            <div className={this.props.className}>
+            <div className="form">
                 <h3 className="form-title">{title}</h3>
                 <form className="dynamic-form" onSubmit={(e) => {
                     this.onSubmit(e)
                 }}>
                     {this.renderForm()}
                     <div className="form-actions">
-                        <button type="submit" className="btn btn-secondary">submit</button>
+                        <button type="submit" className="btn btn-secondary"> OK</button>
                     </div>
                 </form>
             </div>

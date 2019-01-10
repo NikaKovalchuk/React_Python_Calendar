@@ -11,7 +11,7 @@ export const loadUser = () => {
         if (token) {
             headers["Authorization"] = `Token ${token}`;
         }
-        return fetch("http://localhost:8000/api/user/current", {headers,})
+        return fetch("http://localhost:8000/api/user/current/", {headers,})
             .then(res => {
                 if (res.status < 500) {
                     return res.json().then(data => {
@@ -34,22 +34,23 @@ export const loadUser = () => {
     }
 }
 
-export const login = (body) => {
+export const login = (username, password) => {
     return (dispatch, getState) => {
-        var formData = new FormData();
-        formData.append("login", body.email);
-        formData.append("password", body.password);
-        return fetch("http://localhost:8000/api/auth/login/", { body:formData, method: "POST"})
+        let headers = {"Content-Type": "application/json"};
+        let body = JSON.stringify({username, password});
+
+        return fetch("http://localhost:8000/api/user/login/", {headers, body, method: "POST"})
             .then(res => {
                 if (res.status < 500) {
-                    return {status: res.status, data: JSON.stringify(res)}; // TODO send response not {}
+                    return res.json().then(data => {
+                        return {status: res.status, data};
+                    })
                 } else {
                     console.log("Server Error!");
                     throw res;
                 }
             })
             .then(res => {
-                console.log(res)
                 if (res.status === 200) {
                     dispatch({type: 'LOGIN_SUCCESSFUL', data: res.data});
                     return res.data;
@@ -64,45 +65,12 @@ export const login = (body) => {
     }
 }
 
-export const registration = (body) => {
-    return (dispatch) => {
-        var formData = new FormData();
-        formData.append("email", body.email);
-        formData.append("password1", body.password1);
-        formData.append("password2", body.password2);
-        return fetch("http://localhost:8000/api/auth/signup/", { body:formData, method: "POST"})
-            .then(res => {
-                if (res.status < 500) {
-                    return res.json().then(data => {
-                        return {status: res.status, data};
-                    })
-                } else {
-                    console.log("Server Error!");
-                    throw res;
-                }
-            })
-            .then(res => {
-                if (res.status === 200) {
-                    dispatch({type: 'REGISTER_SUCCESSFUL', data: res.data});
-                    return res.data;
-                } else if (res.status === 403 || res.status === 401) {
-                    dispatch({type: "AUTHENTICATION_ERROR", data: res.data});
-                    throw res.data;
-                } else {
-                    dispatch({type: "REGISTER_FAILED", data: res.data});
-                    throw res.data;
-                }
-            })
-    }
-}
+export const register = (username, password) => {
+    return (dispatch, getState) => {
+        let headers = {"Content-Type": "application/json"};
+        let body = JSON.stringify({username, password});
 
-export const changePassword = (body) => {
-    return (dispatch) => {
-        var formData = new FormData();
-        formData.append("oldpassword", body.oldpassword);
-        formData.append("password1", body.password1);
-        formData.append("password2", body.password2);
-        return fetch("http://localhost:8000/api/auth/password/change/", { body:formData, method: "POST"})
+        return fetch("http://localhost:8000/api/user/signup/", {headers, body, method: "POST"})
             .then(res => {
                 if (res.status < 500) {
                     return res.json().then(data => {
@@ -115,13 +83,13 @@ export const changePassword = (body) => {
             })
             .then(res => {
                 if (res.status === 200) {
-                    dispatch({type: 'CHANGE_PASSWORD_SUCCESSFUL', data: res.data});
+                    dispatch({type: 'REGISTRATION_SUCCESSFUL', data: res.data});
                     return res.data;
                 } else if (res.status === 403 || res.status === 401) {
                     dispatch({type: "AUTHENTICATION_ERROR", data: res.data});
                     throw res.data;
                 } else {
-                    dispatch({type: "CHANGE_PASSWORD_FAILED", data: res.data});
+                    dispatch({type: "REGISTRATION_FAILED", data: res.data});
                     throw res.data;
                 }
             })
@@ -132,7 +100,7 @@ export const logout = () => {
     return (dispatch, getState) => {
         let headers = {"Content-Type": "application/json"};
 
-        return fetch("http://localhost:8000/api/auth/logout/", {headers, body: "", method: "POST"})
+        return fetch("http://localhost:8000/api/user/current/", {headers,})
             .then(res => {
                 if (res.status === 204) {
                     return {status: res.status, data: {}};
@@ -146,7 +114,7 @@ export const logout = () => {
                 }
             })
             .then(res => {
-                if (res.status === 204) {
+                if (res.status === 200) {
                     dispatch({type: 'LOGOUT_SUCCESSFUL'});
                     return res.data;
                 } else if (res.status === 403 || res.status === 401) {

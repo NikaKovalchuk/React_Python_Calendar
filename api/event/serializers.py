@@ -9,7 +9,7 @@ class EventSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Event
-        fields = ('id', 'title', 'text', 'start_date', 'finish_date', 'status', 'price', 'archived', 'user')
+        fields = ('id', 'title', 'text', 'start_date', 'finish_date', 'archived', 'user', 'cycle')
 
     def validate(self, value):
         if value['start_date']:
@@ -22,7 +22,7 @@ class EventSerializer(serializers.HyperlinkedModelSerializer):
 class NewEventSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Event
-        fields = ('title', 'text', 'start_date', 'finish_date', 'price')
+        fields = ('title', 'text', 'start_date', 'finish_date', 'cycle')
 
     def validate(self, value):
         if value['start_date']:

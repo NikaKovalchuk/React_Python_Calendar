@@ -1,22 +1,20 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
+
 import {Link, Redirect} from "react-router-dom";
-import DynamicForm from "./DynamicForm"
 
 import {auth} from "../actions";
-
 
 class Register extends Component {
 
     state = {
         username: "",
         password: "",
-        password2: "",
-        user: {},
     }
 
-    onSubmit = (model) => {
-        this.props.registration(model);
+    onSubmit = e => {
+        e.preventDefault();
+        this.props.register(this.state.username, this.state.password);
     }
 
     render() {
@@ -24,26 +22,37 @@ class Register extends Component {
             return <Redirect to="/"/>
         }
         return (
-            <div>
-                <DynamicForm className="form"
-                             title="Registration"
-                             data={this.state.user}
-                             model={[
-                                 {key: "email", label: "Email", type: "email", props: {required: true}},
-                                 {key: "password1", label: "Password", type: "password", props: {required: true}},
-                                 {
-                                     key: "password2",
-                                     label: "Password (repeat)",
-                                     type: "password",
-                                     props: {required: true}
-                                 },
-                             ]}
-                             onSubmit={(model) => this.onSubmit(model)}
-                />
-                <p className={"info"}>
-                    Don't have an account? <Link to="/login">Login</Link>
-                </p>
-            </div>
+            <form onSubmit={this.onSubmit}>
+                <fieldset>
+                    <legend>Register</legend>
+                    {this.props.errors.length > 0 && (
+                        <ul>
+                            {this.props.errors.map(error => (
+                                <li key={error.field}>{error.message}</li>
+                            ))}
+                        </ul>
+                    )}
+                    <p>
+                        <label htmlFor="username">Username</label>
+                        <input
+                            type="text" id="username"
+                            onChange={e => this.setState({username: e.target.value})}/>
+                    </p>
+                    <p>
+                        <label htmlFor="password">Password</label>
+                        <input
+                            type="password" id="password"
+                            onChange={e => this.setState({password: e.target.value})}/>
+                    </p>
+                    <p>
+                        <button type="submit">Register</button>
+                    </p>
+
+                    <p>
+                        Already have an account? <Link to="/login">Login</Link>
+                    </p>
+                </fieldset>
+            </form>
         )
     }
 }
@@ -63,11 +72,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        registration: (model) => {
-            return dispatch(auth.registration(model));
-        }
+        register: (username, password) => dispatch(auth.register(username, password)),
     };
 }
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(Register);

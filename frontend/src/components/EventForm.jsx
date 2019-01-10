@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {events} from "../actions";
 import DynamicForm from "./DynamicForm"
+import {Redirect} from 'react-router-dom';
 
 class EventForm extends Component {
     state = {
@@ -12,6 +13,8 @@ class EventForm extends Component {
         id: this.props.match.params.id || null,
         price: 0,
         event: {},
+        redirect: false,
+        route: '',
     }
 
     componentDidMount() {
@@ -24,33 +27,57 @@ class EventForm extends Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
-        console.log(nextProps)
-    }
-
     onSubmit = (model) => {
         if (this.state.id === null) {
-            this.props.addEvent(model)
+            this.props.addEvent(model).then(response => {
+                this.setState({
+                    redirect: true
+                })
+            });
         } else {
-            this.props.updateEvent(this.state.id, model)
+            this.props.updateEvent(this.state.id, model).then(response => {
+                this.setState({
+                    redirect: true
+                })
+            });
+        }
+    }
+
+    renderRedirect = () => {
+        if (this.state.redirect) {
+            if (this.state.id === null) {
+                return <Redirect to='/'/>
+            } else {
+                return <Redirect to={`/event/${this.state.id}`}/>
+            }
         }
     }
 
     render() {
         return (
             <div>
+                {this.renderRedirect()}
                 <DynamicForm className="form"
-                     title = "Event Form"
-                     data = {this.state.event}
-                     model = {[
-                        {key: "title", label: "Title", props:{required: true}},
-                        {key: "text", label: "Text", props:{required: true}},
-                        {key: "price", label: "Price", type: "number", props:{required: true}},
-                        {key: "start_date", label: "Start time", type: "datetime-local", props:{required: true}},
-                        {key: "finish_date", label: "Finish time", type: "datetime-local", props:{required: true}},
-                     ]}
-                     onSubmit = {(model) => this.onSubmit(model)}
-                 />
+                             title="Event Form"
+                             data={this.state.event}
+                             model={[
+                                 {key: "title", label: "Title", props: {required: true}},
+                                 {key: "text", label: "Text", props: {required: true}},
+                                 {
+                                     key: "start_date",
+                                     label: "Start time",
+                                     type: "datetime-local",
+                                     props: {required: true}
+                                 },
+                                 {
+                                     key: "finish_date",
+                                     label: "Finish time",
+                                     type: "datetime-local",
+                                     props: {required: true}
+                                 },
+                             ]}
+                             onSubmit={(model) => this.onSubmit(model)}
+                />
             </div>
         )
     }

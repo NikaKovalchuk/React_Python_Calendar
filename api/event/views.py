@@ -1,5 +1,5 @@
 from django.http import Http404, HttpResponse
-from rest_framework import status
+from rest_framework import status, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from tablib import Dataset
@@ -10,12 +10,12 @@ from .resources import EventResource
 from .serializers import EventSerializer, NewEventSerializer
 
 
-# @permission_classes((IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly ))
 class EventList(APIView):
+    permission_classes = [permissions.IsAuthenticated, ]
 
     def get(self, request, format=None):
         events = Event.objects.filter(
-            # user__in = [request.user.id]
+            user__in=[request.user.id]
         )
         serializer_context = {
             'request': request,
@@ -34,8 +34,10 @@ class EventList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# @permission_classes((IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly ))
+
 class EventDetail(APIView):
+    permission_classes = [permissions.IsAuthenticated, ]
+
     def get_object(self, pk, request):
         try:
             if request.user.id == ADMIN_USER_ID:
@@ -47,6 +49,9 @@ class EventDetail(APIView):
                     pk=pk,
                     # user__in=[request.user.id]
                 ).first()
+            return Event.objects.filter(
+                pk=pk
+            ).first()
         except Event.DoesNotExist:
             raise Http404
 
@@ -54,13 +59,7 @@ class EventDetail(APIView):
         serializer_context = {
             'request': request,
         }
-        if request.user.id == ADMIN_USER_ID:
-            event = Event.objects.filter(pk=pk)
-        else:
-            event = Event.objects.filter(
-                pk=pk,
-                # user__in=[request.user.id]
-            )
+        event = self.get_object(pk, request)
         serializer = EventSerializer(event, context=serializer_context, many=True)
         return Response(serializer.data)
 
@@ -82,6 +81,7 @@ class EventDetail(APIView):
 
 
 class EventsExport(APIView):
+    permission_classes = [permissions.IsAuthenticated, ]
 
     # export
     def get(self, request):

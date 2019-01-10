@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {auth, events} from "../actions";
+import {auth} from "../actions";
 import DynamicForm from "./DynamicForm";
 
 class Settings extends Component {
@@ -8,11 +8,11 @@ class Settings extends Component {
         user: {},
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.props.loadUser().then(response => {
-          this.setState({
-            user : this.props.auth.user
-          });
+            this.setState({
+                user: this.props.auth.user
+            });
         });
     }
 
@@ -25,19 +25,31 @@ class Settings extends Component {
             <div>
                 <div>
                     <h1>Account</h1>
+                </div>
+                <div>
                     <p className={"form-label"}>Email : {this.state.user.email}</p>
                 </div>
                 <div>
                     <DynamicForm className="form"
-                     title = "Change password"
-                     data = {this.state.user}
-                     model = {[
-                        {key: "oldpassword", label: "Old Password", type: "password", props:{required: true}},
-                        {key: "password1", label: "Password", type: "password", props:{required: true}},
-                        {key: "password2", label: "Password Again", type: "password", props:{required: true}},
-                     ]}
-                     onSubmit = {(model) => this.onSubmit(model)}
-                 />
+                                 title="Change password"
+                                 data={this.state.user}
+                                 model={[
+                                     {
+                                         key: "oldpassword",
+                                         label: "Old Password",
+                                         type: "password",
+                                         props: {required: true}
+                                     },
+                                     {key: "password1", label: "Password", type: "password", props: {required: true}},
+                                     {
+                                         key: "password2",
+                                         label: "Password Again",
+                                         type: "password",
+                                         props: {required: true}
+                                     },
+                                 ]}
+                                 onSubmit={(model) => this.onSubmit(model)}
+                    />
                 </div>
             </div>
         )

@@ -9,6 +9,7 @@ import EventForm from "./components/EventForm";
 import ToolBar from "./components/ToolBar";
 import Login from "./components/Login"
 import Settings from "./components/Settings"
+import Main from "./components/Main"
 import Register from "./components/Registration"
 import NotFound from "./components/NotFound"
 import {applyMiddleware, createStore} from "redux";
@@ -23,41 +24,43 @@ class RootContainerComponent extends Component {
 
     PrivateRoute = ({component: ChildComponent, ...rest}) => {
         return <Route {...rest} render={props => {
-            if (this.props.auth.isLoading) {
-                return <em>Loading...</em>;
-            } else if (!this.props.auth.isAuthenticated) {
-                return <Redirect to="/login"/>;
-            } else {
-                return <ChildComponent {...props} />
-            }
-        }}/>
-    }
+          if (this.props.auth.isAuthenticated) {
+            return <ChildComponent {...props} />
+          } else if (this.props.auth.isLoading) {
+            return <em>Loading...</em>;
+          } else {
+            console.log('s')
+            return <Redirect to="/login" />;
+          }
+        }} />
+      }
 
 
     render() {
+        let {PrivateRoute} = this;
         return (
             <Provider store={store}>
                 <ToolBar/>
                 <BrowserRouter>
                     <div id={"content"}>
-                    <Switch>
-                        <Route exact path="/event/new/" component={EventForm}/>
-                        <Route exact path="/event/edit/:id" component={EventForm}/>
-                        <Route exact path="/event/:id" component={Event}/>
+                        <Switch>
+                            <PrivateRoute exact path="/event/new/" component={EventForm}/>
+                            <PrivateRoute exact path="/event/edit/:id" component={EventForm}/>
+                            <PrivateRoute exact path="/event/:id" component={Event}/>
+                            <PrivateRoute exact path="/settings" component={Settings}/>
+                            <PrivateRoute exact path="/" component={Main}/>
 
-                        <Route exact path="/login" component={Login}/>
-                        <Route exact path="/registration" component={Register}/>
-                        <Route exact path="/settings" component={Settings}/>
 
-                        <Route exact path="*" component={NotFound}/>
-                    </Switch>
+                            <Route exact path="/login" component={Login}/>
+                            <Route exact path="/registration" component={Register}/>
+                            <Route exact path="*" component={NotFound}/>
+                        </Switch>
                     </div>
                 </BrowserRouter>
             </Provider>
         );
     }
 }
-
 
 const mapStateToProps = state => {
     return {
