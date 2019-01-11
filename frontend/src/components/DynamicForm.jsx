@@ -62,6 +62,22 @@ export default class DynamicForm extends React.Component {
                                }}
             />;
 
+            if (type === "datetime-local") {
+                if (value) {
+                    value = value.replace(':00Z', '')
+                }
+                input = <input {...props}
+                               className="form-input"
+                               type={type}
+                               key={key}
+                               value={value}
+                               name={name}
+                               onChange={(e) => {
+                                   this.onChange(e, target)
+                               }}
+                />;
+            }
+
             if (type === "radio") {
                 input = m.options.map((o) => {
                     let checked = o.value === value;

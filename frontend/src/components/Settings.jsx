@@ -30,19 +30,13 @@ class Settings extends Component {
         return (
             <div>
                 <div>
-                    <h1>Account</h1>
-                </div>
-                <div>
-                    <p className={"form-label"}>Username : {this.state.user.username}</p>
-                </div>
-                <div>
-                    <div className={'inline-block'}><h1>Export your calendar : </h1></div>
+                    <div className={'inline-block'}><h3>Export your calendar : </h3></div>
                     <div className={'inline-block'}>
                         <button onClick={this.export} className="btn btn-secondary export-button"> Export</button>
                     </div>
                 </div>
                 <div>
-                    <div className={'inline-block'}><h1>Import calendar : </h1></div>
+                    <div className={'inline-block'}><h3>Import calendar : </h3></div>
                     <div className={'inline-block'}>
                         <button onClick={this.import} className="btn btn-secondary export-button"> Import</button>
                     </div>

@@ -3,6 +3,19 @@ import {connect} from 'react-redux';
 import {auth, events} from "../actions";
 
 class ToolBar extends Component {
+    state={
+        user:{}
+    }
+
+    componentDidMount() {
+        this.props.loadUser().then(response => {
+            if (this.props.user) {
+                this.setState({
+                    user: this.props.user
+                });
+            }
+        });
+    }
 
     render() {
         let list;
@@ -44,14 +57,8 @@ const mapDispatchToProps = dispatch => {
         addEvent: (text) => {
             return dispatch(events.addEvent(text));
         },
-        updateEvent: (id, text) => {
-            return dispatch(events.updateEvent(id, text));
-        },
-        deleteEvent: (id) => {
-            dispatch(events.deleteEvent(id));
-        },
-        loadEvent: (id) => {
-            return dispatch(events.loadEvent(id));
+        loadUser: (id) => {
+            return dispatch(auth.loadUser(id));
         },
         logout: () => dispatch(auth.logout()),
     }

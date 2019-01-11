@@ -15,7 +15,8 @@ class EventList(APIView):
 
     def get(self, request, format=None):
         events = Event.objects.filter(
-            # user=[request.user.id]
+            user=request.user.id,
+            archived=False
         )
         serializer_context = {
             'request': request,
@@ -34,7 +35,6 @@ class EventList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 class EventDetail(APIView):
     permission_classes = [permissions.IsAuthenticated, ]
 
@@ -42,10 +42,13 @@ class EventDetail(APIView):
         try:
             if request.user.id == ADMIN_USER_ID:
                 return Event.objects.filter(
+                    archived=False,
                     pk=pk
                 ).first()
             else:
                 return Event.objects.filter(
+                    user = request.user.id,
+                    archived=False,
                     pk=pk,
                 ).first()
             return Event.objects.filter(

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {auth, events} from "../actions";
 import Calendar from "./Calendar"
+import Scheduler from "./Scheduler"
 
 class Settings extends Component {
     state = {
@@ -27,11 +28,12 @@ class Settings extends Component {
         return (
             <div>
                 <div className={'side-bar'}>
-                    <div>
+                    <div className={'calendar'}>
                         <Calendar/>
                     </div>
                 </div>
                 <div className={'scheduler'}>
+                    <Scheduler/>
                 </div>
             </div>
         )

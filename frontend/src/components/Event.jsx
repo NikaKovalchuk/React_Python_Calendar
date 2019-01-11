@@ -10,6 +10,7 @@ class Events extends Component {
         event: {},
         edit: false,
         not_found: false,
+        main: false,
     }
 
     componentDidMount() {
@@ -33,12 +34,23 @@ class Events extends Component {
         })
     }
 
+    delete() {
+        this.props.deleteEvent(this.state.id)
+        this.setState({
+            main: true
+        })
+    }
+
+
     renderRedirect = () => {
         if (this.state.edit) {
             return <Redirect to={`/event/edit/${this.state.id}`}/>
         }
         if (this.state.not_found) {
             return <Redirect to={`/not_found`}/>
+        }
+        if (this.state.main) {
+            return <Redirect to='/'/>
         }
     }
 
@@ -50,7 +62,7 @@ class Events extends Component {
                     <p className={'title'}>{this.state.event.title}</p>
                 </div>
                     <button onClick={() => this.edit()} className="btn btn-secondary">EDIT</button>
-                    <button onClick={() => this.props.deleteEvent(this.state.id)} className="btn btn-danger">DELETE</button>
+                    <button onClick={() => this.delete()} className="btn btn-danger">DELETE</button>
                 <div className={'margin-top'}>
                     <p className={'data'}>Text : {this.state.event.text}</p>
                     <p className={'data'}>Start Date : {new Date(this.state.event.start_date).toDateString()} {new Date(this.state.event.start_date).toLocaleTimeString("en-US")}</p>
