@@ -63,10 +63,36 @@ export const loadEvent = id => {
             headers["Authorization"] = `Token ${token}`;
         }
         return fetch("http://localhost:8000/api/event/" + id, {headers, method: "GET",})
+            .then(res => {
+                if (res.status === 500 ||res.status === 404 ) {
+                    return dispatch({ type: 'EVENT_ERROR' })
+                }
+                else{
+                   return res.json()
+                }
+            })
+            .then(event => {
+                return dispatch({
+                    type: 'LOAD_EVENT',
+                    event
+                })
+            })
+    }
+}
+
+export const loadEvents = () => {
+    return (dispatch, getState) => {
+        let headers = {"Content-Type": "application/json"};
+        let {token} = getState().auth;
+
+        if (token) {
+            headers["Authorization"] = `Token ${token}`;
+        }
+        return fetch("http://localhost:8000/api/event/", {headers, method: "GET",})
             .then(res => res.json())
             .then(events => {
                 return dispatch({
-                    type: 'LOAD_EVENT',
+                    type: 'LOAD_EVENTS',
                     events
                 })
             })

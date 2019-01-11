@@ -17,6 +17,12 @@ export default function events(state = initialState, action) {
             return [...state, ...action.events];
 
         case 'LOAD_EVENT':
+            return [...state, action.event];
+
+        case 'EVENT_ERROR':
+            return [...state, action.event];
+
+        case 'LOAD_EVENTS':
             return [...state, ...action.events];
 
         default:

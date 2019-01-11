@@ -15,7 +15,7 @@ class EventList(APIView):
 
     def get(self, request, format=None):
         events = Event.objects.filter(
-            user__in=[request.user.id]
+            # user=[request.user.id]
         )
         serializer_context = {
             'request': request,
@@ -47,7 +47,6 @@ class EventDetail(APIView):
             else:
                 return Event.objects.filter(
                     pk=pk,
-                    # user__in=[request.user.id]
                 ).first()
             return Event.objects.filter(
                 pk=pk
@@ -60,8 +59,11 @@ class EventDetail(APIView):
             'request': request,
         }
         event = self.get_object(pk, request)
-        serializer = EventSerializer(event, context=serializer_context, many=True)
-        return Response(serializer.data)
+        if event:
+            serializer = EventSerializer(event, context=serializer_context)
+            return Response(serializer.data)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request, pk, format=None):
         serializer_context = {

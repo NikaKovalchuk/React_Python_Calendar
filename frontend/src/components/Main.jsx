@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {auth} from "../actions";
-import DynamicForm from "./DynamicForm";
-import ReactCalendar from "rc-calendar";
+import {auth, events} from "../actions";
+import Calendar from "./Calendar"
 
 class Settings extends Component {
     state = {
         user: {},
+        events: {},
+        date: new Date(),
     }
 
     componentDidMount() {
@@ -15,19 +16,23 @@ class Settings extends Component {
                 user: this.props.auth.user
             });
         });
-    }
-
-    onSubmit = (model) => {
-        this.props.changePassword(model);
+        this.props.loadEvents().then(response => {
+            this.setState({
+                events: this.props.events
+            });
+        });
     }
 
     render() {
         return (
             <div>
                 <div className={'side-bar'}>
-                    <ReactCalendar/>
+                    <div>
+                        <Calendar/>
+                    </div>
                 </div>
-                <div className={'scheduler'}>  </div>
+                <div className={'scheduler'}>
+                </div>
             </div>
         )
     }
@@ -37,6 +42,7 @@ class Settings extends Component {
 const mapStateToProps = state => {
     return {
         auth: state.auth,
+        events: state.events,
     }
 }
 
@@ -47,6 +53,9 @@ const mapDispatchToProps = dispatch => {
         },
         changePassword: (model) => {
             return dispatch(auth.changePassword(model));
+        },
+        loadEvents: () => {
+            return dispatch(events.loadEvents());
         },
     }
 }

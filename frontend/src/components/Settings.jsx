@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {auth} from "../actions";
-import DynamicForm from "./DynamicForm";
+import {auth, events} from "../actions";
 
 class Settings extends Component {
     state = {
         user: {},
+        password: "",
+        password1: "",
+        password2: "",
     }
 
     componentDidMount() {
@@ -16,8 +18,12 @@ class Settings extends Component {
         });
     }
 
-    onSubmit = (model) => {
-        this.props.changePassword(model);
+    export = () => {
+        this.props.export();
+    }
+
+    import = () => {
+        this.props.import();
     }
 
     render() {
@@ -27,29 +33,19 @@ class Settings extends Component {
                     <h1>Account</h1>
                 </div>
                 <div>
-                    <p className={"form-label"}>Email : {this.state.user.email}</p>
+                    <p className={"form-label"}>Username : {this.state.user.username}</p>
                 </div>
                 <div>
-                    <DynamicForm className="form"
-                                 title="Change password"
-                                 data={this.state.user}
-                                 model={[
-                                     {
-                                         key: "oldpassword",
-                                         label: "Old Password",
-                                         type: "password",
-                                         props: {required: true}
-                                     },
-                                     {key: "password1", label: "Password", type: "password", props: {required: true}},
-                                     {
-                                         key: "password2",
-                                         label: "Password Again",
-                                         type: "password",
-                                         props: {required: true}
-                                     },
-                                 ]}
-                                 onSubmit={(model) => this.onSubmit(model)}
-                    />
+                    <div className={'inline-block'}><h1>Export your calendar : </h1></div>
+                    <div className={'inline-block'}>
+                        <button onClick={this.export} className="btn btn-secondary export-button"> Export</button>
+                    </div>
+                </div>
+                <div>
+                    <div className={'inline-block'}><h1>Import calendar : </h1></div>
+                    <div className={'inline-block'}>
+                        <button onClick={this.import} className="btn btn-secondary export-button"> Import</button>
+                    </div>
                 </div>
             </div>
         )
@@ -60,6 +56,7 @@ class Settings extends Component {
 const mapStateToProps = state => {
     return {
         auth: state.auth,
+        events: state.events,
     }
 }
 
@@ -68,8 +65,11 @@ const mapDispatchToProps = dispatch => {
         loadUser: () => {
             return dispatch(auth.loadUser());
         },
-        changePassword: (model) => {
-            return dispatch(auth.changePassword(model));
+        export: () => {
+            return dispatch(events.exportEvents());
+        },
+        import: () => {
+            return dispatch(events.importEvents());
         },
     }
 }

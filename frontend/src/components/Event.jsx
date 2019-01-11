@@ -18,7 +18,8 @@ class Events extends Component {
                 this.setState({
                     event: this.props.events[0]
                 });
-            } else {
+            }
+            else {
                 this.setState({
                     not_found: true
                 });
@@ -47,15 +48,15 @@ class Events extends Component {
                 {this.renderRedirect()}
                 <div>
                     <p className={'title'}>{this.state.event.title}</p>
-                    <button onClick={() => this.edit()} className="btn btn-secondary">EDIT</button>
-                    <button onClick={() => this.props.deleteEvent(this.state.id)} className="btn btn-danger">DELETE
-                    </button>
                 </div>
-                <p className={'data'}>Text : {this.state.event.text}</p>
-                <p className={'data'}>Status : {this.state.event.status}</p>
-                <p className={'data'}>Start Date : {this.state.event.start_date}</p>
-                <p className={'data'}>Finish Date : {this.state.event.finish_date}</p>
-                <p className={'data'}>Cycle : {this.state.event.cycle}</p>
+                    <button onClick={() => this.edit()} className="btn btn-secondary">EDIT</button>
+                    <button onClick={() => this.props.deleteEvent(this.state.id)} className="btn btn-danger">DELETE</button>
+                <div className={'margin-top'}>
+                    <p className={'data'}>Text : {this.state.event.text}</p>
+                    <p className={'data'}>Start Date : {new Date(this.state.event.start_date).toDateString()} {new Date(this.state.event.start_date).toLocaleTimeString("en-US")}</p>
+                    <p className={'data'}>Finish Date : {new Date(this.state.event.finish_date).toDateString()} {new Date(this.state.event.finish_date).toLocaleTimeString("en-US")}</p>
+                    <p className={'data'}>Cycle : {this.state.event.cycle}</p>
+                </div>
             </div>
         )
     }

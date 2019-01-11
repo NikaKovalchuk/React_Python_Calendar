@@ -1,5 +1,5 @@
 from datetime import datetime
-
+from api.user.models import User
 from django.db import models
 
 
@@ -12,11 +12,12 @@ class Event(models.Model):
     update_date = models.DateTimeField(default=datetime.now, blank=True, null=True)
     start_date = models.DateTimeField(default=datetime.now, blank=True, null=True)
     finish_date = models.DateTimeField(default=datetime.now, blank=True, null=True)
-
     cycle = models.IntegerField(default=0, blank=True, null=True)
 
     archived = models.BooleanField(null=True, blank=True, default=False)
     archived_date = models.DateTimeField(blank=True, null=True)
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
         ordering = ('create_date',)
@@ -37,5 +38,5 @@ class Event(models.Model):
         self.archived_date = datetime.now()
         self.save()
 
-    def get_users(self):
-        return self.user_set
+    def get_user(self):
+        return self.user

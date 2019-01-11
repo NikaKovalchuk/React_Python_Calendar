@@ -24,6 +24,13 @@ class EventForm extends Component {
                     event: this.props.events[0]
                 });
             });
+        } else {
+            this.setState({
+                event: {
+                    start_date: this.start_date,
+                    finish_date: this.finish_date,
+                }
+            });
         }
     }
 
@@ -45,11 +52,7 @@ class EventForm extends Component {
 
     renderRedirect = () => {
         if (this.state.redirect) {
-            if (this.state.id === null) {
-                return <Redirect to='/'/>
-            } else {
-                return <Redirect to={`/event/${this.state.id}`}/>
-            }
+            return <Redirect to='/'/>
         }
     }
 

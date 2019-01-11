@@ -30,7 +30,6 @@ class LoginAPI(generics.GenericAPIView):
             "token": AuthToken.objects.create(user)
         })
 
-
 class CurrentUser(generics.RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticated, ]
     serializer_class = UserSerializer
