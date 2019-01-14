@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {auth, events} from "../actions";
+import dateFns from "date-fns";
 
 const viewType = {day:1, week:2, month:3}
 const viewNames = {1:"Day", 2:"Week", 3:"Month"}
@@ -10,7 +11,9 @@ class Scheduler extends Component {
         super(props);
 
         this.state = {
-            view : viewType.month
+            view : viewType.month,
+            currentMonth: new Date(),
+            selectedDate: new Date()
         };
 
         this.changeView = this.changeView.bind(this);
@@ -43,243 +46,138 @@ class Scheduler extends Component {
     }
 
     renderDayTable(){
-        return(
-            <table>
-                <thead>
-                    <tr>
-                        <td> Time </td>
-                        <td> Events </td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td> 0:00 AM</td>
-                    </tr>
-                    <tr>
-                        <td> 1:00 AM</td>
-                    </tr>
-                    <tr>
-                        <td> 2:00 AM</td>
-                    </tr>
-                    <tr>
-                        <td> 3:00 AM</td>
-                    </tr>
-                    <tr>
-                        <td> 4:00 AM</td>
-                    </tr>
-                    <tr>
-                        <td> 5:00 AM</td>
-                    </tr>
-                    <tr>
-                        <td> 6:00 AM</td>
-                    </tr>
-                    <tr>
-                        <td> 7:00 AM</td>
-                    </tr>
-                    <tr>
-                        <td> 8:00 AM</td>
-                    </tr>
-                    <tr>
-                        <td> 9:00 AM</td>
-                    </tr>
-                    <tr>
-                        <td> 10:00 AM</td>
-                    </tr>
-                    <tr>
-                        <td> 11:00 AM</td>
-                    </tr>
+        const {currentMonth, selectedDate} = this.state;
+        const dayStart = dateFns.startOfDay(selectedDate)
+        const dayEnd = dateFns.endOfDay(selectedDate)
 
-                    <tr>
-                        <td> 12:00 PM</td>
-                    </tr>
-                    <tr>
-                        <td> 1:00 PM</td>
-                    </tr>
-                    <tr>
-                        <td> 2:00 PM</td>
-                    </tr>
-                    <tr>
-                        <td> 3:00 PM</td>
-                    </tr>
-                    <tr>
-                        <td> 4:00 PM</td>
-                    </tr>
-                    <tr>
-                        <td> 5:00 PM</td>
-                    </tr>
-                    <tr>
-                        <td> 6:00 PM</td>
-                    </tr>
-                    <tr>
-                        <td> 7:00 PM</td>
-                    </tr>
-                    <tr>
-                        <td> 8:00 PM</td>
-                    </tr>
-                    <tr>
-                        <td> 9:00 PM</td>
-                    </tr>
-                    <tr>
-                        <td> 10:00 PM</td>
-                    </tr>
-                    <tr>
-                        <td> 11:00 PM</td>
-                    </tr>
-                </tbody>
-            </table>
-        )
+        const timeFormat = "HH:mm";
+        const hours = [];
+        let line = [];
+        let hour = dayStart;
+
+        while (hour <= dayEnd) {
+            let formattedTime = dateFns.format(hour, timeFormat);
+            line.push(
+                <div className={'shedule-hour'}>
+                    <span >{formattedTime}</span>
+                </div>
+            );
+            line.push(
+                <div className={'shedule-day'}>
+                    <span>asd</span>
+                </div>
+            );
+
+            hours.push(
+                <div className="row" key={hour}>
+                    {line}
+                </div>
+            );
+            line = [];
+            hour = dateFns.addHours(hour,1)
+        }
+
+        return <div className="shedule-table">{hours}</div>;
     }
 
     renderWeekTable(){
-        return(
-            <div> <table>
-                <thead>
-                    <tr>
-                        <td> Time </td>
-                        <td> Events </td>
-                        <td> Events </td>
-                        <td> Events </td>
-                        <td> Events </td>
-                        <td> Events </td>
-                        <td> Events </td>
-                        <td> Events </td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td> 0:00 AM</td>
-                    </tr>
-                    <tr>
-                        <td> 1:00 AM</td>
-                    </tr>
-                    <tr>
-                        <td> 2:00 AM</td>
-                    </tr>
-                    <tr>
-                        <td> 3:00 AM</td>
-                    </tr>
-                    <tr>
-                        <td> 4:00 AM</td>
-                    </tr>
-                    <tr>
-                        <td> 5:00 AM</td>
-                    </tr>
-                    <tr>
-                        <td> 6:00 AM</td>
-                    </tr>
-                    <tr>
-                        <td> 7:00 AM</td>
-                    </tr>
-                    <tr>
-                        <td> 8:00 AM</td>
-                    </tr>
-                    <tr>
-                        <td> 9:00 AM</td>
-                    </tr>
-                    <tr>
-                        <td> 10:00 AM</td>
-                    </tr>
-                    <tr>
-                        <td> 11:00 AM</td>
-                    </tr>
+        const {currentMonth, selectedDate} = this.state;
+        const weekStart = dateFns.startOfWeek(selectedDate);
+        const weekEnd = dateFns.endOfWeek(selectedDate);
+        const dayStart = dateFns.startOfDay(selectedDate)
+        const dayEnd = dateFns.endOfDay(selectedDate)
 
-                    <tr>
-                        <td> 12:00 PM</td>
-                    </tr>
-                    <tr>
-                        <td> 1:00 PM</td>
-                    </tr>
-                    <tr>
-                        <td> 2:00 PM</td>
-                    </tr>
-                    <tr>
-                        <td> 3:00 PM</td>
-                    </tr>
-                    <tr>
-                        <td> 4:00 PM</td>
-                    </tr>
-                    <tr>
-                        <td> 5:00 PM</td>
-                    </tr>
-                    <tr>
-                        <td> 6:00 PM</td>
-                    </tr>
-                    <tr>
-                        <td> 7:00 PM</td>
-                    </tr>
-                    <tr>
-                        <td> 8:00 PM</td>
-                    </tr>
-                    <tr>
-                        <td> 9:00 PM</td>
-                    </tr>
-                    <tr>
-                        <td> 10:00 PM</td>
-                    </tr>
-                    <tr>
-                        <td> 11:00 PM</td>
-                    </tr>
-                </tbody>
-            </table>
-            </div>
-        )
+        const dateFormat = "D";
+        const timeFormat = "HH:mm";
+        const hours = [];
+        let days = [];
+        let hour = dayStart;
+
+        let day = weekStart;
+        days.push(
+            <div className="shedule-week-title-empty"></div>
+        );
+        for (let i = 0; i < 7; i++) {
+                let formattedDate = dateFns.format(day, dateFormat);
+                days.push(
+                    <div className="shedule-week-day">
+                        <span >{formattedDate}</span>
+                    </div>
+                );
+                day = dateFns.addDays(day, 1);
+            }
+        hours.push(
+                <div className="row" key={day}>
+                    {days}
+                </div>
+        );
+        days=[]
+
+        while (hour <= dayEnd) {
+            let day = weekStart;
+            let formattedTime = dateFns.format(hour, timeFormat);
+            days.push(
+                <div className="shedule-hour">
+                    <span >{formattedTime}</span>
+                </div>
+            );
+            for (let i = 0; i < 7; i++) {
+                days.push(
+                    <div className="shedule-week-day">
+                        <span ></span>
+                    </div>
+                );
+                day = dateFns.addDays(day, 1);
+            }
+            hours.push(
+                <div className="row" key={day + ' ' + hour}>
+                    {days}
+                </div>
+            );
+            days = [];
+            hour = dateFns.addHours(hour,1)
+        }
+
+        return <div className="shedule-table">{hours}</div>;
     }
 
     renderMonthTable(){
-        return(
-            <div>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        )
+        const {currentMonth, selectedDate} = this.state;
+        const monthStart = dateFns.startOfMonth(currentMonth);
+        const monthEnd = dateFns.endOfMonth(monthStart);
+        const startDate = dateFns.startOfWeek(monthStart);
+        const endDate = dateFns.endOfWeek(monthEnd);
+
+        const dateFormat = "D";
+        const rows = [];
+        let days = [];
+        let day = startDate;
+        let formattedDate = "";
+        while (day <= endDate) {
+            for (let i = 0; i < 7; i++) {
+                formattedDate = dateFns.format(day, dateFormat);
+                const cloneDay = day;
+                days.push(
+                    <div className={`shedule-month-day ${
+                            !dateFns.isSameMonth(day, monthStart)
+                                ? "disabled"
+                                : dateFns.isSameDay(day, selectedDate) ? "selected" : ""
+                            }`}
+                        key={day} onClick={() => this.onDateClick(dateFns.parse(cloneDay))}>
+                        <span className="number">{formattedDate}</span>
+                    </div>
+                );
+                day = dateFns.addDays(day, 1);
+            }
+            rows.push(
+                <div className="row" key={day+"row"}>
+                    {days}
+                </div>
+            );
+            days = [];
+        }
+
+        return <div className="shedule-table">{rows}</div>;
     }
 
 
@@ -295,7 +193,7 @@ class Scheduler extends Component {
             table = this.renderMonthTable()
        }
        return (
-            <div className={'shedule-table'}>
+            <div className={'shedule'}>
                 {table}
             </div>
         )

@@ -70,6 +70,8 @@ p {
 .scheduler{
     width: 80%;
     display: inline-block;
+    margin-left: 20px;
+    margin-top: 10px;
 }
 
 .icon {
@@ -271,4 +273,36 @@ header {
 
 .shedule-buttons{
     text-align: right;
+}
+
+.shedule-month-day{
+    width: 14.2%;
+    height: 120px;
+    border: 1px solid var(--border-color);
+}
+
+.shedule-month-day span{
+   margin: 5px;
+   font-size: 82.5%;
+}
+
+.shedule-hour{
+   width: 5%;
+   border: 1px solid var(--border-color);
+   background: silver;
+}
+
+.shedule-week-day{
+   width: 13.5%;
+   border: 1px solid var(--border-color);
+}
+
+
+.shedule-day{
+    width: 95%;
+    border: 1px solid var(--border-color);
+}
+
+.shedule-week-title-empty{
+  width: 5%;
 }
