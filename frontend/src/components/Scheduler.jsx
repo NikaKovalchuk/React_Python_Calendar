@@ -12,8 +12,9 @@ class Scheduler extends Component {
 
         this.state = {
             view : viewType.month,
-            currentMonth: new Date(),
-            selectedDate: new Date()
+            currentMonth: this.props.currentDate,
+            selectedDate: this.props.selectedDate,
+            events: {}
         };
 
         this.changeView = this.changeView.bind(this);
@@ -25,12 +26,39 @@ class Scheduler extends Component {
                 user: this.props.auth.user
             });
         });
+        this.updateEvents(this.state.selectedDate)
+    }
+
+    componentWillReceiveProps(props) {
+      let update = false
+      if (props.selectedDate){
+          if (props.selectedDate!=this.state.selectedDate){
+              update = true
+              this.setState({
+                selectedDate: props.selectedDate
+              });
+          }
+      }
+      if (update){
+        this.updateEvents(props.selectedDate)
+      }
+    }
+
+    updateEvents(date){
+        let startDate = new Date(dateFns.startOfMonth(date)).toISOString()
+        let finishDate = new Date(dateFns.endOfMonth(date)).toISOString()
+        this.props.loadEvents(startDate, finishDate).then(response => {
+            this.setState({
+                events: this.props.events
+            });
+        });
     }
 
     changeView(newView){
         this.setState({
             view: newView
         })
+        console.log(this.state.events)
     }
 
     renderButtons() {
@@ -142,8 +170,8 @@ class Scheduler extends Component {
     }
 
     renderMonthTable(){
-        const {currentMonth, selectedDate} = this.state;
-        const monthStart = dateFns.startOfMonth(currentMonth);
+        const {selectedDate} = this.state;
+        const monthStart = dateFns.startOfMonth(selectedDate);
         const monthEnd = dateFns.endOfMonth(monthStart);
         const startDate = dateFns.startOfWeek(monthStart);
         const endDate = dateFns.endOfWeek(monthEnd);
@@ -222,11 +250,8 @@ const mapDispatchToProps = dispatch => {
         loadUser: () => {
             return dispatch(auth.loadUser());
         },
-        export: () => {
-            return dispatch(events.exportEvents());
-        },
-        import: () => {
-            return dispatch(events.importEvents());
+        loadEvents: (startDate, finishDate) => {
+            return dispatch(events.loadEvents(startDate, finishDate));
         },
     }
 }

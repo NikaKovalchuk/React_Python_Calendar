@@ -24,9 +24,9 @@ class ToolBar extends Component {
                 <li className="nav-item active">
                     <a className="nav-link" href="/event/new">ADD EVENT</a>
                 </li>
-                <li className="nav-item active">
-                    <a className="nav-link" href="/settings">SETTINGS</a>
-                </li>
+                {/*<li className="nav-item active">*/}
+                    {/*<a className="nav-link" href="/settings">SETTINGS</a>*/}
+                {/*</li>*/}
                 <li className="nav-item active">
                     <a className="nav-link" onClick={this.props.logout}> LOG OUT </a>
                 </li>

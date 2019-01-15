@@ -1,11 +1,16 @@
 import React from "react";
 import dateFns from "date-fns";
+import {events} from "../actions";
 
 class Calendar extends React.Component {
-    state = {
-        currentMonth: new Date(),
-        selectedDate: new Date()
-    };
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            currentMonth: this.props.currentDate,
+            selectedDate: this.props.selectedDate
+        };
+    }
 
     renderHeader() {
         const dateFormat = "MMM YYYY";
@@ -86,6 +91,7 @@ class Calendar extends React.Component {
         this.setState({
             selectedDate: day
           });
+        this.props.changeDate(day);
     }
 
     nextMonth = () => {
@@ -107,6 +113,21 @@ class Calendar extends React.Component {
                 {this.renderCells()}
             </div>
         );
+    }
+}
+
+
+const mapStateToProps = state => {
+    return {
+        events: state.events,
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        import: () => {
+            return dispatch(events.loadEvents());
+        },
     }
 }
 

@@ -80,7 +80,7 @@ export const loadEvent = id => {
     }
 }
 
-export const loadEvents = () => {
+export const loadEvents = (startDate, finishDate) => {
     return (dispatch, getState) => {
         let headers = {"Content-Type": "application/json"};
         let {token} = getState().auth;
@@ -88,7 +88,7 @@ export const loadEvents = () => {
         if (token) {
             headers["Authorization"] = `Token ${token}`;
         }
-        return fetch("http://localhost:8000/api/event/", {headers, method: "GET",})
+        return fetch("http://localhost:8000/api/event/?startDate=" + startDate + "&finishDate="+finishDate, {headers, method: "GET",})
             .then(res => res.json())
             .then(events => {
                 return dispatch({

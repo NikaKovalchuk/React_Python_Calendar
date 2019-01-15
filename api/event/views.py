@@ -18,10 +18,8 @@ class EventList(APIView):
     permission_classes = [permissions.IsAuthenticated, ]
 
     def get(self, request, format=None):
-        date = request.data.date
-        type = ViewType[request.data.type]
-        startDate = self.getStartDate(date, type)
-        finishDate = self.getFinishDate(date, type)
+        startDate = request.query_params['startDate']
+        finishDate = request.query_params['finishDate']
         events = Event.objects.filter(
             start_date__gte = startDate,
             finish_date__lte = finishDate,
@@ -43,30 +41,6 @@ class EventList(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-    def getStartDate(self, date, type):
-        if type == ViewType.DAY:
-            startDate = date
-        if type == ViewType.WEEK:
-            numbeOfDay = date.weekday()
-            startDate = date - timedelta(days=numbeOfDay)
-        if type == ViewType.MONTH:
-            numbeOfDay = date.day()
-            startDate = date - timedelta(days=numbeOfDay-1)
-        return startDate
-
-    def getFinishDate(self, date, type):
-        if type == ViewType.DAY:
-            finishDate = date
-        if type == ViewType.WEEK:
-            numbeOfDay = 6 - date.weekday()
-            finishDate = date + timedelta(days=numbeOfDay)
-        if type == ViewType.MONTH:
-            numbeOfDay = date.day()
-            lastDay = calendar.monthrange(date.year(), date.month())[1]
-            finishDate = date + timedelta(days=lastDay-numbeOfDay)
-        return finishDate
 
 class EventDetail(APIView):
     permission_classes = [permissions.IsAuthenticated, ]

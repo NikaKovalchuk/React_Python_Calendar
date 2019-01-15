@@ -9,7 +9,12 @@ class Settings extends Component {
         user: {},
         events: {},
         date: new Date(),
+        selectedDate: new Date()
     }
+
+    changeDate = (date) => {
+       this.setState(state => ({ selectedDate: date }));
+    };
 
     componentDidMount() {
         this.props.loadUser().then(response => {
@@ -17,23 +22,18 @@ class Settings extends Component {
                 user: this.props.auth.user
             });
         });
-        this.props.loadEvents().then(response => {
-            this.setState({
-                events: this.props.events
-            });
-        });
     }
 
     render() {
         return (
-            <div>
+            <div className={"main-content"}>
                 <div className={'side-bar'}>
                     <div className={'calendar'}>
-                        <Calendar/>
+                        <Calendar currentDate={this.state.date} selectedDate={this.state.selectedDate} changeDate={this.changeDate}/>
                     </div>
                 </div>
                 <div className={'scheduler'}>
-                    <Scheduler/>
+                    <Scheduler currentDate={this.state.date} selectedDate={this.state.selectedDate}/>
                 </div>
             </div>
         )
