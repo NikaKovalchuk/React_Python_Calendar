@@ -15,7 +15,9 @@ class EventForm extends Component {
         event: {},
         redirect: false,
         route: '',
+        CycleOptions: [{0: 'No'}, {1: 'Day'}, {2: 'Week'}, {3: 'Month'}, {4: 'Year'}] // заменить на enum
     }
+
 
     componentDidMount() {
         if (this.state.id !== null) {
@@ -76,6 +78,13 @@ class EventForm extends Component {
                                      key: "finish_date",
                                      label: "Finish time",
                                      type: "datetime-local",
+                                     props: {required: true}
+                                 },
+                                 {
+                                     key: "cycle",
+                                     label: "Repeat",
+                                     type: "select",
+                                     options: this.state.CycleOptions,
                                      props: {required: true}
                                  },
                              ]}

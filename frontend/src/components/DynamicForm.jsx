@@ -104,18 +104,18 @@ export default class DynamicForm extends React.Component {
             if (type === "select") {
                 input = m.options.map((o) => {
                     let checked = o.value === value;
-                    console.log("select: ", o.value, value);
+                    o.key = Object.keys(o)[0]
+                    o.value = Object.values(o)[0]
                     return (
                         <option {...props}
                                 className="form-input"
                                 key={o.key}
-                                value={o.value}
-                        >{o.value}</option>
+                                value={o.key}>
+                            {o.value}</option>
                     );
                 });
 
-                console.log("Select default: ", value);
-                input = <select value={value} onChange={(e) => {
+                input = <select className="form-input" value={value} onChange={(e) => {
                     this.onChange(e, m.key)
                 }}>{input}</select>;
             }
@@ -128,7 +128,6 @@ export default class DynamicForm extends React.Component {
                     if (value && value.length > 0) {
                         checked = value.indexOf(o.value) > -1 ? true : false;
                     }
-                    console.log("Checkbox: ", checked);
                     return (
                         <React.Fragment key={"cfr" + o.key}>
                             <input {...props}
@@ -148,7 +147,6 @@ export default class DynamicForm extends React.Component {
                 });
                 input = <div className="form-group-checkbox">{input}</div>;
             }
-
 
             return (
                 <div key={'g' + key} className="form-group">

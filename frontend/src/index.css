@@ -49,6 +49,11 @@ p {
     width: 350px;
 }
 
+.form-input {
+    margin-left: 15px;
+    width: 350px;
+}
+
 .form {
     float:left;
     display: inline;
@@ -239,11 +244,6 @@ header {
   font-weight: 700;
 }
 
-.calendar .body .disabled {
-  color: var(--text-color-light);
-  pointer-events: none;
-}
-
 .calendar .body .col {
   flex-grow: 0;
   flex-basis: calc(100%/7);
@@ -279,6 +279,12 @@ header {
     width: 14.2%;
     height: 120px;
     border: 1px solid var(--border-color);
+    cursor: pointer;
+}
+
+.disabled {
+    color: var(--text-color-light);
+    pointer-events: none;
 }
 
 .shedule-month-day span{
@@ -305,4 +311,12 @@ header {
 
 .shedule-week-title-empty{
   width: 5%;
+}
+
+.event{
+    display: inline-block;
+    font-size: 11pt;
+    margin: 5px;
+    background: #4f5b69;
+    color: whitesmoke;
 }

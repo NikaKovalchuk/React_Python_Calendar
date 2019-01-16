@@ -2,18 +2,19 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {auth, events} from "../actions";
 import dateFns from "date-fns";
+import {Redirect} from "react-router-dom";
 
-const viewType = {day:1, week:2, month:3}
-const viewNames = {1:"Day", 2:"Week", 3:"Month"}
+const viewType = {day: 1, week: 2, month: 3}
 
 class Scheduler extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            view : viewType.month,
+            view: viewType.month,
             currentMonth: this.props.currentDate,
             selectedDate: this.props.selectedDate,
+            redirect: false,
             events: {}
         };
 
@@ -30,21 +31,21 @@ class Scheduler extends Component {
     }
 
     componentWillReceiveProps(props) {
-      let update = false
-      if (props.selectedDate){
-          if (props.selectedDate!=this.state.selectedDate){
-              update = true
-              this.setState({
-                selectedDate: props.selectedDate
-              });
-          }
-      }
-      if (update){
-        this.updateEvents(props.selectedDate)
-      }
+        let update = false
+        if (props.selectedDate) {
+            if (props.selectedDate !== this.state.selectedDate) {
+                update = true
+                this.setState({
+                    selectedDate: props.selectedDate
+                });
+            }
+        }
+        if (update) {
+            this.updateEvents(props.selectedDate)
+        }
     }
 
-    updateEvents(date){
+    updateEvents(date) {
         let startDate = new Date(dateFns.startOfMonth(date)).toISOString()
         let finishDate = new Date(dateFns.endOfMonth(date)).toISOString()
         this.props.loadEvents(startDate, finishDate).then(response => {
@@ -54,27 +55,32 @@ class Scheduler extends Component {
         });
     }
 
-    changeView(newView){
+    changeView(newView) {
         this.setState({
             view: newView
         })
-        console.log(this.state.events)
     }
 
     renderButtons() {
-       return (
+        return (
             <div className={'shedule-buttons'}>
                 <div className="btn-group btn-group-toggle" data-toggle="buttons">
-                    <button type="button" className="btn btn-secondary btn-sm" onClick={() => this.changeView(viewType.day)}>Day</button>
-                    <button type="button" className="btn btn-secondary btn-sm" onClick={() => this.changeView(viewType.week)}>Week</button>
-                    <button type="button" className="btn btn-secondary btn-sm" onClick={() => this.changeView(viewType.month)}>Month</button>
+                    <button type="button" className="btn btn-secondary btn-sm"
+                            onClick={() => this.changeView(viewType.day)}>Day
+                    </button>
+                    <button type="button" className="btn btn-secondary btn-sm"
+                            onClick={() => this.changeView(viewType.week)}>Week
+                    </button>
+                    <button type="button" className="btn btn-secondary btn-sm"
+                            onClick={() => this.changeView(viewType.month)}>Month
+                    </button>
                 </div>
             </div>
         )
     }
 
-    renderDayTable(){
-        const {currentMonth, selectedDate} = this.state;
+    renderDayTable() {
+        const {selectedDate} = this.state;
         const dayStart = dateFns.startOfDay(selectedDate)
         const dayEnd = dateFns.endOfDay(selectedDate)
 
@@ -87,7 +93,7 @@ class Scheduler extends Component {
             let formattedTime = dateFns.format(hour, timeFormat);
             line.push(
                 <div className={'shedule-hour'}>
-                    <span >{formattedTime}</span>
+                    <span>{formattedTime}</span>
                 </div>
             );
             line.push(
@@ -102,16 +108,15 @@ class Scheduler extends Component {
                 </div>
             );
             line = [];
-            hour = dateFns.addHours(hour,1)
+            hour = dateFns.addHours(hour, 1)
         }
 
         return <div className="shedule-table">{hours}</div>;
     }
 
-    renderWeekTable(){
-        const {currentMonth, selectedDate} = this.state;
+    renderWeekTable() {
+        const {selectedDate} = this.state;
         const weekStart = dateFns.startOfWeek(selectedDate);
-        const weekEnd = dateFns.endOfWeek(selectedDate);
         const dayStart = dateFns.startOfDay(selectedDate)
         const dayEnd = dateFns.endOfDay(selectedDate)
 
@@ -126,33 +131,33 @@ class Scheduler extends Component {
             <div className="shedule-week-title-empty"></div>
         );
         for (let i = 0; i < 7; i++) {
-                let formattedDate = dateFns.format(day, dateFormat);
-                days.push(
-                    <div className="shedule-week-day">
-                        <span >{formattedDate}</span>
-                    </div>
-                );
-                day = dateFns.addDays(day, 1);
-            }
-        hours.push(
-                <div className="row" key={day}>
-                    {days}
+            let formattedDate = dateFns.format(day, dateFormat);
+            days.push(
+                <div className="shedule-week-day">
+                    <span>{formattedDate}</span>
                 </div>
+            );
+            day = dateFns.addDays(day, 1);
+        }
+        hours.push(
+            <div className="row" key={day}>
+                {days}
+            </div>
         );
-        days=[]
+        days = []
 
         while (hour <= dayEnd) {
             let day = weekStart;
             let formattedTime = dateFns.format(hour, timeFormat);
             days.push(
                 <div className="shedule-hour">
-                    <span >{formattedTime}</span>
+                    <span>{formattedTime}</span>
                 </div>
             );
             for (let i = 0; i < 7; i++) {
                 days.push(
                     <div className="shedule-week-day">
-                        <span ></span>
+                        <span></span>
                     </div>
                 );
                 day = dateFns.addDays(day, 1);
@@ -163,13 +168,26 @@ class Scheduler extends Component {
                 </div>
             );
             days = [];
-            hour = dateFns.addHours(hour,1)
+            hour = dateFns.addHours(hour, 1)
         }
 
         return <div className="shedule-table">{hours}</div>;
     }
 
-    renderMonthTable(){
+    renderEvents(day) { // не очищает после себя
+        let result = []
+        for (let index = 0; index < this.state.events.length; index++) {
+            let event = this.state.events[index]
+            let start_date = new Date(event.start_date)
+            let today = new Date(day)
+            if (start_date.getDate() === today.getDate()) {
+                result.push(<div className={'event'} key={today + "_" + event.id} onClick={() => this.onEventClick(event.id)} > {event.title} </div>)
+            }
+        }
+        return <div className="events" key={'events'}>{result}</div>;
+    }
+
+    renderMonthTable() {
         const {selectedDate} = this.state;
         const monthStart = dateFns.startOfMonth(selectedDate);
         const monthEnd = dateFns.endOfMonth(monthStart);
@@ -187,18 +205,19 @@ class Scheduler extends Component {
                 const cloneDay = day;
                 days.push(
                     <div className={`shedule-month-day ${
-                            !dateFns.isSameMonth(day, monthStart)
-                                ? "disabled"
-                                : dateFns.isSameDay(day, selectedDate) ? "selected" : ""
-                            }`}
-                        key={day} onClick={() => this.onDateClick(dateFns.parse(cloneDay))}>
+                        !dateFns.isSameMonth(day, monthStart)
+                            ? "disabled"
+                            : dateFns.isSameDay(day, selectedDate) ? "selected" : ""
+                        }`}
+                         key={day} onClick={() => this.onDateClick(dateFns.parse(cloneDay))}>
                         <span className="number">{formattedDate}</span>
+                        {this.renderEvents(day)}
                     </div>
                 );
                 day = dateFns.addDays(day, 1);
             }
             rows.push(
-                <div className="row" key={day+"row"}>
+                <div className="row" key={day + "row"}>
                     {days}
                 </div>
             );
@@ -208,35 +227,55 @@ class Scheduler extends Component {
         return <div className="shedule-table">{rows}</div>;
     }
 
+    onDateClick = day => {
+        this.setState({
+            redirect: true
+        });
+    }
+
+    onEventClick = id => {
+        this.setState({
+            redirectTo: id,
+            redirect: true
+        });
+    }
 
     renderTable() {
-       let table;
-       if (this.state.view === viewType.day ){
-           table = this.renderDayTable()
-       }
-       else if (this.state.view === viewType.week ){
-           table = this.renderWeekTable()
-       }
-       else{
+        let table;
+        if (this.state.view === viewType.day) {
+            table = this.renderDayTable()
+        } else if (this.state.view === viewType.week) {
+            table = this.renderWeekTable()
+        } else {
             table = this.renderMonthTable()
-       }
-       return (
+        }
+        return (
             <div className={'shedule'}>
                 {table}
             </div>
         )
     }
 
+    renderRedirect = () => {
+        if (this.state.redirect) {
+            if (this.state.redirectTo){
+                let routh = '/event/edit/' + this.state.redirectTo + '/'
+                return <Redirect to={routh} />
+            }
+            else return <Redirect to='/event/new'/>
+        }
+    }
+
     render() {
         return (
             <div>
+                {this.renderRedirect()}
                 {this.renderButtons()}
                 {this.renderTable()}
             </div>
         )
     }
 }
-
 
 const mapStateToProps = state => {
     return {

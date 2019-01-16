@@ -11,9 +11,10 @@ class Events extends Component {
         edit: false,
         not_found: false,
         main: false,
+        CycleOptions: ['No','Day','Week','Month', 'Year'], // заменить на enum
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.props.loadEvent(this.state.id).then(response => {
             if (this.props.events[0]) {
                 this.setState({
@@ -67,7 +68,7 @@ class Events extends Component {
                     <p className={'data'}>Text : {this.state.event.text}</p>
                     <p className={'data'}>Start Date : {new Date(this.state.event.start_date).toDateString()} {new Date(this.state.event.start_date).toLocaleTimeString("en-US")}</p>
                     <p className={'data'}>Finish Date : {new Date(this.state.event.finish_date).toDateString()} {new Date(this.state.event.finish_date).toLocaleTimeString("en-US")}</p>
-                    <p className={'data'}>Cycle : {this.state.event.cycle}</p>
+                    <p className={'data'}>Repear : {this.state.CycleOptions[this.state.event.cycle]}</p>
                 </div>
             </div>
         )
