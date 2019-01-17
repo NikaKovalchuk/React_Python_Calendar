@@ -3,3 +3,8 @@ __pycache__
 *.xml
 *.sqlite3
 venv
+node_modules/
+api/event/migrations
+api/user/migrations
+*.png
+*.json
