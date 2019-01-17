@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {auth, events} from "../actions";
 import Calendar from "./Calendar"
-import Scheduler from "./Scheduler"
+import Schedule from "./Schedule"
+import "../css/main.css"
 
 class Settings extends Component {
     state = {
@@ -33,7 +34,7 @@ class Settings extends Component {
                     </div>
                 </div>
                 <div className={'scheduler'}>
-                    <Scheduler currentDate={this.state.date} selectedDate={this.state.selectedDate} changeDate={this.changeDate}/>
+                    <Schedule currentDate={this.state.date} selectedDate={this.state.selectedDate} changeDate={this.changeDate}/>
                 </div>
             </div>
         )

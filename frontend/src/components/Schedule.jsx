@@ -3,10 +3,11 @@ import {connect} from 'react-redux';
 import {auth, events} from "../actions";
 import dateFns from "date-fns";
 import {Redirect} from "react-router-dom";
+import "../css/schedule.css"
 
 const viewType = {day: 1, week: 2, month: 3}
 
-class Scheduler extends Component {
+class Schedule extends Component {
     constructor(props) {
         super(props);
 
@@ -63,22 +64,27 @@ class Scheduler extends Component {
 
     renderButtons() {
         return (
-            <div className={'shedule-buttons'}>
-                <div className="btn-group btn-group-toggle" data-toggle="buttons">
-                    <button type="button" className="btn btn-secondary btn-sm"
-                            onClick={() => this.changeView(viewType.day)}>Day
-                    </button>
-                    <button type="button" className="btn btn-secondary btn-sm"
-                            onClick={() => this.changeView(viewType.week)}>Week
-                    </button>
-                    <button type="button" className="btn btn-secondary btn-sm"
-                            onClick={() => this.changeView(viewType.month)}>Month
-                    </button>
+            <div>
+                <div className={'today-button'}>
+                    <div className="btn-group btn-group-toggle" data-toggle="buttons">
+                        <button type="button" className="btn btn-secondary btn-sm"
+                                onClick={() => this.changeDate(this.state.currentDate)}>Today
+                        </button>
+                    </div>
                 </div>
-                <div className="btn-group btn-group-toggle" data-toggle="buttons">
-                    <button type="button" className="btn btn-secondary btn-sm"
-                            onClick={() => this.changeDate(this.state.currentDate)}>Today
-                    </button>
+
+                <div className={'view-buttons'}>
+                    <div className="btn-group btn-group-toggle" data-toggle="buttons">
+                        <button type="button" className="btn btn-secondary btn-sm"
+                                onClick={() => this.changeView(viewType.day)}>Day
+                        </button>
+                        <button type="button" className="btn btn-secondary btn-sm"
+                                onClick={() => this.changeView(viewType.week)}>Week
+                        </button>
+                        <button type="button" className="btn btn-secondary btn-sm"
+                                onClick={() => this.changeView(viewType.month)}>Month
+                        </button>
+                    </div>
                 </div>
             </div>
         )
@@ -97,12 +103,12 @@ class Scheduler extends Component {
         while (hour <= dayEnd) {
             let formattedTime = dateFns.format(hour, timeFormat);
             line.push(
-                <div className={'shedule-hour'}>
+                <div className={'day-view-time'}>
                     <span>{formattedTime}</span>
                 </div>
             );
             line.push(
-                <div className={'shedule-day'}>
+                <div className={'day-view-data'}>
                     <span>asd</span>
                 </div>
             );
@@ -116,7 +122,7 @@ class Scheduler extends Component {
             hour = dateFns.addHours(hour, 1)
         }
 
-        return <div className="shedule-table">{hours}</div>;
+        return <div className="table">{hours}</div>;
     }
 
     renderWeekTable() {
@@ -133,12 +139,12 @@ class Scheduler extends Component {
 
         let day = weekStart;
         days.push(
-            <div className="shedule-week-title-empty"></div>
+            <div className="empty-week-title"></div>
         );
         for (let i = 0; i < 7; i++) {
             let formattedDate = dateFns.format(day, dateFormat);
             days.push(
-                <div className="shedule-week-day">
+                <div className="week-view-day">
                     <span>{formattedDate}</span>
                 </div>
             );
@@ -155,13 +161,13 @@ class Scheduler extends Component {
             let day = weekStart;
             let formattedTime = dateFns.format(hour, timeFormat);
             days.push(
-                <div className="shedule-hour">
+                <div className="day-view-time">
                     <span>{formattedTime}</span>
                 </div>
             );
             for (let i = 0; i < 7; i++) {
                 days.push(
-                    <div className="shedule-week-day">
+                    <div className="week-view-day">
                         <span></span>
                     </div>
                 );
@@ -176,7 +182,7 @@ class Scheduler extends Component {
             hour = dateFns.addHours(hour, 1)
         }
 
-        return <div className="shedule-table">{hours}</div>;
+        return <div className="table">{hours}</div>;
     }
 
     renderEvents(day) { // не очищает после себя
@@ -209,7 +215,7 @@ class Scheduler extends Component {
                 formattedDate = dateFns.format(day, dateFormat);
                 const cloneDay = day;
                 days.push(
-                    <div className={`shedule-month-day ${
+                    <div className={`month-view-day ${
                         !dateFns.isSameMonth(day, monthStart)
                             ? "disabled"
                             : dateFns.isSameDay(day, selectedDate) ? "selected" : ""
@@ -229,7 +235,7 @@ class Scheduler extends Component {
             days = [];
         }
 
-        return <div className="shedule-table">{rows}</div>;
+        return <div className="table">{rows}</div>;
     }
 
     onDateClick = day => {
@@ -268,11 +274,10 @@ class Scheduler extends Component {
 
     renderRedirect = () => {
         if (this.state.redirect) {
-            if (this.state.redirectTo){
+            if (this.state.redirectTo) {
                 let routh = '/event/edit/' + this.state.redirectTo + '/'
-                return <Redirect to={routh} />
-            }
-            else return <Redirect to='/event/new'/>
+                return <Redirect to={routh}/>
+            } else return <Redirect to='/event/new'/>
         }
     }
 
@@ -305,4 +310,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Scheduler);
+export default connect(mapStateToProps, mapDispatchToProps)(Schedule);

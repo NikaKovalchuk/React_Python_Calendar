@@ -1,0 +1,57 @@
+.table {
+    height: 100%;
+}
+
+.view-buttons {
+    text-align: right;
+}
+
+.today-button {
+    text-align: left;
+    width: 50%;
+}
+
+.month-view-day {
+    width: 14.2%;
+    height: 120px;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+}
+
+.month-view-day span {
+    margin: 5px;
+    font-size: 82.5%;
+}
+
+.empty-week-title {
+    width: 5%;
+}
+
+.week-view-day {
+    width: 13.5%;
+    border: 1px solid var(--border-color);
+}
+
+.day-view-time {
+    width: 5%;
+    border: 1px solid var(--border-color);
+    background: var(--today-background);
+}
+
+.day-view-data {
+    width: 95%;
+    border: 1px solid var(--border-color);
+}
+
+.event {
+    display: inline-block;
+    font-size: 11pt;
+    margin: 5px;
+    background: var(--event-background);
+    color: var(--neutral-color);
+}
+
+.disabled .event {
+    background: #98a8b6;
+}
+

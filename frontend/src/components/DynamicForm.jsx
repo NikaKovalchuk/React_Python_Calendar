@@ -1,4 +1,5 @@
 import React from 'react';
+import '../css/form.css'
 
 export default class DynamicForm extends React.Component {
     state = {};
@@ -52,7 +53,7 @@ export default class DynamicForm extends React.Component {
             let value = this.state[target];
 
             let input = <input {...props}
-                               className="form-input"
+                               className="input"
                                type={type}
                                key={key}
                                value={value}
@@ -67,7 +68,7 @@ export default class DynamicForm extends React.Component {
                     value = value.replace(':00Z', '')
                 }
                 input = <input {...props}
-                               className="form-input"
+                               className="input"
                                type={type}
                                key={key}
                                value={value}
@@ -84,7 +85,7 @@ export default class DynamicForm extends React.Component {
                     return (
                         <React.Fragment key={'fr' + o.key}>
                             <input {...props}
-                                   className="form-input"
+                                   className="input"
                                    type={type}
                                    key={o.key}
                                    name={o.name}
@@ -98,7 +99,7 @@ export default class DynamicForm extends React.Component {
                         </React.Fragment>
                     );
                 });
-                input = <div className="form-group-radio">{input}</div>;
+                input = <div className="group-radio">{input}</div>;
             }
 
             if (type === "select") {
@@ -108,14 +109,14 @@ export default class DynamicForm extends React.Component {
                     o.value = Object.values(o)[0]
                     return (
                         <option {...props}
-                                className="form-input"
+                                className="input"
                                 key={o.key}
                                 value={o.key}>
                             {o.value}</option>
                     );
                 });
 
-                input = <select className="form-input" value={value} onChange={(e) => {
+                input = <select className="input" value={value} onChange={(e) => {
                     this.onChange(e, m.key)
                 }}>{input}</select>;
             }
@@ -131,7 +132,7 @@ export default class DynamicForm extends React.Component {
                     return (
                         <React.Fragment key={"cfr" + o.key}>
                             <input {...props}
-                                   className="form-input"
+                                   className="input"
                                    type={type}
                                    key={o.key}
                                    name={o.name}
@@ -145,12 +146,12 @@ export default class DynamicForm extends React.Component {
                         </React.Fragment>
                     );
                 });
-                input = <div className="form-group-checkbox">{input}</div>;
+                input = <div className="group-checkbox">{input}</div>;
             }
 
             return (
-                <div key={'g' + key} className="form-group">
-                    <label className="form-label"
+                <div key={'g' + key} className="group">
+                    <label className="label"
                            key={"l" + key}
                            htmlFor={key}>
                         {m.label}
@@ -167,12 +168,12 @@ export default class DynamicForm extends React.Component {
 
         return (
             <div className="form">
-                <h3 className="form-title">{title}</h3>
+                <h3 className="title">{title}</h3>
                 <form className="dynamic-form" onSubmit={(e) => {
                     this.onSubmit(e)
                 }}>
                     {this.renderForm()}
-                    <div className="form-actions">
+                    <div className="actions">
                         <button type="submit" className="btn btn-secondary"> OK</button>
                     </div>
                 </form>

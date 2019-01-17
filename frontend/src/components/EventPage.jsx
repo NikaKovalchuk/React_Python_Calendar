@@ -4,7 +4,7 @@ import {events} from "../actions";
 import {Redirect} from "react-router-dom";
 
 
-class Events extends Component {
+class EventPage extends Component {
     state = {
         id: this.props.match.params.id,
         event: {},
@@ -99,4 +99,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Events);
+export default connect(mapStateToProps, mapDispatchToProps)(EventPage);

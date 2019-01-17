@@ -1,0 +1,12 @@
+
+.side-bar {
+    width: 15%;
+    display: inline-block;
+}
+
+.scheduler{
+    width: 80%;
+    display: inline-block;
+    margin-left: 20px;
+    margin-top: 10px;
+}

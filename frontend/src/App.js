@@ -4,7 +4,7 @@ import {BrowserRouter, Redirect, Route, Switch} from 'react-router-dom';
 import {connect, Provider} from "react-redux";
 import app from "./reducers";
 import {auth} from "./actions";
-import Event from "./components/Event";
+import Event from "./components/EventPage";
 import EventForm from "./components/EventForm";
 import ToolBar from "./components/ToolBar";
 import Login from "./components/Login"

@@ -1,0 +1,33 @@
+.group {
+    margin-bottom: 2%;
+    clear:both;
+    text-align:right;
+}
+
+.title {
+    font-size: 25pt;
+    font-family:  var(--main-font);
+}
+
+.label {
+    font-size: 15pt;
+    font-family:  var(--main-font);
+}
+
+.input {
+    margin-left: 15px;
+    width: 350px;
+}
+
+.form {
+    float:left;
+    display: inline;
+}
+
+.actions {
+    float: left;
+}
+
+.dynamic-form{
+    margin-top: 1%;
+}
