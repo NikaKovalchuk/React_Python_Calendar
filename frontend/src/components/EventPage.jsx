@@ -5,13 +5,17 @@ import {Redirect} from "react-router-dom";
 
 
 class EventPage extends Component {
-    state = {
-        id: this.props.match.params.id,
-        event: {},
-        edit: false,
-        not_found: false,
-        main: false,
-        CycleOptions: ['No','Day','Week','Month', 'Year'], // заменить на enum
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            id: this.props.match.params.id,
+            event: {},
+            edit: false,
+            not_found: false,
+            main: false,
+            CycleOptions: ['No', 'Day', 'Week', 'Month', 'Year'], // заменить на enum
+        };
     }
 
     componentWillMount() {
@@ -20,8 +24,7 @@ class EventPage extends Component {
                 this.setState({
                     event: this.props.events[0]
                 });
-            }
-            else {
+            } else {
                 this.setState({
                     not_found: true
                 });
@@ -62,12 +65,14 @@ class EventPage extends Component {
                 <div>
                     <p className={'title'}>{this.state.event.title}</p>
                 </div>
-                    <button onClick={() => this.edit()} className="btn btn-secondary">EDIT</button>
-                    <button onClick={() => this.delete()} className="btn btn-danger">DELETE</button>
+                <button onClick={() => this.edit()} className="btn btn-secondary">EDIT</button>
+                <button onClick={() => this.delete()} className="btn btn-danger">DELETE</button>
                 <div className={'margin-top'}>
                     <p className={'data'}>Text : {this.state.event.text}</p>
-                    <p className={'data'}>Start Date : {new Date(this.state.event.start_date).toDateString()} {new Date(this.state.event.start_date).toLocaleTimeString("en-US")}</p>
-                    <p className={'data'}>Finish Date : {new Date(this.state.event.finish_date).toDateString()} {new Date(this.state.event.finish_date).toLocaleTimeString("en-US")}</p>
+                    <p className={'data'}>Start Date
+                        : {new Date(this.state.event.start_date).toDateString()} {new Date(this.state.event.start_date).toLocaleTimeString("en-US")}</p>
+                    <p className={'data'}>Finish Date
+                        : {new Date(this.state.event.finish_date).toDateString()} {new Date(this.state.event.finish_date).toLocaleTimeString("en-US")}</p>
                     <p className={'data'}>Repear : {this.state.CycleOptions[this.state.event.cycle]}</p>
                 </div>
             </div>

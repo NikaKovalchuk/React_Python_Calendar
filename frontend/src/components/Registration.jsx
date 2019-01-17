@@ -6,10 +6,13 @@ import {Link, Redirect} from "react-router-dom";
 import {auth} from "../actions";
 
 class Register extends Component {
+    constructor(props) {
+        super(props);
 
-    state = {
-        username: "",
-        password: "",
+        this.state = {
+            username: "",
+            password: "",
+        };
     }
 
     onSubmit = e => {
@@ -71,7 +74,7 @@ const mapStateToProps = state => {
             }
         });
     }
-    if (removeErrors == true){
+    if (removeErrors == true) {
         errors = []
     }
     return {

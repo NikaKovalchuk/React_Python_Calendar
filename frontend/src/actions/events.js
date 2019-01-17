@@ -64,11 +64,10 @@ export const loadEvent = id => {
         }
         return fetch("http://localhost:8000/api/event/" + id, {headers, method: "GET",})
             .then(res => {
-                if (res.status === 500 ||res.status === 404 ) {
-                    return dispatch({ type: 'EVENT_ERROR' })
-                }
-                else{
-                   return res.json()
+                if (res.status === 500 || res.status === 404) {
+                    return dispatch({type: 'EVENT_ERROR'})
+                } else {
+                    return res.json()
                 }
             })
             .then(event => {
@@ -88,7 +87,10 @@ export const loadEvents = (startDate, finishDate) => {
         if (token) {
             headers["Authorization"] = `Token ${token}`;
         }
-        return fetch("http://localhost:8000/api/event/?startDate=" + startDate + "&finishDate="+finishDate, {headers, method: "GET",})
+        return fetch("http://localhost:8000/api/event/?startDate=" + startDate + "&finishDate=" + finishDate, {
+            headers,
+            method: "GET",
+        })
             .then(res => res.json())
             .then(events => {
                 return dispatch({

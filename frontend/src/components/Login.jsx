@@ -4,6 +4,14 @@ import {Link, Redirect} from 'react-router-dom';
 import {auth} from "../actions";
 
 class Login extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            username: "",
+            password: "",
+        };
+    }
 
     onSubmit = e => {
         e.preventDefault();

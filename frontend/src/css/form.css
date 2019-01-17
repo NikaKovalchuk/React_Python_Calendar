@@ -1,17 +1,17 @@
 .group {
     margin-bottom: 2%;
-    clear:both;
-    text-align:right;
+    clear: both;
+    text-align: right;
 }
 
 .title {
     font-size: 25pt;
-    font-family:  var(--main-font);
+    font-family: var(--main-font);
 }
 
 .label {
     font-size: 15pt;
-    font-family:  var(--main-font);
+    font-family: var(--main-font);
 }
 
 .input {
@@ -20,7 +20,7 @@
 }
 
 .form {
-    float:left;
+    float: left;
     display: inline;
 }
 
@@ -28,6 +28,6 @@
     float: left;
 }
 
-.dynamic-form{
+.dynamic-form {
     margin-top: 1%;
 }

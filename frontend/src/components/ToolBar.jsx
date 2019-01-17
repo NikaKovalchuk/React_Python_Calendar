@@ -3,8 +3,12 @@ import {connect} from 'react-redux';
 import {auth, events} from "../actions";
 
 class ToolBar extends Component {
-    state={
-        user:{}
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            user: {},
+        };
     }
 
     componentDidMount() {
@@ -25,7 +29,7 @@ class ToolBar extends Component {
                     <a className="nav-link" href="/event/new">ADD EVENT</a>
                 </li>
                 {/*<li className="nav-item active">*/}
-                    {/*<a className="nav-link" href="/settings">SETTINGS</a>*/}
+                {/*<a className="nav-link" href="/settings">SETTINGS</a>*/}
                 {/*</li>*/}
                 <li className="nav-item active">
                     <a className="nav-link" onClick={this.props.logout}> LOG OUT </a>
