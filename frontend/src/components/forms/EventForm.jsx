@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {events} from "../actions";
+import {events} from "../../actions";
 import DynamicForm from "./DynamicForm"
 import {Redirect} from 'react-router-dom';
 

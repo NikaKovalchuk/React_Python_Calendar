@@ -1,9 +1,11 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {Link, Redirect} from 'react-router-dom';
-import {auth} from "../actions";
 
-class Login extends Component {
+import {Link, Redirect} from "react-router-dom";
+
+import {auth} from "../../actions";
+
+class Register extends Component {
     constructor(props) {
         super(props);
 
@@ -15,7 +17,7 @@ class Login extends Component {
 
     onSubmit = e => {
         e.preventDefault();
-        this.props.login(this.state.username, this.state.password);
+        this.props.register(this.state.username, this.state.password);
     }
 
     render() {
@@ -23,9 +25,9 @@ class Login extends Component {
             return <Redirect to="/"/>
         }
         return (
-            <form onSubmit={this.onSubmit}>
+            <form onSubmit={this.onSubmit} className={'dynamic-form '}>
                 <fieldset>
-                    <legend>Login</legend>
+                    <legend className={'title'}>Register</legend>
                     {this.props.errors.length > 0 && (
                         <ul>
                             {this.props.errors.map(error => (
@@ -34,23 +36,25 @@ class Login extends Component {
                         </ul>
                     )}
                     <p>
-                        <label htmlFor="username">Username</label>
+                        <label className={'label'} htmlFor="username">Username</label>
                         <input
+                            className={'input'}
                             type="text" id="username"
                             onChange={e => this.setState({username: e.target.value})}/>
                     </p>
                     <p>
-                        <label htmlFor="password">Password</label>
+                        <label className={'label'}  htmlFor="password">Password</label>
                         <input
+                            className={'input'}
                             type="password" id="password"
                             onChange={e => this.setState({password: e.target.value})}/>
                     </p>
                     <p>
-                        <button type="submit">Login</button>
+                        <button className={'btn btn-secondary'} type="submit">Register</button>
                     </p>
 
                     <p>
-                        Don't have an account? <Link to="/registration">Register</Link>
+                        Already have an account? <Link to="/login">Login</Link>
                     </p>
                 </fieldset>
             </form>
@@ -72,7 +76,7 @@ const mapStateToProps = state => {
             }
         });
     }
-    if (removeErrors == true){
+    if (removeErrors == true) {
         errors = []
     }
     return {
@@ -83,10 +87,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        login: (username, password) => {
-            return dispatch(auth.login(username, password));
-        }
+        register: (username, password) => dispatch(auth.register(username, password)),
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Register);

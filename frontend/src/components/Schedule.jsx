@@ -185,19 +185,6 @@ class Schedule extends Component {
         return <div className="table">{hours}</div>;
     }
 
-    renderEvents(day) { // не очищает после себя
-        // let result = []
-        // for (let index = 0; index < this.state.events.length; index++) {
-        //     let event = this.state.events[index]
-        //     let start_date = new Date(event.start_date)
-        //     let today = new Date(day)
-        //     if (start_date.getDate() === today.getDate()) {
-        //         result.push(<div className={'event'} key={today + "_" + event.id} onClick={() => this.onEventClick(event.id)} > {event.title} </div>)
-        //     }
-        // }
-        // return <div className="events" key={'events'}>{result}</div>;
-    }
-
     renderMonthTable() {
         const {selectedDate} = this.state;
         const monthStart = dateFns.startOfMonth(selectedDate);
@@ -214,6 +201,15 @@ class Schedule extends Component {
             for (let i = 0; i < 7; i++) {
                 formattedDate = dateFns.format(day, dateFormat);
                 const cloneDay = day;
+                // let result = []
+                // for (let index = 0; index < this.state.events.length; index++) {
+                //     let event = this.state.events[index]
+                //     let start_date = new Date(event.start_date)
+                //     let today = new Date(day)
+                //     if (start_date.getDate() === today.getDate()) {
+                //         result.push(<div className={'event'} key={today + "_" + event.id} onClick={() => this.onEventClick(event.id)} > {event.title} </div>)
+                //     }
+                // }
                 days.push(
                     <div className={`month-view-day ${
                         !dateFns.isSameMonth(day, monthStart)
@@ -222,7 +218,7 @@ class Schedule extends Component {
                         }`}
                          key={day} onClick={() => this.onDateClick(dateFns.parse(cloneDay))}>
                         <span className="number">{formattedDate}</span>
-                        {this.renderEvents(day)}
+                        {/*<div className={'events'}>{result}</div>*/}
                     </div>
                 );
                 day = dateFns.addDays(day, 1);
@@ -283,7 +279,7 @@ class Schedule extends Component {
 
     render() {
         return (
-            <div>
+            <div className={'tall'}>
                 {this.renderRedirect()}
                 {this.renderButtons()}
                 {this.renderTable()}

@@ -1,5 +1,5 @@
 import React from 'react';
-import '../css/form.css'
+import '../../css/form.css'
 
 export default class DynamicForm extends React.Component {
     state = {};

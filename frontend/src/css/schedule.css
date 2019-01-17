@@ -2,17 +2,22 @@
     height: 100%;
 }
 
-.view-buttons {
-    text-align: right;
-}
-
 .today-button {
     text-align: left;
-    width: 50%;
+    width: calc(100% / 2);
+    display: inline-block;
+    margin-bottom: 10px;
 }
 
+.view-buttons {
+    text-align: right;
+    width:calc(100% / 2);
+    display: inline-block;margin-bottom: 10px;
+}
+
+
 .month-view-day {
-    width: 14.2%;
+    width: calc(100% / 7);
     height: 120px;
     border: 1px solid var(--border-color);
     cursor: pointer;
@@ -28,7 +33,7 @@
 }
 
 .week-view-day {
-    width: 13.5%;
+    width: calc(95% / 7);
     border: 1px solid var(--border-color);
 }
 
