@@ -33,7 +33,7 @@ class Settings extends Component {
                     </div>
                 </div>
                 <div className={'scheduler'}>
-                    <Scheduler currentDate={this.state.date} selectedDate={this.state.selectedDate}/>
+                    <Scheduler currentDate={this.state.date} selectedDate={this.state.selectedDate} changeDate={this.changeDate}/>
                 </div>
             </div>
         )

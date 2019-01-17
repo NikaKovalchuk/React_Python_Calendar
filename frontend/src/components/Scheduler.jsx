@@ -12,10 +12,10 @@ class Scheduler extends Component {
 
         this.state = {
             view: viewType.month,
-            currentMonth: this.props.currentDate,
+            currentDate: this.props.currentDate,
             selectedDate: this.props.selectedDate,
             redirect: false,
-            events: {}
+            events: {},
         };
 
         this.changeView = this.changeView.bind(this);
@@ -73,6 +73,11 @@ class Scheduler extends Component {
                     </button>
                     <button type="button" className="btn btn-secondary btn-sm"
                             onClick={() => this.changeView(viewType.month)}>Month
+                    </button>
+                </div>
+                <div className="btn-group btn-group-toggle" data-toggle="buttons">
+                    <button type="button" className="btn btn-secondary btn-sm"
+                            onClick={() => this.changeDate(this.state.currentDate)}>Today
                     </button>
                 </div>
             </div>
@@ -175,16 +180,16 @@ class Scheduler extends Component {
     }
 
     renderEvents(day) { // не очищает после себя
-        let result = []
-        for (let index = 0; index < this.state.events.length; index++) {
-            let event = this.state.events[index]
-            let start_date = new Date(event.start_date)
-            let today = new Date(day)
-            if (start_date.getDate() === today.getDate()) {
-                result.push(<div className={'event'} key={today + "_" + event.id} onClick={() => this.onEventClick(event.id)} > {event.title} </div>)
-            }
-        }
-        return <div className="events" key={'events'}>{result}</div>;
+        // let result = []
+        // for (let index = 0; index < this.state.events.length; index++) {
+        //     let event = this.state.events[index]
+        //     let start_date = new Date(event.start_date)
+        //     let today = new Date(day)
+        //     if (start_date.getDate() === today.getDate()) {
+        //         result.push(<div className={'event'} key={today + "_" + event.id} onClick={() => this.onEventClick(event.id)} > {event.title} </div>)
+        //     }
+        // }
+        // return <div className="events" key={'events'}>{result}</div>;
     }
 
     renderMonthTable() {
@@ -238,6 +243,11 @@ class Scheduler extends Component {
             redirectTo: id,
             redirect: true
         });
+    }
+
+    changeDate = day => {
+        console.log(day)
+        this.props.changeDate(day);
     }
 
     renderTable() {

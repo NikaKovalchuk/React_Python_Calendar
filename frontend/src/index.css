@@ -325,3 +325,8 @@ header {
     background: #4f5b69;
     color: whitesmoke;
 }
+
+.calendar .body .today  {
+    background: #98a8b6;
+    color: whitesmoke;
+}
