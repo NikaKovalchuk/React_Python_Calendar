@@ -4,6 +4,7 @@ import {Link, Redirect} from 'react-router-dom';
 import {auth} from "../actions";
 
 class Login extends Component {
+
     onSubmit = e => {
         e.preventDefault();
         this.props.login(this.state.username, this.state.password);
@@ -51,10 +52,20 @@ class Login extends Component {
 
 const mapStateToProps = state => {
     let errors = [];
+    let removeErrors = false
     if (state.auth.errors) {
         errors = Object.keys(state.auth.errors).map(field => {
-            return {field, message: state.auth.errors[field]};
+            if (state.auth.errors[field] !== "Authentication credentials were not provided.") {
+                console.log('asd')
+                return {field, message: state.auth.errors[field]};
+            } else {
+                removeErrors = true
+                return {}
+            }
         });
+    }
+    if (removeErrors == true){
+        errors = []
     }
     return {
         errors,

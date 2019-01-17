@@ -24,16 +24,13 @@ class RootContainerComponent extends Component {
 
     PrivateRoute = ({component: ChildComponent, ...rest}) => {
         return <Route {...rest} render={props => {
-          if (this.props.auth.isAuthenticated) {
-            return <ChildComponent {...props} />
-          } else if (this.props.auth.isLoading) {
-            return <em>Loading...</em>;
-          } else {
-            console.log('s')
-            return <Redirect to="/login" />;
-          }
-        }} />
-      }
+            if (this.props.auth.isAuthenticated) {
+                return <ChildComponent {...props} />
+            } else {
+                return <Redirect to="/login"/>;
+            }
+        }}/>
+    }
 
 
     render() {

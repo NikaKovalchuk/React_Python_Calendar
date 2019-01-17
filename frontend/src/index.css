@@ -287,6 +287,11 @@ header {
     pointer-events: none;
 }
 
+.disabled .event{
+    background: #98a8b6;
+}
+
+
 .shedule-month-day span{
    margin: 5px;
    font-size: 82.5%;
