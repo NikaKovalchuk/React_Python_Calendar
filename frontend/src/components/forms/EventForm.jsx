@@ -16,7 +16,8 @@ class EventForm extends Component {
             title: null,
             text: null,
             id: null,
-            start_time: null
+            start_time: null,
+            finish_time: null
         },
         redirect: false,
         route: '',
@@ -42,11 +43,11 @@ class EventForm extends Component {
     }
 
     componentWillReceiveProps(props) {
-        if (props.events){ //TODO : change it for normal load
-            for (let i=0; i<props.events.length; i++){
-                if (props.events[i]['id'] === this.state.id){
+        if (props.events) { //TODO : change it for normal load
+            for (let i = 0; i < props.events.length; i++) {
+                if (props.events[i]['id'] == this.state.id) {
                     this.setState({
-                        event : props.events[i]
+                        event: props.events[i]
                     });
 
                 }
@@ -74,14 +75,34 @@ class EventForm extends Component {
 
     renderRedirect = () => {
         if (this.state.redirect) {
-            return <Redirect to='/'/>
+            if (this.state.id == null) {
+                return <Redirect to='/'/>
+            } else {
+                let route = "/event/" + this.state.id + "/"
+                return <Redirect to={route}/>
+            }
         }
+    }
+
+    back = () => {
+        this.setState({
+            redirect: true
+        })
+    }
+
+    renderButton = () => {
+        let button = []
+        if (this.state.id != null) {
+            button = <button className={"btn btn-secondary"} onClick={this.back}> Back </button>
+        }
+        return <div className={'back-button'}>{button}</div>
     }
 
     render() {
         return (
             <div>
                 {this.renderRedirect()}
+                {this.renderButton()}
                 <DynamicForm className="form"
                              title="Event Form"
                              data={this.state.event}

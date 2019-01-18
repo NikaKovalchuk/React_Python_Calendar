@@ -10,7 +10,13 @@ class EventPage extends Component {
 
         this.state = {
             id: this.props.match.params.id,
-            event: {},
+             event: {
+                title: null,
+                text: null,
+                id: null,
+                start_time: null,
+                finish_time: null
+            },
             edit: false,
             not_found: false,
             main: false,
