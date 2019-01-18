@@ -1,6 +1,5 @@
 import React from "react";
 import dateFns from "date-fns";
-import {events} from "../actions";
 import '../css/calendar.css'
 
 class Calendar extends React.Component {
@@ -15,11 +14,8 @@ class Calendar extends React.Component {
     }
 
     componentWillReceiveProps(props) {
-        let update = false
-        console.log(props)
         if (props.selectedDate) {
             if (props.selectedDate !== this.state.selectedDate) {
-                update = true
                 this.setState({
                     selectedDate: props.selectedDate,
                     viewDate: props.selectedDate
@@ -80,8 +76,8 @@ class Calendar extends React.Component {
                 days.push(
                     <div
                         className={`col cell ${!dateFns.isSameMonth(day, monthStart) ? "disabled" :
-                                                dateFns.isSameDay(day, currentDate) ? "today" :
-                                                dateFns.isSameDay(day, this.state.selectedDate)? "selected" : ""}`}
+                            dateFns.isSameDay(day, currentDate) ? "today" :
+                                dateFns.isSameDay(day, this.state.selectedDate) ? "selected" : ""}`}
                         key={day}
                         onClick={() => this.onDateClick(dateFns.parse(cloneDay))}>
                         <span className="number">{formattedDate}</span>
@@ -126,21 +122,6 @@ class Calendar extends React.Component {
                 {this.renderCells()}
             </div>
         );
-    }
-}
-
-
-const mapStateToProps = state => {
-    return {
-        events: state.events,
-    }
-}
-
-const mapDispatchToProps = dispatch => {
-    return {
-        import: () => {
-            return dispatch(events.loadEvents());
-        },
     }
 }
 

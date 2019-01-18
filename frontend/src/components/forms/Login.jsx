@@ -69,7 +69,6 @@ const mapStateToProps = state => {
     if (state.auth.errors) {
         errors = Object.keys(state.auth.errors).map(field => {
             if (state.auth.errors[field] !== "Authentication credentials were not provided.") {
-                console.log('asd')
                 return {field, message: state.auth.errors[field]};
             } else {
                 removeErrors = true
@@ -77,7 +76,7 @@ const mapStateToProps = state => {
             }
         });
     }
-    if (removeErrors == true) {
+    if (removeErrors === true) {
         errors = []
     }
     return {

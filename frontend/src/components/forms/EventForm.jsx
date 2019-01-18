@@ -12,7 +12,12 @@ class EventForm extends Component {
         finish_date: new Date(),
         id: this.props.match.params.id || null,
         price: 0,
-        event: {},
+        event: {
+            title: null,
+            text: null,
+            id: null,
+            start_time: null
+        },
         redirect: false,
         route: '',
         CycleOptions: [{0: 'No'}, {1: 'Day'}, {2: 'Week'}, {3: 'Month'}, {4: 'Year'}] // заменить на enum
@@ -35,6 +40,22 @@ class EventForm extends Component {
             });
         }
     }
+
+    componentWillReceiveProps(props) {
+        if (props.events){ //TODO : change it for normal load
+            for (let i=0; i<props.events.length; i++){
+                if (props.events[i]['id'] == this.state.id){
+                    console.log(props.events[i])
+                    this.setState({
+                        event : props.events[i]
+                    });
+
+                }
+            }
+
+        }
+    }
+
 
     onSubmit = (model) => {
         if (this.state.id === null) {

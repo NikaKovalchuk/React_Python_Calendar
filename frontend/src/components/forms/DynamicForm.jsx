@@ -104,7 +104,6 @@ export default class DynamicForm extends React.Component {
 
             if (type === "select") {
                 input = m.options.map((o) => {
-                    let checked = o.value === value;
                     o.key = Object.keys(o)[0]
                     o.value = Object.values(o)[0]
                     return (

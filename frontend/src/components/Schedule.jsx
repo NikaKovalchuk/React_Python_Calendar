@@ -201,7 +201,7 @@ class Schedule extends Component {
             for (let i = 0; i < 7; i++) {
                 formattedDate = dateFns.format(day, dateFormat);
                 const cloneDay = day;
-                // let result = []
+                let result = []
                 // for (let index = 0; index < this.state.events.length; index++) {
                 //     let event = this.state.events[index]
                 //     let start_date = new Date(event.start_date)
@@ -218,7 +218,7 @@ class Schedule extends Component {
                         }`}
                          key={day} onClick={() => this.onDateClick(dateFns.parse(cloneDay))}>
                         <span className="number">{formattedDate}</span>
-                        {/*<div className={'events'}>{result}</div>*/}
+                        <div className={'events'}>{result}</div>
                     </div>
                 );
                 day = dateFns.addDays(day, 1);
@@ -248,7 +248,6 @@ class Schedule extends Component {
     }
 
     changeDate = day => {
-        console.log(day)
         this.props.changeDate(day);
     }
 
