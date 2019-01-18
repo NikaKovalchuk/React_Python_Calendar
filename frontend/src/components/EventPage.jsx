@@ -64,9 +64,9 @@ class EventPage extends Component {
                 {this.renderRedirect()}
                 <div>
                     <p className={'title'}>{this.state.event.title}</p>
+                    <button onClick={() => this.edit()} className="btn btn-secondary button-margin">EDIT</button>
+                    <button onClick={() => this.delete()} className="btn btn-danger button-margin">DELETE</button>
                 </div>
-                <button onClick={() => this.edit()} className="btn btn-secondary">EDIT</button>
-                <button onClick={() => this.delete()} className="btn btn-danger">DELETE</button>
                 <div className={'margin-top'}>
                     <p className={'data'}>Text : {this.state.event.text}</p>
                     <p className={'data'}>Start Date

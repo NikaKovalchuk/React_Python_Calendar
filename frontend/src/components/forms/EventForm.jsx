@@ -8,8 +8,8 @@ class EventForm extends Component {
     state = {
         text: "",
         title: "",
-        start_date: new Date(),
-        finish_date: new Date(),
+        start_date: new Date().toISOString(),
+        finish_date: new Date().toISOString(),
         id: this.props.match.params.id || null,
         price: 0,
         event: {
@@ -34,8 +34,8 @@ class EventForm extends Component {
         } else {
             this.setState({
                 event: {
-                    start_date: this.start_date,
-                    finish_date: this.finish_date,
+                    start_date: this.state.start_date,
+                    finish_date: this.state.finish_date,
                 }
             });
         }
@@ -45,7 +45,6 @@ class EventForm extends Component {
         if (props.events){ //TODO : change it for normal load
             for (let i=0; i<props.events.length; i++){
                 if (props.events[i]['id'] == this.state.id){
-                    console.log(props.events[i])
                     this.setState({
                         event : props.events[i]
                     });

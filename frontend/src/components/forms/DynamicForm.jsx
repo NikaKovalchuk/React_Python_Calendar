@@ -65,7 +65,8 @@ export default class DynamicForm extends React.Component {
 
             if (type === "datetime-local") {
                 if (value) {
-                    value = value.replace(':00Z', '')
+                    value = value.replace(/\.[0-9]*Z/, '')
+                    value = value.replace(/\:[0-9]*Z/, '')
                 }
                 input = <input {...props}
                                className="input"
