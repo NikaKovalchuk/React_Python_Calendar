@@ -37,23 +37,42 @@
     border: 1px solid var(--border-color);
 }
 
+.week-view-day-title {
+    width: calc(95% / 7);
+    color: var(--neutral-color);
+    background: var(--event-background);
+    text-align: center;
+}
+
+.day-title{
+    width: 100%;
+    color: var(--neutral-color);
+    background: var(--event-background);
+    text-align: center;
+}
+
 .day-view-time {
     width: 5%;
-    border: 1px solid var(--border-color);
-    background: var(--today-background);
+    color: var(--neutral-color);
+    background: var(--event-background);
+    text-align: center;
 }
 
 .day-view-data {
     width: 95%;
     border: 1px solid var(--border-color);
+    height: calc(100%/24);
 }
 
 .event {
     display: inline-block;
     font-size: 11pt;
     margin: 5px;
+    border-radius: 5px;
     background: var(--event-background);
     color: var(--neutral-color);
+    padding: 2px 4px;
+    font-size: 10pt;
 }
 
 .disabled .event {
