@@ -17,9 +17,12 @@
 .input {
     margin-left: 15px;
     width: 350px;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
 }
 
 .form {
+    margin-top: 1%;
     float: left;
     display: inline;
 }

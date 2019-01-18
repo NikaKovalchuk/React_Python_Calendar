@@ -25,39 +25,41 @@ class Register extends Component {
             return <Redirect to="/"/>
         }
         return (
-            <form onSubmit={this.onSubmit} className={'dynamic-form '}>
-                <fieldset>
-                    <legend className={'title'}>Register</legend>
-                    {this.props.errors.length > 0 && (
-                        <ul>
-                            {this.props.errors.map(error => (
-                                <li key={error.field}>{error.message}</li>
-                            ))}
-                        </ul>
-                    )}
-                    <p>
-                        <label className={'label'} htmlFor="username">Username</label>
-                        <input
-                            className={'input'}
-                            type="text" id="username"
-                            onChange={e => this.setState({username: e.target.value})}/>
-                    </p>
-                    <p>
-                        <label className={'label'}  htmlFor="password">Password</label>
-                        <input
-                            className={'input'}
-                            type="password" id="password"
-                            onChange={e => this.setState({password: e.target.value})}/>
-                    </p>
-                    <p>
-                        <button className={'btn btn-secondary'} type="submit">Register</button>
-                    </p>
+            <div className={'form'}>
+                <form onSubmit={this.onSubmit} className={'dynamic-form '}>
+                    <fieldset>
+                        <legend className={'title'}>Register</legend>
+                        {this.props.errors.length > 0 && (
+                            <ul>
+                                {this.props.errors.map(error => (
+                                    <li key={error.field}>{error.message}</li>
+                                ))}
+                            </ul>
+                        )}
+                        <p className={'group'}>
+                            <label className={'label'} htmlFor="username">Username</label>
+                            <input
+                                className={'input'}
+                                type="text" id="username"
+                                onChange={e => this.setState({username: e.target.value})}/>
+                        </p>
+                        <p className={'group'}>
+                            <label className={'label'} htmlFor="password">Password</label>
+                            <input
+                                className={'input'}
+                                type="password" id="password"
+                                onChange={e => this.setState({password: e.target.value})}/>
+                        </p>
+                        <p>
+                            <button className={'btn btn-secondary'} type="submit">Register</button>
+                        </p>
 
-                    <p>
-                        Already have an account? <Link to="/login">Login</Link>
-                    </p>
-                </fieldset>
-            </form>
+                        <p>
+                            Already have an account? <Link to="/login">Login</Link>
+                        </p>
+                    </fieldset>
+                </form>
+            </div>
         )
     }
 }
