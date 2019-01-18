@@ -44,7 +44,7 @@ class EventForm extends Component {
     componentWillReceiveProps(props) {
         if (props.events){ //TODO : change it for normal load
             for (let i=0; i<props.events.length; i++){
-                if (props.events[i]['id'] == this.state.id){
+                if (props.events[i]['id'] === this.state.id){
                     this.setState({
                         event : props.events[i]
                     });
