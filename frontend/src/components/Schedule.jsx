@@ -96,22 +96,44 @@ class Schedule extends Component {
 
     renderEventsDay(day, hour) {
         const result = [];
-        let start_day = dateFns.endOfDay(day)
-        let end_day = dateFns.startOfDay(day)
+        let startOfDay = dateFns.startOfDay(day)
+        let endOfDay = dateFns.endOfDay(day)
         let events = []
         for (let index = 0; index < this.state.events.length; index++) {
             let event = this.state.events[index]
             let start_date = new Date(event.start_date)
             let finish_date = new Date(event.finish_date)
-            if (start_date <= start_day && finish_date >= end_day) {
-                if (start_date.getHours() <= hour.getHours() && finish_date.getHours() >= hour.getHours()) {
-                    let add = true;
-                    for (let i = 0; i < events.length; i++) {
-                        if (events[i].id === event.id) {
-                            add = false
+            let add = false
+            if (start_date <= endOfDay && finish_date >= startOfDay) {
+                if (start_date > startOfDay) { // if event start today
+                    if (finish_date < endOfDay) {    // if event finish today
+                        if (start_date.getHours() <= hour.getHours() && finish_date.getHours() >= hour.getHours()) {
+                            add = true
+                        }
+                    } else {
+                        if (start_date.getHours() <= hour.getHours()) {
+                            add = true
                         }
                     }
-                    if (add == true) {
+                }
+
+                if (start_date < startOfDay) { // event start earlier
+                    if (finish_date < endOfDay) {
+                        if (finish_date.getHours() >= hour.getHours()) {
+                            add = true
+                        }
+                    } else {
+                        add = true
+                    }
+                }
+                if (add == true) {
+                    let newEvent = true;
+                    for (let i = 0; i < events.length; i++) {
+                        if (events[i].id === event.id) {
+                            newEvent = false
+                        }
+                    }
+                    if (newEvent == true) {
                         result.push(<div className={'day-event'} key={event.id + "_" + event.title}
                                          onClick={() => this.onEventClick(event.id)}>{event.title}</div>)
                         events.push(event)
@@ -166,21 +188,44 @@ class Schedule extends Component {
     renderEventsWeek(day, hour) {
         const result = [];
         let events = []
-        let start_day = dateFns.endOfDay(day)
-        let end_day = dateFns.startOfDay(day)
+        let startOfDay = dateFns.startOfDay(day)
+        let endOfDay = dateFns.endOfDay(day)
         for (let index = 0; index < this.state.events.length; index++) {
             let event = this.state.events[index]
             let start_date = new Date(event.start_date)
             let finish_date = new Date(event.finish_date)
-            if (start_date <= start_day && finish_date >= end_day) {
-                if (start_date.getHours() <= hour.getHours() && finish_date.getHours() >= hour.getHours()) {
-                    let add = true;
-                    for (let i = 0; i < events.length; i++) {
-                        if (events[i].id === event.id) {
-                            add = false
+            let add = false
+            if (start_date <= endOfDay && finish_date >= startOfDay) {
+                if (start_date > startOfDay) { // if event start today
+                    if (finish_date < endOfDay) {    // if event finish today
+                        if (start_date.getHours() <= hour.getHours() && finish_date.getHours() >= hour.getHours()) {
+                            add = true
+                        }
+                    } else {
+                        if (start_date.getHours() <= hour.getHours()) {
+                            add = true
                         }
                     }
-                    if (add == true) {
+                }
+
+                if (start_date < startOfDay) { // event start earlier
+                    if (finish_date < endOfDay) {
+                        if (finish_date.getHours() >= hour.getHours()) {
+                            add = true
+                        }
+                    } else {
+                        add = true
+                    }
+                }
+
+                if (add == true) {
+                    let newEvent = true;
+                    for (let i = 0; i < events.length; i++) {
+                        if (events[i].id === event.id) {
+                            newEvent = false
+                        }
+                    }
+                    if (newEvent == true) {
                         result.push(<div className={'week-event'} key={event.id + "_" + event.title}
                                          onClick={() => this.onEventClick(event.id)}>{event.title}</div>)
                         events.push(event)
