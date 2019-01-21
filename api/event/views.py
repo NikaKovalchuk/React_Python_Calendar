@@ -1,6 +1,6 @@
 import copy
 from datetime import datetime, timedelta
-from enum import Enum
+
 import dateutil.parser
 from django.http import Http404, HttpResponse
 from rest_framework import status, permissions
@@ -33,20 +33,21 @@ class EventList(APIView):
                 startDate = dateutil.parser.parse(request.query_params['startDate'])
             if 'finishDate' in request.query_params:
                 finishDate = dateutil.parser.parse(request.query_params['finishDate'])
-        events = Event.objects.filter(
-            start_date__gte=startDate,
-            finish_date__lte=finishDate,
-            user=request.user.id,
-            archived=False,
-            cycle=self.cycleNo
-        )
+        events = Event.objects.filter(start_date__gte=startDate, finish_date__lte=finishDate, user=request.user.id,
+                                      archived=False, cycle=self.cycleNo) | \
+                 Event.objects.filter(
+                     start_date__lte=startDate, finish_date__lte=finishDate, user=request.user.id,
+                     archived=False, cycle=self.cycleNo) | \
+                 Event.objects.filter(
+                    start_date__gte=startDate, finish_date__gte=finishDate, user=request.user.id,
+                    archived=False, cycle=self.cycleNo)
 
         events = list(events)
         events = self.repeatedEvents(startDate, finishDate, events, user=request.user)
         serializer = EventSerializer(events, many=True)
         return Response(serializer.data)
 
-    def post(request):
+    def post(self, request):
         serializer_context = {'request': request, }
 
         if not request.data:

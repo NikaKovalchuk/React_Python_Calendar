@@ -9,7 +9,7 @@ class EventForm extends Component {
         text: "",
         title: "",
         start_date: new Date().toISOString(),
-        finish_date: new Date().toISOString(),
+        finish_date: new Date( new Date().setHours(new Date().getHours() + 1) ).toISOString(),
         id: this.props.match.params.id || null,
         price: 0,
         event: {

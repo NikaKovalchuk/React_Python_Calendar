@@ -35,7 +35,9 @@ class Schedule extends Component {
         let update = false
         if (props.selectedDate) {
             if (props.selectedDate !== this.state.selectedDate) {
-                update = true
+                if (new Date(props.selectedDate).getMonth() !== new Date(this.state.selectedDate).getMonth()) {
+                    update = true
+                }
                 this.setState({
                     selectedDate: props.selectedDate
                 });
@@ -47,8 +49,10 @@ class Schedule extends Component {
     }
 
     updateEvents(date) {
-        let startDate = new Date(dateFns.startOfMonth(date)).toISOString()
-        let finishDate = new Date(dateFns.endOfMonth(date)).toISOString()
+        const monthStart = dateFns.startOfMonth(date);
+        const monthEnd = dateFns.endOfMonth(monthStart);
+        const startDate = dateFns.startOfWeek(monthStart).toISOString();
+        const finishDate = dateFns.endOfWeek(monthEnd).toISOString();
         this.props.loadEvents(startDate, finishDate).then(response => {
             this.setState({
                 events: this.props.events
@@ -90,15 +94,49 @@ class Schedule extends Component {
         )
     }
 
+    renderEventsDay(day, hour) {
+        const result = [];
+        let start_day = dateFns.endOfDay(day)
+        let end_day = dateFns.startOfDay(day)
+        let events = []
+        for (let index = 0; index < this.state.events.length; index++) {
+            let event = this.state.events[index]
+            let start_date = new Date(event.start_date)
+            let finish_date = new Date(event.finish_date)
+            if (start_date <= start_day && finish_date >= end_day) {
+                if (start_date.getHours() <= hour.getHours() && finish_date.getHours() >= hour.getHours()) {
+                    let add = true;
+                    for (let i = 0; i < events.length; i++) {
+                        if (events[i].id === event.id) {
+                            add = false
+                        }
+                    }
+                    if (add == true) {
+                        result.push(<div className={'day-event'} key={event.id + "_" + event.title}
+                                         onClick={() => this.onEventClick(event.id)}>{event.title}</div>)
+                        events.push(event)
+                    }
+                }
+            }
+        }
+        return <div className="day-events">{result}</div>;
+    }
+
     renderDayTable() {
         const {selectedDate} = this.state;
         const dayStart = dateFns.startOfDay(selectedDate)
         const dayEnd = dateFns.endOfDay(selectedDate)
+        const day = selectedDate
 
         const timeFormat = "HH:mm";
         const hours = [];
         let line = [];
         let hour = dayStart;
+        const dateFormat = "D";
+
+        let formattedDate = dateFns.format(day, dateFormat);
+        hours.push(<div className="day-title"><span>{formattedDate}</span></div>);
+
 
         while (hour <= dayEnd) {
             let formattedTime = dateFns.format(hour, timeFormat);
@@ -109,7 +147,7 @@ class Schedule extends Component {
             );
             line.push(
                 <div className={'day-view-data'}>
-                    <span>asd</span>
+                    {this.renderEventsDay(day, hour)}
                 </div>
             );
 
@@ -123,6 +161,34 @@ class Schedule extends Component {
         }
 
         return <div className="table">{hours}</div>;
+    }
+
+    renderEventsWeek(day, hour) {
+        const result = [];
+        let events = []
+        let start_day = dateFns.endOfDay(day)
+        let end_day = dateFns.startOfDay(day)
+        for (let index = 0; index < this.state.events.length; index++) {
+            let event = this.state.events[index]
+            let start_date = new Date(event.start_date)
+            let finish_date = new Date(event.finish_date)
+            if (start_date <= start_day && finish_date >= end_day) {
+                if (start_date.getHours() <= hour.getHours() && finish_date.getHours() >= hour.getHours()) {
+                    let add = true;
+                    for (let i = 0; i < events.length; i++) {
+                        if (events[i].id === event.id) {
+                            add = false
+                        }
+                    }
+                    if (add == true) {
+                        result.push(<div className={'week-event'} key={event.id + "_" + event.title}
+                                         onClick={() => this.onEventClick(event.id)}>{event.title}</div>)
+                        events.push(event)
+                    }
+                }
+            }
+        }
+        return <div className="week-events">{result}</div>;
     }
 
     renderWeekTable() {
@@ -144,7 +210,7 @@ class Schedule extends Component {
         for (let i = 0; i < 7; i++) {
             let formattedDate = dateFns.format(day, dateFormat);
             days.push(
-                <div className="week-view-day">
+                <div className="week-view-day-title">
                     <span>{formattedDate}</span>
                 </div>
             );
@@ -168,7 +234,7 @@ class Schedule extends Component {
             for (let i = 0; i < 7; i++) {
                 days.push(
                     <div className="week-view-day">
-                        <span></span>
+                        {this.renderEventsWeek(day, hour)}
                     </div>
                 );
                 day = dateFns.addDays(day, 1);
@@ -185,18 +251,30 @@ class Schedule extends Component {
         return <div className="table">{hours}</div>;
     }
 
-    renderEvents(day) {
+    renderEventsMonth(day) {
         const result = [];
+        let events = []
+        let start_day = dateFns.endOfDay(day)
+        let end_day = dateFns.startOfDay(day)
         for (let index = 0; index < this.state.events.length; index++) {
             let event = this.state.events[index]
             let start_date = new Date(event.start_date)
-            let today = new Date(day)
-            if (start_date.getDate() === today.getDate()) {
-                result.push(<div className={'event'} key={event.id}
-                                 onClick={() => this.onEventClick(event.id)}>{event.title}</div>)
+            let finish_date = new Date(event.finish_date)
+            if (start_date <= start_day && finish_date >= end_day) {
+                let add = true;
+                for (let i = 0; i < events.length; i++) {
+                    if (events[i].id === event.id) {
+                        add = false
+                    }
+                }
+                if (add == true) {
+                    result.push(<div className={'month-event'} key={event.id + "_" + event.title}
+                                     onClick={() => this.onEventClick(event.id)}>{event.title}</div>)
+                    events.push(event)
+                }
             }
         }
-        return <div className="events">{result}</div>;
+        return <div className="month-events">{result}</div>;
     }
 
     renderMonthTable() {
@@ -224,7 +302,7 @@ class Schedule extends Component {
                         }`}
                          key={day} onClick={() => this.onDateClick(dateFns.parse(cloneDay))}>
                         <span className="number">{formattedDate}</span>
-                        {this.renderEvents(day)}
+                        {this.renderEventsMonth(day)}
                     </div>
                 );
                 day = dateFns.addDays(day, 1);
