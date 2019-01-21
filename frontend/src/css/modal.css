@@ -1,0 +1,42 @@
+.backdrop {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 50px;
+}
+
+.modal-window {
+    background: #fff;
+    border-radius: 5px;
+    max-width: 1000px;
+    min-height: 250px;
+    margin: 0 auto;
+    padding: 30px;
+}
+
+.header {
+    text-align: center;
+    font-size: 25pt;
+    font-family: var(--main-font);
+}
+
+.modal-body {
+    padding-top: 30px;
+    font-size: 20pt;
+    font-family: var(--main-font);
+}
+
+.footer {
+    text-align: center;
+}
+
+.button-group{
+    margin-top: 20px;
+}
+
+.button-group button{
+   margin: 10px;
+}

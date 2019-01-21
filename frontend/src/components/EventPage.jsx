@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {events} from "../actions";
 import {Redirect} from "react-router-dom";
+import Modal from './Modal';
 
 
 class EventPage extends Component {
@@ -10,7 +11,7 @@ class EventPage extends Component {
 
         this.state = {
             id: this.props.match.params.id,
-             event: {
+            event: {
                 title: null,
                 text: null,
                 id: null,
@@ -20,8 +21,15 @@ class EventPage extends Component {
             edit: false,
             not_found: false,
             main: false,
+            isOpen: false,
             CycleOptions: ['No', 'Day', 'Week', 'Month', 'Year'], // заменить на enum
         };
+    }
+
+    toggleModal = () => {
+        this.setState({
+            isOpen: !this.state.isOpen
+        });
     }
 
     componentWillMount() {
@@ -44,7 +52,7 @@ class EventPage extends Component {
         })
     }
 
-    delete() {
+    delete = () => {
         this.props.deleteEvent(this.state.id)
         this.setState({
             main: true
@@ -71,7 +79,11 @@ class EventPage extends Component {
                 <div>
                     <p className={'title'}>{this.state.event.title}</p>
                     <button onClick={() => this.edit()} className="btn btn-secondary button-margin">EDIT</button>
-                    <button onClick={() => this.delete()} className="btn btn-danger button-margin">DELETE</button>
+                    <button onClick={this.toggleModal} className="btn btn-danger button-margin">DELETE</button>
+                    <Modal show={this.state.isOpen} onCancel={this.toggleModal} onOk={this.delete} header={"Remove event \"" + this.state.event.title + "\""}>
+                        Are you sure that you wanr to remove event "{this.state.event.title}"? <br></br>
+                        This is a permanent changes.
+                    </Modal>
                 </div>
                 <div className={'margin-top'}>
                     <p className={'data'}>Text : {this.state.event.text}</p>

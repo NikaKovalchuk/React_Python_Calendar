@@ -32,3 +32,9 @@
 .tall {
     width: 100%;
 }
+
+.not-found{
+    text-align: center;
+    font-size: 35pt;
+    margin-top: 50px;
+}

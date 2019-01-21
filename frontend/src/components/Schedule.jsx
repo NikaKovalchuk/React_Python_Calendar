@@ -157,24 +157,24 @@ class Schedule extends Component {
         const dateFormat = "D";
 
         let formattedDate = dateFns.format(day, dateFormat);
-        hours.push(<div className="day-title"><span>{formattedDate}</span></div>);
+        hours.push(<div className="day-title" key={formattedDate} ><span>{formattedDate}</span></div>);
 
 
         while (hour <= dayEnd) {
             let formattedTime = dateFns.format(hour, timeFormat);
             line.push(
-                <div className={'day-view-time'}>
+                <div className={'day-view-time'} key={'day-view-time'}>
                     <span>{formattedTime}</span>
                 </div>
             );
             line.push(
-                <div className={'day-view-data'}>
+                <div className={'day-view-data'} key={'day-view-data'}>
                     {this.renderEventsDay(day, hour)}
                 </div>
             );
 
             hours.push(
-                <div className="row" key={hour}>
+                <div className="row" key={'row' + hour}>
                     {line}
                 </div>
             );
@@ -250,12 +250,12 @@ class Schedule extends Component {
 
         let day = weekStart;
         days.push(
-            <div className="empty-week-title"></div>
+            <div className="empty-week-title" key={'empty'}></div>
         );
         for (let i = 0; i < 7; i++) {
             let formattedDate = dateFns.format(day, dateFormat);
             days.push(
-                <div className="week-view-day-title">
+                <div className="week-view-day-title" key={formattedDate + '-week-view-day-title'}>
                     <span>{formattedDate}</span>
                 </div>
             );
@@ -272,13 +272,13 @@ class Schedule extends Component {
             let day = weekStart;
             let formattedTime = dateFns.format(hour, timeFormat);
             days.push(
-                <div className="day-view-time">
+                <div className="day-view-time" key={formattedTime + "-day-view-time"}>
                     <span>{formattedTime}</span>
                 </div>
             );
             for (let i = 0; i < 7; i++) {
                 days.push(
-                    <div className="week-view-day">
+                    <div className="week-view-day"  key={day + '-week-view-day'}>
                         {this.renderEventsWeek(day, hour)}
                     </div>
                 );
