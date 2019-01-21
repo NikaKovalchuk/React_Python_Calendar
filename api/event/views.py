@@ -75,32 +75,32 @@ class EventList(APIView):
                     newEvent = copy.copy(event)
                     newEvent.start_date = checkedDate.replace(hour=newEvent.start_date.hour,
                                                               minute=newEvent.start_date.minute)
-                    newEvent.finish_date = checkedDate.replace(hour=newEvent.start_date.hour,
-                                                               minute=newEvent.start_date.minute)
+                    newEvent.finish_date = checkedDate.replace(hour=newEvent.finish_date.hour,
+                                                               minute=newEvent.finish_date.minute)
                     events.append(newEvent)
                 if event.cycle == self.cycleWeek:  # заменить на enum
                     if abs(event.start_date - checkedDate).days % 7 == 0:  # работает с датами, поменяй
                         newEvent = copy.copy(event)
                         newEvent.start_date = checkedDate.replace(hour=newEvent.start_date.hour,
                                                                   minute=newEvent.start_date.minute)
-                        newEvent.finish_date = checkedDate.replace(hour=newEvent.start_date.hour,
-                                                                   minute=newEvent.start_date.minute)
+                        newEvent.finish_date = checkedDate.replace(hour=newEvent.finish_date.hour,
+                                                                   minute=newEvent.finish_date.minute)
                         events.append(newEvent)
                 if event.cycle == self.cycleMonth:  # заменить на enum
                     if event.start_date.day == checkedDate.day:
                         newEvent = copy.copy(event)
                         newEvent.start_date = checkedDate.replace(hour=newEvent.start_date.hour,
                                                                   minute=newEvent.start_date.minute)
-                        newEvent.finish_date = checkedDate.replace(hour=newEvent.start_date.hour,
-                                                                   minute=newEvent.start_date.minute)
+                        newEvent.finish_date = checkedDate.replace(hour=newEvent.finish_date.hour,
+                                                                   minute=newEvent.finish_date.minute)
                         events.append(newEvent)
                 if event.cycle == self.cycleYear:  # заменить на enum
                     if event.start_date.day == checkedDate.day and event.start_date.month == checkedDate.month:
                         newEvent = copy.copy(event)
                         newEvent.start_date = checkedDate.replace(hour=newEvent.start_date.hour,
                                                                   minute=newEvent.start_date.minute)
-                        newEvent.finish_date = checkedDate.replace(hour=newEvent.start_date.hour,
-                                                                   minute=newEvent.start_date.minute)
+                        newEvent.finish_date = checkedDate.replace(hour=newEvent.finish_date.hour,
+                                                                   minute=newEvent.finish_date.minute)
                         events.append(newEvent)
                 checkedDate = checkedDate + timedelta(days=1)
         return events
