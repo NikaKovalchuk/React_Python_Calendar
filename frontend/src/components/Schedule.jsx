@@ -4,10 +4,12 @@ import {auth, events} from "../actions";
 import dateFns from "date-fns";
 import {Redirect} from "react-router-dom";
 import "../css/schedule.css"
+import EventModal from "./EventModal";
 
 const viewType = {day: 1, week: 2, month: 3}
 
 class Schedule extends Component {
+    
     constructor(props) {
         super(props);
 
@@ -15,8 +17,20 @@ class Schedule extends Component {
             view: viewType.month,
             currentDate: this.props.currentDate,
             selectedDate: this.props.selectedDate,
+            id: null,
+            newEvent: {
+                id: null,
+                title: null,
+                text: null,
+                start_date: new Date().toISOString(),
+                finish_date: new Date(new Date().setHours(new Date().getHours() + 1)).toISOString(),
+                cycle: null,
+            },
+            event: {},
+            clickedDate: null,
             redirect: false,
             events: {},
+            isOpen: false,
         };
 
         this.changeView = this.changeView.bind(this);
@@ -53,6 +67,9 @@ class Schedule extends Component {
         const monthEnd = dateFns.endOfMonth(monthStart);
         const startDate = dateFns.startOfWeek(monthStart).toISOString();
         const finishDate = dateFns.endOfWeek(monthEnd).toISOString();
+        this.setState({
+            events: {}
+        })
         this.props.loadEvents(startDate, finishDate).then(response => {
             this.setState({
                 events: this.props.events
@@ -127,17 +144,9 @@ class Schedule extends Component {
                     }
                 }
                 if (add == true) {
-                    let newEvent = true;
-                    for (let i = 0; i < events.length; i++) {
-                        if (events[i].id === event.id) {
-                            newEvent = false
-                        }
-                    }
-                    if (newEvent == true) {
-                        result.push(<div className={'day-event'} key={event.id + "_" + event.title}
-                                         onClick={() => this.onEventClick(event.id)}>{event.title}</div>)
-                        events.push(event)
-                    }
+                    result.push(<div className={'day-event'} key={event.id + "_" + event.title}
+                                     onClick={() => this.onEventClick(event)}>{event.title}</div>)
+                    events.push(event)
                 }
             }
         }
@@ -157,7 +166,7 @@ class Schedule extends Component {
         const dateFormat = "D";
 
         let formattedDate = dateFns.format(day, dateFormat);
-        hours.push(<div className="day-title" key={formattedDate} ><span>{formattedDate}</span></div>);
+        hours.push(<div className="day-title" key={formattedDate}><span>{formattedDate}</span></div>);
 
 
         while (hour <= dayEnd) {
@@ -219,17 +228,9 @@ class Schedule extends Component {
                 }
 
                 if (add == true) {
-                    let newEvent = true;
-                    for (let i = 0; i < events.length; i++) {
-                        if (events[i].id === event.id) {
-                            newEvent = false
-                        }
-                    }
-                    if (newEvent == true) {
-                        result.push(<div className={'week-event'} key={event.id + "_" + event.title}
-                                         onClick={() => this.onEventClick(event.id)}>{event.title}</div>)
-                        events.push(event)
-                    }
+                    result.push(<div className={'week-event'} key={event.id + "_" + event.title}
+                                     onClick={() => this.onEventClick(event)}>{event.title}</div>)
+                    events.push(event)
                 }
             }
         }
@@ -278,7 +279,7 @@ class Schedule extends Component {
             );
             for (let i = 0; i < 7; i++) {
                 days.push(
-                    <div className="week-view-day"  key={day + '-week-view-day'}>
+                    <div className="week-view-day" key={day + '-week-view-day'}>
                         {this.renderEventsWeek(day, hour)}
                     </div>
                 );
@@ -306,18 +307,11 @@ class Schedule extends Component {
             let start_date = new Date(event.start_date)
             let finish_date = new Date(event.finish_date)
             if (start_date <= start_day && finish_date >= end_day) {
-                let add = true;
-                for (let i = 0; i < events.length; i++) {
-                    if (events[i].id === event.id) {
-                        add = false
-                    }
-                }
-                if (add == true) {
-                    result.push(<div className={'month-event'} key={event.id + "_" + event.title}
-                                     onClick={() => this.onEventClick(event.id)}>{event.title}</div>)
-                    events.push(event)
-                }
+                result.push(<div className={'month-event'} key={event.id + "_" + event.title}
+                                 onClick={() => this.onEventClick(event)}>{event.title}</div>)
+                events.push(event)
             }
+
         }
         return <div className="month-events">{result}</div>;
     }
@@ -345,8 +339,8 @@ class Schedule extends Component {
                             ? "disabled"
                             : dateFns.isSameDay(day, selectedDate) ? "selected" : ""
                         }`}
-                         key={day} onClick={() => this.onDateClick(dateFns.parse(cloneDay))}>
-                        <span className="number">{formattedDate}</span>
+                         key={day}>
+                        <span className="number" onClick={() => this.onDateClick(cloneDay)}>{formattedDate}</span>
                         {this.renderEventsMonth(day)}
                     </div>
                 );
@@ -359,21 +353,46 @@ class Schedule extends Component {
             );
             days = [];
         }
-
         return <div className="table">{rows}</div>;
     }
 
-    onDateClick = day => {
+    toggleModal = () => {
+        if (this.state.isOpen == true) {
+            this.setState({
+                event: this.state.newEvent,
+            })
+        }
         this.setState({
-            redirect: true
+            isOpen: !this.state.isOpen
         });
+        this.updateEvents(this.state.selectedDate)
     }
 
-    onEventClick = id => {
+    complite = (event) => {
+        if (event.id) {
+            this.props.updateEvent(event)
+        } else {
+            this.props.addEvent(event)
+        }
+        this.toggleModal()
+    }
+
+    onDateClick = day => {
+        console.log('date')
         this.setState({
-            redirectTo: id,
-            redirect: true
+            clickedDate: day,
+            event: {}
         });
+        this.toggleModal()
+    }
+
+    onEventClick = event => {
+
+        this.setState({
+            event: event,
+            clickedDate: null,
+        });
+        this.toggleModal()
     }
 
     changeDate = day => {
@@ -411,6 +430,8 @@ class Schedule extends Component {
                 {this.renderRedirect()}
                 {this.renderButtons()}
                 {this.renderTable()}
+                <EventModal show={this.state.isOpen} onCancel={this.toggleModal} onOk={this.complite}
+                            data={this.state.event} date={this.state.clickedDate}></EventModal>
             </div>
         )
     }
@@ -430,6 +451,12 @@ const mapDispatchToProps = dispatch => {
         },
         loadEvents: (startDate, finishDate) => {
             return dispatch(events.loadEvents(startDate, finishDate));
+        },
+        addEvent: (model) => {
+            return dispatch(events.addEvent(model));
+        },
+        updateEvent: (id, model) => {
+            return dispatch(events.updateEvent(id, model));
         },
     }
 }

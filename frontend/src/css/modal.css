@@ -12,7 +12,7 @@
     background: #fff;
     border-radius: 5px;
     max-width: 1000px;
-    min-height: 250px;
+    min-height: 300px;
     margin: 0 auto;
     padding: 30px;
 }
@@ -27,6 +27,7 @@
     padding-top: 30px;
     font-size: 20pt;
     font-family: var(--main-font);
+    width: 100%;
 }
 
 .footer {
@@ -39,4 +40,24 @@
 
 .button-group button{
    margin: 10px;
+}
+
+.event-modal-window {
+    background: #fff;
+    border-radius: 5px;
+    max-width: 1000px;
+    min-height: 500px;
+    margin: 0 auto;
+    padding: 30px;
+}
+
+.event-modal-body {
+    padding-top: 30px;
+    font-size: 20pt;
+    font-family: var(--main-font);
+    height: 340px;
+}
+
+.event-footer {
+    text-align: center;
 }

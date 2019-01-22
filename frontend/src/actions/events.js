@@ -7,6 +7,7 @@ export const addEvent = (body) => {
         }
 
         body = JSON.stringify(body)
+        console.log(body)
         return fetch("http://localhost:8000/api/event/", {headers, method: "POST", body})
             .then(res => res.json())
             .then(events => {

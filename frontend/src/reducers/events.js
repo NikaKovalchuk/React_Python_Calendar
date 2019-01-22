@@ -23,7 +23,7 @@ export default function events(state = initialState, action) {
             return [...state, action.event];
 
         case 'LOAD_EVENTS':
-            return [...state, ...action.events];
+            return [...action.events];
 
         default:
             return state;
