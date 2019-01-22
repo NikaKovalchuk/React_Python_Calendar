@@ -9,7 +9,7 @@ import EventModal from "./EventModal";
 const viewType = {day: 1, week: 2, month: 3}
 
 class Schedule extends Component {
-    
+
     constructor(props) {
         super(props);
 
@@ -370,7 +370,7 @@ class Schedule extends Component {
 
     complite = (event) => {
         if (event.id) {
-            this.props.updateEvent(event)
+            this.props.updateEvent(event.id,event)
         } else {
             this.props.addEvent(event)
         }
@@ -378,7 +378,6 @@ class Schedule extends Component {
     }
 
     onDateClick = day => {
-        console.log('date')
         this.setState({
             clickedDate: day,
             event: {}

@@ -25,14 +25,7 @@ class ToolBar extends Component {
         let list;
         if (this.props.user) {
             list = <div className={'wide'}>
-                <ul className="navbar-nav navbar-left">
-                    <li className="nav-item active">
-                        <a className="nav-link" href="/event/new">ADD EVENT</a>
-                    </li>
-                    {/*<li className="nav-item active">*/}
-                    {/*<a className="nav-link" href="/settings">SETTINGS</a>*/}
-                    {/*</li>*/}
-                </ul>
+                <ul className="navbar-nav navbar-left"></ul>
                 <ul className="navbar-nav navbar-right">
                     <li className="nav-item active">
                         <a className="nav-link" onClick={this.props.logout}> LOG OUT </a>
