@@ -12,7 +12,7 @@ class Event(models.Model):
     update_date = models.DateTimeField(default=datetime.now, blank=True, null=True)
     start_date = models.DateTimeField(default=datetime.now, blank=True, null=True)
     finish_date = models.DateTimeField(default=datetime.now, blank=True, null=True)
-    cycle = models.IntegerField(default=0, blank=True, null=True)
+    repeat = models.IntegerField(default=0, blank=True, null=True)
 
     archived = models.BooleanField(null=True, blank=True, default=False)
     archived_date = models.DateTimeField(blank=True, null=True)
