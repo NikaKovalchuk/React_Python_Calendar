@@ -67,9 +67,6 @@ class Schedule extends Component {
         const monthEnd = dateFns.endOfMonth(monthStart);
         const startDate = dateFns.startOfWeek(monthStart).toISOString();
         const finishDate = dateFns.endOfWeek(monthEnd).toISOString();
-        this.setState({
-            events: {}
-        })
         this.props.loadEvents(startDate, finishDate).then(response => {
             this.setState({
                 events: this.props.events
@@ -122,8 +119,8 @@ class Schedule extends Component {
             let finish_date = new Date(event.finish_date)
             let add = false
             if (start_date <= endOfDay && finish_date >= startOfDay) {
-                if (start_date > startOfDay) { // if event start today
-                    if (finish_date < endOfDay) {    // if event finish today
+                if (start_date >= startOfDay) { // if event start today
+                    if (finish_date <= endOfDay) {    // if event finish today
                         if (start_date.getHours() <= hour.getHours() && finish_date.getHours() >= hour.getHours()) {
                             add = true
                         }
@@ -205,8 +202,8 @@ class Schedule extends Component {
             let finish_date = new Date(event.finish_date)
             let add = false
             if (start_date <= endOfDay && finish_date >= startOfDay) {
-                if (start_date > startOfDay) { // if event start today
-                    if (finish_date < endOfDay) {    // if event finish today
+                if (start_date >= startOfDay) { // if event start today
+                    if (finish_date <= endOfDay) {    // if event finish today
                         if (start_date.getHours() <= hour.getHours() && finish_date.getHours() >= hour.getHours()) {
                             add = true
                         }
@@ -370,11 +367,14 @@ class Schedule extends Component {
 
     complite = (event) => {
         if (event.id) {
-            this.props.updateEvent(event.id,event)
+            this.props.updateEvent(event.id, event).then(response => {
+                this.toggleModal()
+            });
         } else {
-            this.props.addEvent(event)
+            this.props.addEvent(event).then(response => {
+                this.toggleModal()
+            });
         }
-        this.toggleModal()
     }
 
     onDateClick = day => {

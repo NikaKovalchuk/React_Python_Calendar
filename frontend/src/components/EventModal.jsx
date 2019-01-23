@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import "../css/form.css"
 import {events} from "../actions";
 import {connect} from "react-redux";
@@ -189,13 +188,6 @@ class EventModal extends React.Component {
         );
     }
 }
-
-EventModal.propTypes = {
-    onCancel: PropTypes.func.isRequired,
-    onOk: PropTypes.func.isRequired,
-    show: PropTypes.bool,
-    children: PropTypes.node
-};
 
 const mapStateToProps = state => {
     return {
