@@ -21,7 +21,9 @@ urlpatterns = [
 
     url(r'api/user/', include('api.user.urls')),
     url(r'api/event/', include('api.event.urls')),
-    url(r'admin', admin.site.urls),
+
+    url(r'admin/', admin.site.urls),
+
     url(r'api/auth/', include('knox.urls')),
     url(r'token-auth/', obtain_jwt_token),
 ]

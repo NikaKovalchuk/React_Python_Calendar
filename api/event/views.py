@@ -7,47 +7,49 @@ from rest_framework import status, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from tablib import Dataset
+
 from app.settings import ADMIN_USER_ID
 from .models import Event
 from .resources import EventResource
 from .serializers import EventSerializer, NewEventSerializer
 
-class EventList(APIView):
-    cycleNo = 0
-    cycleDay = 1
-    cycleWeek = 2
-    cycleMonth = 3
-    cycleYear = 4
 
+class EventList(APIView):
     permission_classes = [permissions.IsAuthenticated, ]
+    repeat = {'no': 0, 'day': 1, 'week': 2, 'month': 3, 'year': 4}
 
     def get(self, request):
         startDate = datetime.now()
         startDate = startDate.replace(hour=0, minute=0, second=0)
+
         finishDate = datetime.now()
         finishDate = finishDate.replace(hour=23, minute=59, second=59)
+
         if not request.user.id:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-        if request.query_params != None:
+
+        if request.query_params is not None:
             if 'startDate' in request.query_params:
                 startDate = dateutil.parser.parse(request.query_params['startDate'])
             if 'finishDate' in request.query_params:
                 finishDate = dateutil.parser.parse(request.query_params['finishDate'])
+
         events = Event.objects.filter(start_date__gte=startDate, finish_date__lte=finishDate, user=request.user.id,
-                                      archived=False, cycle=self.cycleNo) | \
+                                      archived=False, repeat=self.repeat['no']) | \
                  Event.objects.filter(
                      start_date__lte=startDate, finish_date__lte=finishDate, user=request.user.id,
-                     archived=False, cycle=self.cycleNo) | \
+                     archived=False, repeat=self.repeat['no']) | \
                  Event.objects.filter(
-                    start_date__gte=startDate, finish_date__gte=finishDate, user=request.user.id,
-                    archived=False, cycle=self.cycleNo)
+                     start_date__gte=startDate, finish_date__gte=finishDate, user=request.user.id,
+                     archived=False, repeat=self.repeat['no'])
 
         events = list(events)
-        events = self.repeatedEvents(startDate, finishDate, events, user=request.user)
+        events = self.repeatedEvents(startDate=startDate, finishDate=finishDate, events=events, user=request.user)
         serializer = EventSerializer(events, many=True)
         return Response(serializer.data)
 
-    def post(self, request):
+    @staticmethod
+    def post(request):
         serializer_context = {'request': request, }
 
         if not request.data:
@@ -61,24 +63,25 @@ class EventList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def repeatedEvents(self, startDate, finishDate, events, user):
-
         extra = Event.objects.filter(
             user=user.id,
             archived=False,
-            cycle__isnull=False,
+            repeat__isnull=False,
         )
 
         for event in extra:
             checkedDate = startDate
             while checkedDate < finishDate:
-                if event.cycle == self.cycleDay:
+                if event.repeat == self.repeat['day']:
                     newEvent = copy.copy(event)
                     newEvent.start_date = checkedDate.replace(hour=newEvent.start_date.hour,
                                                               minute=newEvent.start_date.minute)
                     newEvent.finish_date = checkedDate.replace(hour=newEvent.finish_date.hour,
                                                                minute=newEvent.finish_date.minute)
                     events.append(newEvent)
-                if event.cycle == self.cycleWeek:
+
+
+                if event.repeat == self.repeat['week']:
                     if abs(event.start_date.date() - checkedDate.date()).days % 7 == 0:
                         newEvent = copy.copy(event)
                         newEvent.start_date = checkedDate.replace(hour=newEvent.start_date.hour,
@@ -86,7 +89,9 @@ class EventList(APIView):
                         newEvent.finish_date = checkedDate.replace(hour=newEvent.finish_date.hour,
                                                                    minute=newEvent.finish_date.minute)
                         events.append(newEvent)
-                if event.cycle == self.cycleMonth:
+
+
+                if event.repeat == self.repeat['month']:
                     if event.start_date.day == checkedDate.day:
                         newEvent = copy.copy(event)
                         newEvent.start_date = checkedDate.replace(hour=newEvent.start_date.hour,
@@ -94,7 +99,9 @@ class EventList(APIView):
                         newEvent.finish_date = checkedDate.replace(hour=newEvent.finish_date.hour,
                                                                    minute=newEvent.finish_date.minute)
                         events.append(newEvent)
-                if event.cycle == self.cycleYear:
+
+
+                if event.repeat == self.repeat['year']:
                     if event.start_date.day == checkedDate.day and event.start_date.month == checkedDate.month:
                         newEvent = copy.copy(event)
                         newEvent.start_date = checkedDate.replace(hour=newEvent.start_date.hour,
@@ -146,7 +153,6 @@ class EventDetail(APIView):
 class EventsExport(APIView):
     permission_classes = [permissions.IsAuthenticated, ]
 
-    # export
     def get(self, request):
         event_resource = EventResource()
         dataset = event_resource.export()
@@ -154,7 +160,6 @@ class EventsExport(APIView):
         response['Content-Disposition'] = 'attachment; filename="calendar.json"'
         return response
 
-    # import
     def post(self, request):
         event_resource = EventResource()
         dataset = Dataset()

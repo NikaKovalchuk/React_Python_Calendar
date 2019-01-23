@@ -57,11 +57,6 @@ INSTALLED_APPS = [
     'webpack_loader',
     'knox',
 
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
-
     'api.event',
     'api.user',
 ]
