@@ -4,10 +4,6 @@ import "../../css/modal.css"
 
 class Modal extends React.Component {
 
-    onOk = () => {
-        this.props.onOk()
-    }
-
     render() {
         if (!this.props.show) {
             return null;
@@ -25,7 +21,7 @@ class Modal extends React.Component {
                     <div className="footer">
                         <div className={'button-group'}>
                             <button className={"btn btn-secondary"} onClick={this.props.onCancel}> CANCEL</button>
-                            <button className={"btn btn-secondary"} onClick={this.onOk}> OK</button>
+                            <button className={"btn btn-secondary"} onClick={this.props.onOk}> OK </button>
                         </div>
                     </div>
                 </div>

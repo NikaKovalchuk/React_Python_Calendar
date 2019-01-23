@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component}  from 'react';
 import "../../css/form.css"
 import {events} from "../../actions";
 import {connect} from "react-redux";
@@ -6,7 +6,7 @@ import Modal from "./Modal"
 import moment from "moment";
 
 
-class EventModal extends React.Component {
+class EventModal extends Component {
 
     constructor(props) {
         super(props);
@@ -98,8 +98,9 @@ class EventModal extends React.Component {
     };
 
     delete = () => {
-        this.props.deleteEvent(this.state.id)
-        this.props.onCancel()
+        this.props.deleteEvent(this.state.id).then(response => {
+            this.props.onCancel()
+        })
     };
 
     toggleModal = () => {
@@ -198,7 +199,10 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         deleteEvent: (id) => {
-            dispatch(events.deleteEvent(id));
+            return dispatch(events.deleteEvent(id));
+        },
+        updateEvent: (id, model) => {
+            return dispatch(events.updateEvent(id, model));
         },
     }
 }

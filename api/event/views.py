@@ -79,7 +79,7 @@ class EventList(APIView):
                                                                minute=newEvent.finish_date.minute)
                     events.append(newEvent)
                 if event.cycle == self.cycleWeek:
-                    if abs(event.start_date.date() - checkedDate.date()).days % 7 == 0:  # работает с датами, поменяй
+                    if abs(event.start_date.date() - checkedDate.date()).days % 7 == 0:
                         newEvent = copy.copy(event)
                         newEvent.start_date = checkedDate.replace(hour=newEvent.start_date.hour,
                                                                   minute=newEvent.start_date.minute)

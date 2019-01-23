@@ -42,7 +42,7 @@ export const updateEvent = (index, body) => {
     }
 }
 
-export const deleteEvent = id => {
+export const deleteEvent = (id) => {
     return (dispatch, getState) => {
         let headers = {"Content-Type": "application/json"};
         let {token} = getState().auth;
@@ -50,17 +50,15 @@ export const deleteEvent = id => {
             headers["Authorization"] = `Token ${token}`;
         }
         return fetch("http://localhost:8000/api/event/" + id + "/", {headers, method: "DELETE",})
-            .then(res => res.json())
-            .then(events => {
+            .then(res => {
                 return dispatch({
-                    type: 'DELETE_EVENT',
-                    events
+                    type: 'DELETE_EVENT'
                 })
             })
     }
 }
 
-export const loadEvent = id => {
+export const loadEvent = (id) => {
     return (dispatch, getState) => {
         let headers = {"Content-Type": "application/json"};
         let {token} = getState().auth;
