@@ -2,9 +2,8 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {auth, events} from "../actions";
 import dateFns from "date-fns";
-import {Redirect} from "react-router-dom";
 import "../css/schedule.css"
-import EventModal from "./EventModal";
+import EventModal from "./modals/EventModal";
 
 const viewType = {day: 1, week: 2, month: 3}
 
@@ -20,15 +19,14 @@ class Schedule extends Component {
             id: null,
             newEvent: {
                 id: null,
-                title: null,
-                text: null,
+                title: "",
+                text: "",
                 start_date: new Date().toISOString(),
                 finish_date: new Date(new Date().setHours(new Date().getHours() + 1)).toISOString(),
-                cycle: null,
+                cycle: 0,
             },
             event: {},
             clickedDate: null,
-            redirect: false,
             events: {},
             isOpen: false,
         };
@@ -79,6 +77,7 @@ class Schedule extends Component {
             view: newView
         })
     }
+
 
     renderButtons() {
         return (
@@ -142,7 +141,7 @@ class Schedule extends Component {
                 }
                 if (add == true) {
                     result.push(<div className={'day-event'} key={event.id + "_" + event.title}
-                                     onClick={() => this.onEventClick(event)}>{event.title}</div>)
+                                     onClick={(e) => this.onEventClick(e, event)}>{event.title}</div>)
                     events.push(event)
                 }
             }
@@ -168,13 +167,14 @@ class Schedule extends Component {
 
         while (hour <= dayEnd) {
             let formattedTime = dateFns.format(hour, timeFormat);
+            const cloneHour = hour
             line.push(
                 <div className={'day-view-time'} key={'day-view-time'}>
                     <span>{formattedTime}</span>
                 </div>
             );
             line.push(
-                <div className={'day-view-data'} key={'day-view-data'}>
+                <div className={'day-view-data'} key={'day-view-data'} onClick={() => this.onDateClick(day, cloneHour)}>
                     {this.renderEventsDay(day, hour)}
                 </div>
             );
@@ -226,7 +226,7 @@ class Schedule extends Component {
 
                 if (add == true) {
                     result.push(<div className={'week-event'} key={event.id + "_" + event.title}
-                                     onClick={() => this.onEventClick(event)}>{event.title}</div>)
+                                     onClick={(e) => this.onEventClick(e, event)}>{event.title}</div>)
                     events.push(event)
                 }
             }
@@ -275,8 +275,11 @@ class Schedule extends Component {
                 </div>
             );
             for (let i = 0; i < 7; i++) {
+                const cloneHour = hour
+                const cloneday = day
                 days.push(
-                    <div className="week-view-day" key={day + '-week-view-day'}>
+                    <div className="week-view-day" key={day + '-week-view-day'}
+                         onClick={() => this.onDateClick(cloneday, cloneHour)} >
                         {this.renderEventsWeek(day, hour)}
                     </div>
                 );
@@ -305,7 +308,7 @@ class Schedule extends Component {
             let finish_date = new Date(event.finish_date)
             if (start_date <= start_day && finish_date >= end_day) {
                 result.push(<div className={'month-event'} key={event.id + "_" + event.title}
-                                 onClick={() => this.onEventClick(event)}>{event.title}</div>)
+                                 onClick={(e) => this.onEventClick(e, event)}>{event.title}</div>)
                 events.push(event)
             }
 
@@ -335,9 +338,9 @@ class Schedule extends Component {
                         !dateFns.isSameMonth(day, monthStart)
                             ? "disabled"
                             : dateFns.isSameDay(day, selectedDate) ? "selected" : ""
-                        }`}
+                        }`} onClick={() => this.onDateClick(cloneDay, null)}
                          key={day}>
-                        <span className="number" onClick={() => this.onDateClick(cloneDay)}>{formattedDate}</span>
+                        <span className="number">{formattedDate}</span>
                         {this.renderEventsMonth(day)}
                     </div>
                 );
@@ -352,6 +355,7 @@ class Schedule extends Component {
         }
         return <div className="table">{rows}</div>;
     }
+
 
     toggleModal = () => {
         if (this.state.isOpen == true) {
@@ -377,7 +381,10 @@ class Schedule extends Component {
         }
     }
 
-    onDateClick = day => {
+    onDateClick = (day, hour) => {
+        if (hour != null) {
+            day = new Date(day.setHours(hour.getHours()))
+        }
         this.setState({
             clickedDate: day,
             event: {}
@@ -385,13 +392,14 @@ class Schedule extends Component {
         this.toggleModal()
     }
 
-    onEventClick = event => {
+    onEventClick = (e, event) => {
 
         this.setState({
             event: event,
             clickedDate: null,
         });
         this.toggleModal()
+        e.stopPropagation();
     }
 
     changeDate = day => {
@@ -414,19 +422,9 @@ class Schedule extends Component {
         )
     }
 
-    renderRedirect = () => {
-        if (this.state.redirect) {
-            if (this.state.redirectTo) {
-                let routh = '/event/edit/' + this.state.redirectTo + '/'
-                return <Redirect to={routh}/>
-            } else return <Redirect to='/event/new'/>
-        }
-    }
-
     render() {
         return (
             <div className={'tall'}>
-                {this.renderRedirect()}
                 {this.renderButtons()}
                 {this.renderTable()}
                 <EventModal show={this.state.isOpen} onCancel={this.toggleModal} onOk={this.complite}

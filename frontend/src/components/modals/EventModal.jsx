@@ -1,6 +1,6 @@
 import React from 'react';
-import "../css/form.css"
-import {events} from "../actions";
+import "../../css/form.css"
+import {events} from "../../actions";
 import {connect} from "react-redux";
 import Modal from "./Modal"
 
