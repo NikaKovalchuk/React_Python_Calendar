@@ -11,7 +11,7 @@ export default function events(state = initialState, action) {
             return [...state];
 
         case 'DELETE_EVENT':
-            return [...state, ...action.events];
+            return [...state];
 
         case 'FETCH_EVENTS':
             return [...state, ...action.events];
@@ -23,7 +23,7 @@ export default function events(state = initialState, action) {
             return [...state, action.event];
 
         case 'LOAD_EVENTS':
-            return [...state, ...action.events];
+            return [...action.events];
 
         default:
             return state;

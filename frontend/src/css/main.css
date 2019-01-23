@@ -1,0 +1,40 @@
+.side-bar {
+    width: 15%;
+    vertical-align: top;
+    display: inline-block;
+    margin-top: 50px;
+}
+
+.scheduler {
+    width: 84%;
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 1%;
+    margin-top: 0.5%;
+}
+
+.navbar-left{
+    display: inline-block;
+    text-align: left;
+    width: 50%;
+}
+
+.navbar-right{
+    display: inline-block;
+    text-align: right;
+    width: 50%;
+}
+
+.wide {
+    width: 100%;
+}
+
+.tall {
+    width: 100%;
+}
+
+.not-found{
+    text-align: center;
+    font-size: 35pt;
+    margin-top: 50px;
+}

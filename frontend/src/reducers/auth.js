@@ -1,39 +1,39 @@
 const initialState = {
     token: localStorage.getItem("token"),
-    isAuthenticated: null,
-    isLoading: true,
+    isAuthenticated: localStorage.getItem("token") ? true : false,
     user: null,
     errors: {},
 };
 
 
-export default function auth(state=initialState, action) {
+export default function auth(state = initialState, action) {
 
-  switch (action.type) {
+    switch (action.type) {
+        case 'REGISTRATION_SUCCESSFUL':
+            localStorage.setItem("token", action.data.token);
+            state.token = localStorage.getItem("token")
+            state.isAuthenticated = true
+            return {...state, ...action.data, isAuthenticated: true, errors: null};
 
-    case 'USER_LOADING':
-      return {...state, isLoading: true};
+        case 'USER_LOADED':
+            return {...state, isAuthenticated: true, user: action.user};
 
-    case 'REGISTRATION_SUCCESSFUL':
-      localStorage.setItem("token", action.data.token);
-      return {...state, ...action.data, isAuthenticated: true, isLoading: false, errors: null};
+        case 'LOGIN_SUCCESSFUL':
+            localStorage.setItem("token", action.data.token);
+            state.token = localStorage.getItem("token")
+            state.isAuthenticated = true
+            return {...state, ...action.data, isAuthenticated: true, errors: null};
 
-    case 'USER_LOADED':
-      return {...state, isAuthenticated: true, isLoading: false, user: action.user};
+        case 'AUTHENTICATION_ERROR':
+        case 'LOGIN_FAILED':
+        case 'REGISTRATION_FAILED':
+        case 'LOGOUT':
+            localStorage.removeItem("token");
+            state.token = localStorage.getItem("token")
+            state.isAuthenticated = false
+            return {...state, errors: action.data, token: null, user: null, isAuthenticated: false};
 
-    case 'LOGIN_SUCCESSFUL':
-      localStorage.setItem("token", action.data.token);
-      return {...state, ...action.data, isAuthenticated: true, isLoading: false, errors: null};
-
-    case 'AUTHENTICATION_ERROR':
-    case 'LOGIN_FAILED':
-    case 'REGISTRATION_FAILED':
-    case 'LOGOUT_SUCCESSFUL':
-      localStorage.removeItem("token");
-      return {...state, errors: action.data, token: null, user: null,
-        isAuthenticated: false, isLoading: false};
-
-    default:
-      return state;
-  }
+        default:
+            return state;
+    }
 }

@@ -6,6 +6,9 @@ export const addEvent = (body) => {
             headers["Authorization"] = `Token ${token}`;
         }
 
+        body.start_date = new Date(body.start_date).toISOString()
+        body.finish_date = new Date(body.finish_date).toISOString()
+
         body = JSON.stringify(body)
         return fetch("http://localhost:8000/api/event/", {headers, method: "POST", body})
             .then(res => res.json())
@@ -19,6 +22,9 @@ export const addEvent = (body) => {
 
 export const updateEvent = (index, body) => {
     return (dispatch, getState) => {
+        body.start_date = new Date(body.start_date).toISOString()
+        body.finish_date = new Date(body.finish_date).toISOString()
+
         body = JSON.stringify(body)
         let headers = {"Content-Type": "application/json"};
         let {token} = getState().auth;
@@ -36,7 +42,7 @@ export const updateEvent = (index, body) => {
     }
 }
 
-export const deleteEvent = id => {
+export const deleteEvent = (id) => {
     return (dispatch, getState) => {
         let headers = {"Content-Type": "application/json"};
         let {token} = getState().auth;
@@ -44,17 +50,15 @@ export const deleteEvent = id => {
             headers["Authorization"] = `Token ${token}`;
         }
         return fetch("http://localhost:8000/api/event/" + id + "/", {headers, method: "DELETE",})
-            .then(res => res.json())
-            .then(events => {
+            .then(res => {
                 return dispatch({
-                    type: 'DELETE_EVENT',
-                    events
+                    type: 'DELETE_EVENT'
                 })
             })
     }
 }
 
-export const loadEvent = id => {
+export const loadEvent = (id) => {
     return (dispatch, getState) => {
         let headers = {"Content-Type": "application/json"};
         let {token} = getState().auth;
@@ -64,11 +68,10 @@ export const loadEvent = id => {
         }
         return fetch("http://localhost:8000/api/event/" + id, {headers, method: "GET",})
             .then(res => {
-                if (res.status === 500 ||res.status === 404 ) {
-                    return dispatch({ type: 'EVENT_ERROR' })
-                }
-                else{
-                   return res.json()
+                if (res.status === 500 || res.status === 404) {
+                    return dispatch({type: 'EVENT_ERROR'})
+                } else {
+                    return res.json()
                 }
             })
             .then(event => {
@@ -85,10 +88,16 @@ export const loadEvents = (startDate, finishDate) => {
         let headers = {"Content-Type": "application/json"};
         let {token} = getState().auth;
 
+        startDate = new Date(startDate).toISOString()
+        finishDate = new Date(finishDate).toISOString()
+
         if (token) {
             headers["Authorization"] = `Token ${token}`;
         }
-        return fetch("http://localhost:8000/api/event/?startDate=" + startDate + "&finishDate="+finishDate, {headers, method: "GET",})
+        return fetch("http://localhost:8000/api/event/?startDate=" + startDate + "&finishDate=" + finishDate, {
+            headers,
+            method: "GET",
+        })
             .then(res => res.json())
             .then(events => {
                 return dispatch({

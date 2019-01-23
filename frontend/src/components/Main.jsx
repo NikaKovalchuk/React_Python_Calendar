@@ -2,18 +2,24 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {auth, events} from "../actions";
 import Calendar from "./Calendar"
-import Scheduler from "./Scheduler"
+import Schedule from "./Schedule"
+import "../css/main.css"
 
 class Settings extends Component {
-    state = {
-        user: {},
-        events: {},
-        date: new Date(),
-        selectedDate: new Date()
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            user: {},
+            events: {},
+            date: new Date(new Date().setHours(0,0,0,)),
+            selectedDate: new Date(new Date().setHours(0,0,0)),
+        };
     }
 
+
     changeDate = (date) => {
-       this.setState(state => ({ selectedDate: date }));
+        this.setState(state => ({selectedDate: date}));
     };
 
     componentDidMount() {
@@ -29,11 +35,13 @@ class Settings extends Component {
             <div className={"main-content"}>
                 <div className={'side-bar'}>
                     <div className={'calendar'}>
-                        <Calendar currentDate={this.state.date} selectedDate={this.state.selectedDate} changeDate={this.changeDate}/>
+                        <Calendar currentDate={this.state.date} selectedDate={this.state.selectedDate}
+                                  changeDate={this.changeDate}/>
                     </div>
                 </div>
                 <div className={'scheduler'}>
-                    <Scheduler currentDate={this.state.date} selectedDate={this.state.selectedDate}/>
+                    <Schedule currentDate={this.state.date} selectedDate={this.state.selectedDate}
+                              changeDate={this.changeDate}/>
                 </div>
             </div>
         )

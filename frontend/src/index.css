@@ -2,252 +2,40 @@
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400,700);
 @import url(https://fonts.googleapis.com/icon?family=Material+Icons);
 
-p {
-    font-family: 'Raleway', sans-serif;
-}
-
-#content {
-    margin:25px;
-}
-
-.info{
-    margin-top: 10px;
-    font-size: 15pt;
-    font-family: 'Raleway', sans-serif;
-}
-
-.title{
-    font-size: 20pt;
-    display:inline-block;
-    margin-right: 30px;
-}
-
-.data {
-    font-size: 15pt;
-}
-
-/* form */
-
-.form-group {
-    margin-bottom: 2%;
-    clear:both;
-    text-align:right;
-}
-
-.form-title {
-    font-size: 25pt;
-    font-family: 'Raleway', sans-serif;
-}
-
-.form-label {
-    font-size: 15pt;
-    font-family: 'Raleway', sans-serif;
-}
-
-.form-input {
-    margin-left: 15px;
-    width: 350px;
-}
-
-.form-input {
-    margin-left: 15px;
-    width: 350px;
-}
-
-.form {
-    float:left;
-    display: inline;
-}
-
-.form-actions {
-    float: left;
-}
-
-.dynamic-form{
-    margin-top: 1%;
-}
-
-.side-bar {
-    width: 15%;
-    display: inline-block;
-}
-
-.scheduler{
-    width: 80%;
-    display: inline-block;
-    margin-left: 20px;
-    margin-top: 10px;
-}
-
-.icon {
-  font-family: 'Raleway', sans-serif;
-  font-style: normal;
-  display: inline-block;
-  vertical-align: middle;
-  font-size: 10pt;
-  text-transform: none;
-  letter-spacing: normal;
-  word-wrap: normal;
-  white-space: nowrap;
-  direction: ltr;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-  -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: 'liga';
-}
-
-
 /* VARIABLES */
 :root {
   --main-color: #1a8fff;
   --text-color: #777;
   --text-color-light: #ccc;
   --border-color: #eee;
-  --bg-color: #f9f9f9;
   --neutral-color: #fff;
+  --event-background : #4f5b69;
+  --today-background : #98a8b6;
+  --main-font: 'Raleway', sans-serif;
 }
 
-header {
-  display: block;
-  width: 100%;
-  padding: 1.75em 0;
-  border-bottom: 1px solid var(--border-color);
-  background: var(--neutral-color);
+p {
+    font-family:  var(--main-font);
 }
 
-/* GRID */
-
-.row {
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 100%;
+#content {
+    margin: 0% 1%;
 }
 
-.row-middle {
-  align-items: center;
+.info{
+    margin-top: 10px;
+    font-size: 15pt;
+    font-family: var(--main-font)
 }
 
-.col {
-  max-width: 100%;
+.title{
+    font-size: 20pt;
+    display:inline-block;
+    margin: 10px 5px;
 }
 
-.col-start {
-  justify-content: flex-start;
-  text-align: left;
-  width: 20%;
-}
-
-.col-center {
-  justify-content: center;
-  text-align: center;
-  font-size: 10pt;
-  padding-top: 5px;
-  padding-bottom: -5px;
-  padding-left: 1px;
-  padding-right: 1px;
-}
-
-.col-end {
-  justify-content: flex-end;
-  text-align: right;
-  width: 20%;
-}
-
-
-/* Calendar */
-
-.calendar {
-  display: block;
-  position: relative;
-  width: 100%;
-  background: var(--neutral-color);
-  border: 1px solid var(--border-color);
-}
-
-.calendar .header {
-  font-family: 'Raleway', sans-serif;
-  text-transform: uppercase;
-  font-weight: 700;
-  font-size: 115%;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.calendar .header .icon {
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: .15s ease-out;
-}
-
-.calendar .header .icon:hover {
-  transform: scale(1.5);
-  transition: .25s ease-out;
-  color: var(--main-color);
-}
-
-.calendar .header .icon:first-of-type {
-  margin-left: 1em;
-}
-
-.calendar .header .icon:last-of-type {
-  margin-right: 1em;
-}
-
-.calendar .days {
-  text-transform: uppercase;
-  font-weight: 400;
-  color: var(--text-color-light);
-  padding: .5em 0;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.calendar .body .cell {
-  position: relative;
-  height: 2em;
-  border-right: 1px solid var(--border-color);
-  overflow: hidden;
-  cursor: pointer;
-  background: var(--neutral-color);
-  transition: 0.25s ease-out;
-}
-
-.calendar .body .cell:hover {
-  background: #b1b1b1;
-}
-
-.calendar .body .selected {
-  background: #4f5b69;
-  color: whitesmoke;
-}
-
-.calendar .body .row {
-  border-bottom: 1px solid var(--border-color);
-}
-
-.calendar .body .row:last-child {
-  border-bottom: none;
-}
-
-.calendar .body .cell:last-child {
-  border-right: none;
-}
-
-.calendar .body .cell .number {
-  position: absolute;
-  font-size: 82.5%;
-  line-height: 1;
-  top: .75em;
-  right: .75em;
-  font-weight: 700;
-}
-
-.calendar .body .col {
-  flex-grow: 0;
-  flex-basis: calc(100%/7);
-  width: calc(100%/7);
+.data {
+    font-size: 15pt;
 }
 
 .inline-block{
@@ -267,56 +55,12 @@ header {
     text-align: right;
 }
 
-.shedule-table{
-    height: 100%;
-}
-
-.shedule-buttons{
-    text-align: right;
-}
-
-.shedule-month-day{
-    width: 14.2%;
-    height: 120px;
-    border: 1px solid var(--border-color);
-    cursor: pointer;
-}
-
 .disabled {
     color: var(--text-color-light);
     pointer-events: none;
 }
 
-.shedule-month-day span{
-   margin: 5px;
-   font-size: 82.5%;
-}
-
-.shedule-hour{
-   width: 5%;
-   border: 1px solid var(--border-color);
-   background: silver;
-}
-
-.shedule-week-day{
-   width: 13.5%;
-   border: 1px solid var(--border-color);
-}
-
-
-.shedule-day{
-    width: 95%;
-    border: 1px solid var(--border-color);
-}
-
-.shedule-week-title-empty{
-  width: 5%;
-}
-
-.event{
-    display: inline-block;
-    font-size: 11pt;
-    margin: 5px;
-    background: #4f5b69;
-    color: whitesmoke;
+.button-margin{
+    margin: 0px 5px;
+    margin-bottom: 5px;
 }

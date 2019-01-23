@@ -3,11 +3,15 @@ import {connect} from 'react-redux';
 import {auth, events} from "../actions";
 
 class Settings extends Component {
-    state = {
-        user: {},
-        password: "",
-        password1: "",
-        password2: "",
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            user: {},
+            password: "",
+            password1: "",
+            password2: "",
+        };
     }
 
     componentDidMount() {

@@ -1,15 +1,27 @@
 import React from "react";
 import dateFns from "date-fns";
-import {events} from "../actions";
+import '../css/calendar.css'
 
 class Calendar extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            currentMonth: this.props.currentDate,
-            selectedDate: this.props.selectedDate
+            currentDate: this.props.currentDate,
+            selectedDate: this.props.selectedDate,
+            viewDate: this.props.selectedDate,
         };
+    }
+
+    componentWillReceiveProps(props) {
+        if (props.selectedDate) {
+            if (props.selectedDate !== this.state.selectedDate) {
+                this.setState({
+                    selectedDate: props.selectedDate,
+                    viewDate: props.selectedDate
+                });
+            }
+        }
     }
 
     renderHeader() {
@@ -21,7 +33,7 @@ class Calendar extends React.Component {
                 </div>
                 <div className="col col-center">
             <span>
-              {dateFns.format(this.state.currentMonth, dateFormat)}
+              {dateFns.format(this.state.viewDate, dateFormat)}
             </span>
                 </div>
                 <div className="col col-end" onClick={this.nextMonth}>
@@ -34,7 +46,7 @@ class Calendar extends React.Component {
     renderDays() {
         const dateFormat = "ddd";
         const days = [];
-        let startDate = dateFns.startOfWeek(this.state.currentMonth);
+        let startDate = dateFns.startOfWeek(this.state.viewDate);
         for (let i = 0; i < 7; i++) {
             days.push(
                 <div className="col col-center" key={i}>
@@ -46,8 +58,8 @@ class Calendar extends React.Component {
     }
 
     renderCells() {
-        const {currentMonth, selectedDate} = this.state;
-        const monthStart = dateFns.startOfMonth(currentMonth);
+        const {currentDate, viewDate} = this.state;
+        const monthStart = dateFns.startOfMonth(viewDate);
         const monthEnd = dateFns.endOfMonth(monthStart);
         const startDate = dateFns.startOfWeek(monthStart);
         const endDate = dateFns.endOfWeek(monthEnd);
@@ -63,14 +75,11 @@ class Calendar extends React.Component {
                 const cloneDay = day;
                 days.push(
                     <div
-                        className={`col cell ${
-                            !dateFns.isSameMonth(day, monthStart)
-                                ? "disabled"
-                                : dateFns.isSameDay(day, selectedDate) ? "selected" : ""
-                            }`}
+                        className={`col cell ${!dateFns.isSameMonth(day, monthStart) ? "disabled" :
+                            dateFns.isSameDay(day, currentDate) ? "today" :
+                                dateFns.isSameDay(day, this.state.selectedDate) ? "selected" : ""}`}
                         key={day}
-                        onClick={() => this.onDateClick(dateFns.parse(cloneDay))}
-                    >
+                        onClick={() => this.onDateClick(dateFns.parse(cloneDay))}>
                         <span className="number">{formattedDate}</span>
                     </div>
                 );
@@ -90,18 +99,18 @@ class Calendar extends React.Component {
     onDateClick = day => {
         this.setState({
             selectedDate: day
-          });
+        });
         this.props.changeDate(day);
     }
 
     nextMonth = () => {
         this.setState({
-            currentMonth: dateFns.addMonths(this.state.currentMonth, 1)
+            viewDate: dateFns.addMonths(this.state.viewDate, 1)
         });
     }
     prevMonth = () => {
         this.setState({
-            currentMonth: dateFns.subMonths(this.state.currentMonth, 1)
+            viewDate: dateFns.subMonths(this.state.viewDate, 1)
         });
     }
 
@@ -113,21 +122,6 @@ class Calendar extends React.Component {
                 {this.renderCells()}
             </div>
         );
-    }
-}
-
-
-const mapStateToProps = state => {
-    return {
-        events: state.events,
-    }
-}
-
-const mapDispatchToProps = dispatch => {
-    return {
-        import: () => {
-            return dispatch(events.loadEvents());
-        },
     }
 }
 

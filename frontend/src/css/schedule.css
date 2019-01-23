@@ -1,0 +1,84 @@
+.table {
+    height: 100%;
+}
+
+.today-button {
+    text-align: left;
+    width: calc(100% / 2);
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.view-buttons {
+    text-align: right;
+    width:calc(100% / 2);
+    display: inline-block;margin-bottom: 10px;
+}
+
+
+.month-view-day {
+    width: calc(100% / 7);
+    height: 120px;
+    border: 0.5px solid var(--border-color);
+    cursor: pointer;
+}
+
+.month-view-day span {
+    margin: 5px;
+    font-size: 82.5%;
+}
+
+.month-event {
+    display: inline-block;
+    font-size: 11pt;
+    margin: 5px;
+    border-radius: 5px;
+    background: var(--event-background);
+    color: var(--neutral-color);
+    padding: 2px 4px;
+    font-size: 10pt;
+}
+
+.empty-week-title {
+    width: 5%;
+}
+
+.week-view-day {
+    width: calc(95% / 7);
+    border: 0.5px solid var(--border-color);
+}
+
+.week-view-day-title {
+    width: calc(95% / 7);
+    color: var(--neutral-color);
+    background: var(--event-background);
+    text-align: center;
+}
+
+.week-event{
+
+}
+
+.day-title{
+    width: 100%;
+    color: var(--neutral-color);
+    background: var(--event-background);
+    text-align: center;
+}
+
+.day-view-time {
+    width: 5%;
+    color: var(--neutral-color);
+    background: var(--event-background);
+    text-align: center;
+}
+
+.day-view-data {
+    width: 95%;
+    border: 0.5px solid var(--border-color);
+}
+
+.disabled .event {
+    background: #98a8b6;
+}
+
