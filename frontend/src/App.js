@@ -39,6 +39,7 @@ class RootContainerComponent extends Component {
                     <div id={"content"}>
                         <Switch>
                             <PrivateRoute exact path="/" component={Main}/>
+
                             <Route exact path="/login" component={Login}/>
                             <Route exact path="/registration" component={Register}/>
                             <Route exact path="*" component={NotFound}/>

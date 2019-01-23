@@ -15,7 +15,7 @@ class Register extends Component {
         };
     }
 
-    onSubmit = e => {
+    onSubmit = (e) => {
         e.preventDefault();
         this.props.register(this.state.username, this.state.password);
     }
@@ -36,6 +36,7 @@ class Register extends Component {
                                 ))}
                             </ul>
                         )}
+
                         <p className={'group'}>
                             <label className={'label'} htmlFor="username">Username</label>
                             <input
@@ -43,6 +44,7 @@ class Register extends Component {
                                 type="text" id="username"
                                 onChange={e => this.setState({username: e.target.value})}/>
                         </p>
+
                         <p className={'group'}>
                             <label className={'label'} htmlFor="password">Password</label>
                             <input
@@ -50,6 +52,7 @@ class Register extends Component {
                                 type="password" id="password"
                                 onChange={e => this.setState({password: e.target.value})}/>
                         </p>
+
                         <p>
                             <button className={'btn btn-secondary'} type="submit">Register</button>
                         </p>
@@ -57,6 +60,7 @@ class Register extends Component {
                         <p>
                             Already have an account? <Link to="/login">Login</Link>
                         </p>
+
                     </fieldset>
                 </form>
             </div>

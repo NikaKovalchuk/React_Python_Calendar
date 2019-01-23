@@ -24,8 +24,10 @@ class Calendar extends React.Component {
         }
     }
 
+
     renderHeader() {
         const dateFormat = "MMM YYYY";
+
         return (
             <div className="header row flex-middle">
                 <div className="col col-start">
@@ -44,9 +46,10 @@ class Calendar extends React.Component {
     }
 
     renderDays() {
-        const dateFormat = "ddd";
+        const dateFormat = "dd";
         const days = [];
         let startDate = dateFns.startOfWeek(this.state.viewDate);
+
         for (let i = 0; i < 7; i++) {
             days.push(
                 <div className="col col-center" key={i}>
@@ -60,19 +63,20 @@ class Calendar extends React.Component {
     renderCells() {
         const {currentDate, viewDate} = this.state;
         const monthStart = dateFns.startOfMonth(viewDate);
-        const monthEnd = dateFns.endOfMonth(monthStart);
         const startDate = dateFns.startOfWeek(monthStart);
-        const endDate = dateFns.endOfWeek(monthEnd);
-
+        const endDate = dateFns.endOfWeek(dateFns.endOfMonth(monthStart));
         const dateFormat = "D";
         const rows = [];
+
         let days = [];
         let day = startDate;
         let formattedDate = "";
+
         while (day <= endDate) {
             for (let i = 0; i < 7; i++) {
-                formattedDate = dateFns.format(day, dateFormat);
                 const cloneDay = day;
+
+                formattedDate = dateFns.format(day, dateFormat);
                 days.push(
                     <div
                         className={`col cell ${!dateFns.isSameMonth(day, monthStart) ? "disabled" :
@@ -96,23 +100,20 @@ class Calendar extends React.Component {
         return <div className="body">{rows}</div>;
     }
 
+
     onDateClick = day => {
-        this.setState({
-            selectedDate: day
-        });
+        this.setState({selectedDate: day});
         this.props.changeDate(day);
     }
 
     nextMonth = () => {
-        this.setState({
-            viewDate: dateFns.addMonths(this.state.viewDate, 1)
-        });
+        this.setState({viewDate: dateFns.addMonths(this.state.viewDate, 1)});
     }
+
     prevMonth = () => {
-        this.setState({
-            viewDate: dateFns.subMonths(this.state.viewDate, 1)
-        });
+        this.setState({viewDate: dateFns.subMonths(this.state.viewDate, 1)});
     }
+
 
     render() {
         return (

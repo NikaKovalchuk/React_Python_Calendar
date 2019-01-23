@@ -4,33 +4,33 @@
 
 /* VARIABLES */
 :root {
-  --main-color: #1a8fff;
-  --text-color: #777;
-  --text-color-light: #ccc;
-  --border-color: #eee;
-  --neutral-color: #fff;
-  --event-background : #4f5b69;
-  --today-background : #98a8b6;
-  --main-font: 'Raleway', sans-serif;
+    --main-color: #1a8fff;
+    --text-color: #777;
+    --text-color-light: #ccc;
+    --border-color: #eee;
+    --neutral-color: #fff;
+    --event-background: #4f5b69;
+    --today-background: #98a8b6;
+    --main-font: 'Raleway', sans-serif;
 }
 
 p {
-    font-family:  var(--main-font);
+    font-family: var(--main-font);
 }
 
 #content {
     margin: 0% 1%;
 }
 
-.info{
+.info {
     margin-top: 10px;
     font-size: 15pt;
     font-family: var(--main-font)
 }
 
-.title{
+.title {
     font-size: 20pt;
-    display:inline-block;
+    display: inline-block;
     margin: 10px 5px;
 }
 
@@ -38,20 +38,20 @@ p {
     font-size: 15pt;
 }
 
-.inline-block{
+.inline-block {
     display: inline-block;
 }
 
-.export-button{
-   margin-left: 15px;
-   margin-top: -15px;
+.export-button {
+    margin-left: 15px;
+    margin-top: -15px;
 }
 
-.margin-top{
+.margin-top {
     margin-top: 10px;
 }
 
-.right{
+.right {
     text-align: right;
 }
 
@@ -60,7 +60,7 @@ p {
     pointer-events: none;
 }
 
-.button-margin{
+.button-margin {
     margin: 0px 5px;
     margin-bottom: 5px;
 }

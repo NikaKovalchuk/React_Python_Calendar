@@ -5,30 +5,29 @@ import Calendar from "./Calendar"
 import Schedule from "./Schedule"
 import "../css/main.css"
 
-class Settings extends Component {
+class Main extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
             user: {},
             events: {},
-            date: new Date(new Date().setHours(0,0,0,)),
-            selectedDate: new Date(new Date().setHours(0,0,0)),
+            date: new Date(new Date().setHours(0, 0, 0,)),
+            selectedDate: new Date(new Date().setHours(0, 0, 0)),
         };
-    }
-
-
-    changeDate = (date) => {
-        this.setState(state => ({selectedDate: date}));
     };
 
     componentDidMount() {
         this.props.loadUser().then(response => {
-            this.setState({
-                user: this.props.auth.user
-            });
+            this.setState({user: this.props.auth.user});
         });
-    }
+    };
+
+    changeDate = (date) => {
+        this.setState({selectedDate: date});
+    };
+
+
 
     render() {
         return (
@@ -47,7 +46,6 @@ class Settings extends Component {
         )
     }
 }
-
 
 const mapStateToProps = state => {
     return {
@@ -70,4 +68,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Settings);
+export default connect(mapStateToProps, mapDispatchToProps)(Main);
