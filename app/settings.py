@@ -64,7 +64,6 @@ INSTALLED_APPS = [
 
     'api.event',
     'api.user',
-    'api.home',
 ]
 
 AUTH_USER_MODEL = 'user.User'
