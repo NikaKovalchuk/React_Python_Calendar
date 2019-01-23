@@ -12,8 +12,8 @@ class Settings extends Component {
         this.state = {
             user: {},
             events: {},
-            date: new Date(),
-            selectedDate: new Date()
+            date: new Date(new Date().setHours(0,0,0,)),
+            selectedDate: new Date(new Date().setHours(0,0,0)),
         };
     }
 

@@ -6,8 +6,10 @@ export const addEvent = (body) => {
             headers["Authorization"] = `Token ${token}`;
         }
 
+        body.start_date = new Date(body.start_date).toISOString()
+        body.finish_date = new Date(body.finish_date).toISOString()
+
         body = JSON.stringify(body)
-        console.log(body)
         return fetch("http://localhost:8000/api/event/", {headers, method: "POST", body})
             .then(res => res.json())
             .then(events => {
@@ -20,6 +22,9 @@ export const addEvent = (body) => {
 
 export const updateEvent = (index, body) => {
     return (dispatch, getState) => {
+        body.start_date = new Date(body.start_date).toISOString()
+        body.finish_date = new Date(body.finish_date).toISOString()
+
         body = JSON.stringify(body)
         let headers = {"Content-Type": "application/json"};
         let {token} = getState().auth;
@@ -84,6 +89,9 @@ export const loadEvents = (startDate, finishDate) => {
     return (dispatch, getState) => {
         let headers = {"Content-Type": "application/json"};
         let {token} = getState().auth;
+
+        startDate = new Date(startDate).toISOString()
+        finishDate = new Date(finishDate).toISOString()
 
         if (token) {
             headers["Authorization"] = `Token ${token}`;

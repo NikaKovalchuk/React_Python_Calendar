@@ -3,6 +3,7 @@ import "../../css/form.css"
 import {events} from "../../actions";
 import {connect} from "react-redux";
 import Modal from "./Modal"
+import moment from "moment";
 
 
 class EventModal extends React.Component {
@@ -23,40 +24,39 @@ class EventModal extends React.Component {
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
+        let hour = new Date().getHours()
         if (nextProps.date != null) {
-            let date = nextProps.date.toISOString()
-            let value = date.replace(/\.[0-9]*Z/, '')
-            value = value.replace(/\:[0-9]*Z/, '')
+            let date = new Date(nextProps.date)
+            date = new Date(date.setHours(hour))
+            date = moment(date).format();
+            let value = date.replace(/\+[0-9]*\:[0-9]*/, '')
             this.setState({
                 start_date: value
             })
 
             date = new Date(date)
-            date = new Date(date.setHours(date.getHours() + 1)).toISOString()
-            value = date.replace(/\.[0-9]*Z/, '')
-            value = value.replace(/\:[0-9]*Z/, '')
+            date = new Date(date.setHours(hour + 1))
+            date = moment(date).format();
+            value = date.replace(/\+[0-9]*\:[0-9]*/, '')
             this.setState({
                 finish_date: value
             })
         }
         if (nextProps.data != {}) {
             if (nextProps.data.start_date) {
-                let date = nextProps.data.start_date
-                let value = date.replace(/\.[0-9]*Z/, '')
-                value = value.replace(/\:[0-9]*Z/, '')
+                let date = moment(nextProps.data.start_date).format();
+                let value = date.replace(/\+[0-9]*\:[0-9]*/, '')
                 this.setState({
                     start_date: value
                 })
             }
             if (nextProps.data.finish_date) {
-                let date = nextProps.data.finish_date
-                let value = date.replace(/\.[0-9]*Z/, '')
-                value = value.replace(/\:[0-9]*Z/, '')
+                let date = moment(nextProps.data.finish_date).format();
+                let value = date.replace(/\+[0-9]*\:[0-9]*/, '')
                 this.setState({
                     finish_date: value
                 })
             }
-
             this.setState({
                 id: nextProps.data.id,
                 title: nextProps.data.title,
