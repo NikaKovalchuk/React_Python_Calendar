@@ -14,7 +14,7 @@ class Login extends Component {
         };
     }
 
-    onSubmit = e => {
+    onSubmit = (e) => {
         e.preventDefault();
         this.props.login(this.state.username, this.state.password);
     }
@@ -35,6 +35,7 @@ class Login extends Component {
                                 ))}
                             </ul>
                         )}
+
                         <p className={'group'}>
                             <label className={'label'} htmlFor="username">Username</label>
                             <input
@@ -42,6 +43,7 @@ class Login extends Component {
                                 type="text" id="username"
                                 onChange={e => this.setState({username: e.target.value})}/>
                         </p>
+
                         <p className={'group'}>
                             <label className={'label'} htmlFor="password">Password</label>
                             <input
@@ -49,6 +51,7 @@ class Login extends Component {
                                 type="password" id="password"
                                 onChange={e => this.setState({password: e.target.value})}/>
                         </p>
+
                         <p>
                             <button className={'btn btn-secondary'} type="submit">Login</button>
                         </p>
@@ -56,6 +59,7 @@ class Login extends Component {
                         <p>
                             Don't have an account? <Link to="/registration">Register</Link>
                         </p>
+
                     </fieldset>
                 </form>
             </div>

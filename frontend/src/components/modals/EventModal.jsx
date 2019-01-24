@@ -1,4 +1,4 @@
-import React, {Component}  from 'react';
+import React, {Component} from 'react';
 import "../../css/form.css"
 import {events} from "../../actions";
 import {connect} from "react-redux";
@@ -15,16 +15,17 @@ class EventModal extends Component {
             title: "",
             text: "",
             id: this.props.id,
-            start_date: null,
-            finish_date: null,
-            cycle: 0,
+            start_date: new Date(),
+            finish_date: new Date(),
+            repeat: 0,
             isOpen: false,
-            CycleOptions: [{0: 'No'}, {1: 'Day'}, {2: 'Week'}, {3: 'Month'}, {4: 'Year'}] // заменить на enum
+            repeatOptions: [{0: 'No'}, {1: 'Day'}, {2: 'Week'}, {3: 'Month'}, {4: 'Year'}] // заменить на enum
         };
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
         let hour = new Date().getHours()
+
         if (nextProps.date != null) {
             let date = new Date(nextProps.date)
             date = new Date(date.setHours(hour))
@@ -42,47 +43,31 @@ class EventModal extends Component {
                 finish_date: value
             })
         }
-        if (nextProps.data != {}) {
-            if (nextProps.data.start_date) {
-                let date = moment(nextProps.data.start_date).format();
+
+        if (nextProps.event !== {}) {
+            if (nextProps.event.start_date) {
+                let date = moment(nextProps.event.start_date).format();
                 let value = date.replace(/\+[0-9]*\:[0-9]*/, '')
+
                 this.setState({
                     start_date: value
                 })
             }
-            if (nextProps.data.finish_date) {
-                let date = moment(nextProps.data.finish_date).format();
+            if (nextProps.event.finish_date) {
+                let date = moment(nextProps.event.finish_date).format();
                 let value = date.replace(/\+[0-9]*\:[0-9]*/, '')
+
                 this.setState({
                     finish_date: value
                 })
             }
             this.setState({
-                id: nextProps.data.id,
-                title: nextProps.data.title,
-                text: nextProps.data.text,
-                cycle: nextProps.data.cycle,
+                id: nextProps.event.id,
+                title: nextProps.event.title,
+                text: nextProps.event.text,
+                repeat: nextProps.event.repeat,
             })
         }
-    }
-
-    select() {
-        let options = []
-        options = this.state.CycleOptions.map((o) => {
-            o.key = Object.keys(o)[0]
-            o.value = Object.values(o)[0]
-            return (
-                <option className="input"
-                        key={o.key}
-                        value={o.key}>
-                    {o.value}</option>
-            );
-        });
-        return <select className="input" value={this.state.cycle}
-                       onChange={(e) => {
-                           this.setState({cycle: e.target.value})
-                       }}
-        >{options}</select>
     }
 
     onOk = () => {
@@ -92,7 +77,7 @@ class EventModal extends Component {
             text: this.state.text,
             start_date: this.state.start_date,
             finish_date: this.state.finish_date,
-            cycle: this.state.cycle,
+            repeat: this.state.repeat,
         }
         this.props.onOk(event)
     };
@@ -104,9 +89,24 @@ class EventModal extends Component {
     };
 
     toggleModal = () => {
-        this.setState({
-            isOpen: !this.state.isOpen
+        this.setState({isOpen: !this.state.isOpen});
+    }
+
+    select() {
+        let options = []
+        options = this.state.repeatOptions.map((o) => {
+            o.key = Object.keys(o)[0]
+            o.value = Object.values(o)[0]
+            return (
+                <option className="input" key={o.key} value={o.key}>
+                    {o.value}</option>
+            );
         });
+
+        return <select className="input" value={this.state.repeat}
+                       onChange={(e) => {
+                           this.setState({repeat: e.target.value})
+                       }}>{options}</select>
     }
 
     render() {
@@ -114,29 +114,32 @@ class EventModal extends Component {
             return null;
         }
 
-        let buttons;
+        let buttons, label;
         if (this.state.id) {
             buttons = <div className={'button-group'}>
                 <button className={"btn btn-secondary"} onClick={this.props.onCancel}> CANCEL</button>
                 <button className={"btn btn-danger"} onClick={this.toggleModal}> DELETE</button>
                 <button className={"btn btn-secondary"} onClick={this.onOk}> OK</button>
             </div>
+            label = <h1>Edit event "{this.props.event.title}"</h1>
         } else {
             buttons = <div className={'button-group'}>
                 <button className={"btn btn-secondary"} onClick={this.props.onCancel}> CANCEL</button>
                 <button className={"btn btn-secondary"} onClick={this.onOk}> OK</button>
             </div>
+            label = <h1>New event</h1>
         }
 
         return (
             <div className="backdrop">
                 <div className="event-modal-window">
                     <div className="header">
-                        Event Form
+                        {label}
                     </div>
                     <div className="event-modal-body">
                         <div className="form">
                             <form className="dynamic-form">
+
                                 <div key={'gtitle'} className="group">
                                     <label className="label" key={'ltitle'} htmlFor={'title'}> Title </label>
                                     <input className="input" type={'text'} key={'title'} value={this.state.title}
@@ -144,6 +147,7 @@ class EventModal extends Component {
                                                this.setState({title: e.target.value})
                                            }}/>
                                 </div>
+
                                 <div key={'gtext'} className="group">
                                     <label className="label" key={'ltext'} htmlFor={'text'}> Text </label>
                                     <input className="input" type={'text'} key={'text'} value={this.state.text}
@@ -151,6 +155,7 @@ class EventModal extends Component {
                                                this.setState({text: e.target.value})
                                            }}/>
                                 </div>
+
                                 <div key={'gstart_date'} className="group">
                                     <label className="label" key={'lstart_date'} htmlFor={'start_date'}> Start
                                         Date </label>
@@ -160,6 +165,7 @@ class EventModal extends Component {
                                                this.setState({start_date: e.target.value})
                                            }}/>
                                 </div>
+
                                 <div key={'gfinish_date'} className="group">
                                     <label className="label" key={'lfinish_date'} htmlFor={'finish_date'}> Finish
                                         Date </label>
@@ -169,10 +175,12 @@ class EventModal extends Component {
                                                this.setState({finish_date: e.target.value})
                                            }}/>
                                 </div>
-                                <div key={'gcycle'} className="group">
-                                    <label className="label" key={'lcycle'} htmlFor={'cycle'}> Repeat </label>
+
+                                <div key={'grepeat'} className="group">
+                                    <label className="label" key={'lrepeat'} htmlFor={'repeat'}> Repeat </label>
                                     {this.select()}
                                 </div>
+
                             </form>
                         </div>
                     </div>
@@ -181,8 +189,7 @@ class EventModal extends Component {
                     </div>
                     <Modal show={this.state.isOpen} onCancel={this.toggleModal} onOk={this.delete}
                            header={"Remove event \"" + this.state.title + "\""}>
-                        Are you sure that you wanr to remove event "{this.state.title}"? <br></br>
-                        This is a permanent changes.
+                        Are you sure you want to delete the event "{this.state.title}"?
                     </Modal>
                 </div>
             </div>

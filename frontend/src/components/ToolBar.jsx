@@ -14,9 +14,7 @@ class ToolBar extends Component {
     componentDidMount() {
         this.props.loadUser().then(response => {
             if (this.props.user) {
-                this.setState({
-                    user: this.props.user
-                });
+                this.setState({user: this.props.user});
             }
         });
     }
@@ -25,7 +23,9 @@ class ToolBar extends Component {
         let list;
         if (this.props.user) {
             list = <div className={'wide'}>
-                <ul className="navbar-nav navbar-left"></ul>
+                <ul className="navbar-nav navbar-left">
+
+                </ul>
                 <ul className="navbar-nav navbar-right">
                     <li className="nav-item active">
                         <a className="nav-link" onClick={this.props.logout}> LOG OUT </a>
