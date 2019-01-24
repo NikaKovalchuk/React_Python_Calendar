@@ -24,19 +24,30 @@
 }
 
 .month-view-day span {
-    margin: 5px;
+    margin: 1% 5%;
     font-size: 82.5%;
 }
 
 .month-event {
     display: inline-block;
     font-size: 11pt;
-    margin: 5px;
+    font-size: 10pt;
+
+    margin: 1% 5%;
+    padding: 2px 4px;
+    position: sticky;
+
     border-radius: 5px;
     background: var(--event-background);
     color: var(--neutral-color);
-    padding: 2px 4px;
-    font-size: 10pt;
+}
+
+.more-events{
+    height: 5px;
+}
+
+.empty {
+    color: var(--event-background);
 }
 
 .empty-week-title {
@@ -55,9 +66,7 @@
     text-align: center;
 }
 
-.week-event{
-
-}
+.week-event{}
 
 .day-title{
     width: 100%;

@@ -74,7 +74,7 @@ class Schedule extends Component {
     }
 
     toggleModal = () => {
-        if (this.state.isOpen == true) {
+        if (this.state.isOpen === true) {
             this.setState({event: this.state.newEvent,})
         }
         this.setState({isOpen: !this.state.isOpen});
@@ -183,7 +183,7 @@ class Schedule extends Component {
                     }
                 }
 
-                if (add == true) {
+                if (add === true) {
                     result.push(<div className={'day-event'} key={event.id + "_" + event.title}
                                      onClick={(e) => this.onEventClick(e, event)}>{event.title}</div>)
                     events.push(event)
@@ -264,7 +264,7 @@ class Schedule extends Component {
                     }
                 }
 
-                if (add == true) {
+                if (add === true) {
                     result.push(<div className={'week-event'} key={event.id + "_" + event.title}
                                      onClick={(e) => this.onEventClick(e, event)}>{event.title}</div>)
                     events.push(event)
@@ -334,21 +334,55 @@ class Schedule extends Component {
         return <div className="table">{hours}</div>;
     }
 
-    renderEventsMonth(day) {
+    renderEventsMonth(today) {
+        const begin_of_today = dateFns.startOfDay(today)
+        const end_of_today = dateFns.endOfDay(today)
+        const begin_of_week = dateFns.startOfWeek(today)
+        const end_of_week = dateFns.endOfWeek(today)
         const result = [];
-        let events = []
-        let start_day = dateFns.endOfDay(day)
-        let end_day = dateFns.startOfDay(day)
+        const events_limit = 3;
 
+        let events_for_today = [];
         for (let index = 0; index < this.state.events.length; index++) {
             let event = this.state.events[index]
-            let start_date = new Date(event.start_date)
             let finish_date = new Date(event.finish_date)
+            let start_date = new Date(event.start_date)
+            let event_width = 0
 
-            if (start_date <= start_day && finish_date >= end_day) {
-                result.push(<div className={'month-event'} key={event.id + "_" + event.title}
+            if (finish_date < end_of_week && finish_date > begin_of_week && start_date > begin_of_week && start_date < end_of_week) {
+                event_width = finish_date.getDate() - start_date.getDate()
+            } else if (start_date > begin_of_week && start_date < end_of_week) {
+                event_width = end_of_week.getDate() - start_date.getDate()
+            } else if (finish_date < end_of_week && finish_date > begin_of_week) {
+                event_width = finish_date.getDate() - begin_of_week.getDate()
+            } else {
+                event_width = end_of_week.getDate() - begin_of_week.getDate()
+            }
+
+            const width = 90 + event_width * 100
+            if (start_date<end_of_today && finish_date>begin_of_today) {
+                events_for_today.push(event)
+            }
+
+            if (start_date <= end_of_today && start_date >= begin_of_today) {
+                const eventStyle = {
+                    width: width + '%',
+                };
+
+                if (events_for_today.length > events_limit) {
+                    result.pop()
+                    result.push(<div className={'more-events'} style={eventStyle}
+                                     key={"more"}> {events_for_today.length - events_limit + 1} more events</div>)
+                } else {
+                    result.push(<div className={'month-event'} style={eventStyle} key={event.id}
+                                     onClick={(e) => this.onEventClick(e, event)}>{event.title}</div>)
+                }
+
+            } else if (start_date < begin_of_week && finish_date > begin_of_week && begin_of_today <= begin_of_week) {
+                const eventStyle = {width: width + '%'};
+                result.push(<div className={'month-event empty'} style={eventStyle}
+                                 key={event.id + "_" + event.title + today}
                                  onClick={(e) => this.onEventClick(e, event)}>{event.title}</div>)
-                events.push(event)
             }
 
         }
