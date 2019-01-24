@@ -1,18 +1,33 @@
-Copy of Google Calendar based on Django
+Calendar
 
-You may create events, add another users to them. export and import calendars.
-For users:
+About: The calendar contains 3 views (month, week, day), a calendar and schedule components. 
+To add and edit use modal windows that appear by clicking on an event or an empty space.
 
-* signUp/logIn/logOut
-* account page where you can edit info about you
-* timezones support
+To install:
 
-For events:
+```
+git clone https://github.com/NikaKovalchuk/Calendar
 
-* page with all events
-* pages by day/week/month/year
-* create new/edit events
+python3 -m venv myvenv
+source myvenv/bin/activate
 
-Also added tests for backend and frontend.
+pip install -r requerements.txt
+python manage.py migrate
 
-stack: Django, Django REST, React, Redux, Webpack
+cd frontend
+npm install
+```
+
+To run backend
+```
+python manage.py runserver
+```
+
+To run frontend
+```  
+cd frontend
+npm start run
+```
+
+
+Stack: Django, Django REST, React, Redux, Webpack
