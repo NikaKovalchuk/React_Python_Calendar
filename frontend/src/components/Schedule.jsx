@@ -16,8 +16,6 @@ class Schedule extends Component {
             view: viewType.month,
             currentDate: this.props.currentDate,
             selectedDate: this.props.selectedDate,
-            clickedDate: null,
-
             id: null,
             newEvent: {
                 id: null,
@@ -28,6 +26,8 @@ class Schedule extends Component {
                 repeat: 0,
             },
             event: {},
+            notifications: {},
+            clickedDate: null,
             events: {},
 
             isOpen: false,

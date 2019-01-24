@@ -18,8 +18,10 @@ class EventModal extends Component {
             start_date: new Date(),
             finish_date: new Date(),
             repeat: 0,
+            notification: 0,
             isOpen: false,
-            repeatOptions: [{0: 'No'}, {1: 'Day'}, {2: 'Week'}, {3: 'Month'}, {4: 'Year'}] // заменить на enum
+            repeatOptions: [{0: 'No'}, {1: 'Day'}, {2: 'Week'}, {3: 'Month'}, {4: 'Year'}], // заменить на enum
+            NotificationOptions: [{0: 'No'}, {1: 'Day'}, {2: 'Hour'}, {3: '30 minutes'}, {4: '10 minutes'}] // заменить на enum
         };
     }
 
@@ -66,8 +68,28 @@ class EventModal extends Component {
                 title: nextProps.event.title,
                 text: nextProps.event.text,
                 repeat: nextProps.event.repeat,
+                notification: nextProps.event.notification,
             })
         }
+    }
+
+    selectNotification() {
+        let options = []
+        options = this.state.NotificationOptions.map((o) => {
+            o.key = Object.keys(o)[0]
+            o.value = Object.values(o)[0]
+            return (
+                <option className="input"
+                        key={o.key}
+                        value={o.key}>
+                    {o.value}</option>
+            );
+        });
+        return <select className="input" value={this.state.notification}
+                       onChange={(e) => {
+                           this.setState({notification: e.target.value})
+                       }}
+        >{options}</select>
     }
 
     onOk = () => {
@@ -78,6 +100,7 @@ class EventModal extends Component {
             start_date: this.state.start_date,
             finish_date: this.state.finish_date,
             repeat: this.state.repeat,
+            notification: this.state.notification,
         }
         this.props.onOk(event)
     };
@@ -92,7 +115,7 @@ class EventModal extends Component {
         this.setState({isOpen: !this.state.isOpen});
     }
 
-    select() {
+    selectRepeat() {
         let options = []
         options = this.state.repeatOptions.map((o) => {
             o.key = Object.keys(o)[0]
@@ -178,7 +201,13 @@ class EventModal extends Component {
 
                                 <div key={'grepeat'} className="group">
                                     <label className="label" key={'lrepeat'} htmlFor={'repeat'}> Repeat </label>
-                                    {this.select()}
+                                    {this.selectRepeat()}
+                                </div>
+
+                                <div key={'gnotification'} className="group">
+                                    <label className="label" key={'lnotification'}
+                                           htmlFor={'notification'}> Notice </label>
+                                    {this.selectNotification()}
                                 </div>
 
                             </form>
