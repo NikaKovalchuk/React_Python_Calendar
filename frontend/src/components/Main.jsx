@@ -27,8 +27,6 @@ class Main extends Component {
         this.setState({selectedDate: date});
     };
 
-
-
     render() {
         return (
             <div className={"main-content"}>
@@ -58,12 +56,6 @@ const mapDispatchToProps = dispatch => {
     return {
         loadUser: () => {
             return dispatch(auth.loadUser());
-        },
-        changePassword: (model) => {
-            return dispatch(auth.changePassword(model));
-        },
-        loadEvents: () => {
-            return dispatch(events.loadEvents());
         },
     }
 }

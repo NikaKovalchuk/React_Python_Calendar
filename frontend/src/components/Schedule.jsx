@@ -4,6 +4,7 @@ import {auth, events} from "../actions";
 import dateFns from "date-fns";
 import "../css/schedule.css"
 import EventModal from "./modals/EventModal";
+import Modal from "./modals/Modal";
 
 const viewType = {day: 1, week: 2, month: 3}
 
@@ -17,8 +18,8 @@ class Schedule extends Component {
             currentDate: this.props.currentDate,
             selectedDate: this.props.selectedDate,
             clickedDate: null,
-
             id: null,
+
             newEvent: {
                 id: null,
                 title: "",
@@ -26,13 +27,17 @@ class Schedule extends Component {
                 start_date: new Date().toISOString(),
                 finish_date: new Date(new Date().setHours(new Date().getHours() + 1)).toISOString(),
                 repeat: 0,
+                notice: false,
+                notification: 0,
             },
             event: {},
-            events: {},
+            notificationEvent: {},
+            notifications: {},
 
+            events: {},
             isOpen: false,
+            isOpenNotification: false,
         };
-        this.changeView = this.changeView.bind(this);
     }
 
     componentDidMount() {
@@ -67,18 +72,43 @@ class Schedule extends Component {
         this.props.loadEvents(startDate, finishDate).then(response => {
             this.setState({events: this.props.events});
         });
-    }
-
-    changeView(newView) {
-        this.setState({view: newView})
+        this.props.loadNotifications(startDate, finishDate).then(response => {
+            this.setState({notifications: this.props.events});
+            if (this.props.events !== []) {
+                let event = this.props.events[this.props.events.length - 1]
+                if (event) {
+                    this.setState({
+                        isOpenNotification: true,
+                        notificationEvent: event,
+                    });
+                }
+            }
+        });
     }
 
     toggleModal = () => {
         if (this.state.isOpen === true) {
             this.setState({event: this.state.newEvent,})
+            this.updateEvents(this.state.selectedDate)
         }
         this.setState({isOpen: !this.state.isOpen});
-        this.updateEvents(this.state.selectedDate)
+    }
+
+    dismissNotification = () => {
+        let event = this.state.notificationEvent
+        let events = this.state.notifications
+        events.pop()
+        event.notice = false
+        this.props.updateEvent(event.id, event)
+
+        if (events !== []) {
+            let event = events[events.length - 1]
+            this.setState({
+                isOpenNotification: event ? true : false,
+                notificationEvent: event ? event : {},
+                notifications: events,
+            });
+        }
     }
 
     complite = (event) => {
@@ -114,18 +144,13 @@ class Schedule extends Component {
         e.stopPropagation();
     }
 
-    changeDate = day => {
-        this.props.changeDate(day);
-    }
-
-
     renderButtons() {
         return (
             <div>
                 <div className={'today-button'}>
                     <div className="btn-group btn-group-toggle" data-toggle="buttons">
                         <button type="button" className="btn btn-secondary btn-sm"
-                                onClick={() => this.changeDate(this.state.currentDate)}>Today
+                                onClick={() => this.props.changeDate(this.state.currentDate)}>Today
                         </button>
                     </div>
                 </div>
@@ -133,13 +158,13 @@ class Schedule extends Component {
                 <div className={'view-buttons'}>
                     <div className="btn-group btn-group-toggle" data-toggle="buttons">
                         <button type="button" className="btn btn-secondary btn-sm"
-                                onClick={() => this.changeView(viewType.day)}>Day
+                                onClick={() => this.setState({view: viewType.day})}>Day
                         </button>
                         <button type="button" className="btn btn-secondary btn-sm"
-                                onClick={() => this.changeView(viewType.week)}>Week
+                                onClick={() => this.setState({view: viewType.week})}>Week
                         </button>
                         <button type="button" className="btn btn-secondary btn-sm"
-                                onClick={() => this.changeView(viewType.month)}>Month
+                                onClick={() => this.setState({view: viewType.month})}>Month
                         </button>
                     </div>
                 </div>
@@ -147,7 +172,7 @@ class Schedule extends Component {
         )
     }
 
-    renderEventsDay(day, hour) {
+    renderEvents(day, hour, elementClass, blockClass){
         const result = [];
         let startOfDay = dateFns.startOfDay(day)
         let endOfDay = dateFns.endOfDay(day)
@@ -184,15 +209,37 @@ class Schedule extends Component {
                 }
 
                 if (add === true) {
-                    result.push(<div className={'day-event'} key={event.id + "_" + event.title}
+                    result.push(<div className={elementClass} key={event.id}
                                      onClick={(e) => this.onEventClick(e, event)}>{event.title}</div>)
                     events.push(event)
                 }
 
             }
         }
-        return <div className="day-events">{result}</div>;
+        return <div className={blockClass}>{result}</div>;
     }
+
+    renderEventsMonth(day) {
+        const result = [];
+        let events = []
+        let start_day = dateFns.endOfDay(day)
+        let end_day = dateFns.startOfDay(day)
+
+        for (let index = 0; index < this.state.events.length; index++) {
+            let event = this.state.events[index]
+            let start_date = new Date(event.start_date)
+            let finish_date = new Date(event.finish_date)
+
+            if (start_date <= start_day && finish_date >= end_day) {
+                result.push(<div className={'month-event'} key={event.id + "_" + event.title}
+                                 onClick={(e) => this.onEventClick(e, event)}>{event.title}</div>)
+                events.push(event)
+            }
+
+        }
+        return <div className="month-events">{result}</div>;
+    }
+
 
     renderDayTable() {
         const {selectedDate} = this.state;
@@ -219,7 +266,7 @@ class Schedule extends Component {
                     </div>
                     <div className={'day-view-data'} key={'day-view-data'}
                          onClick={() => this.onDateClick(day, cloneHour)}>
-                        {this.renderEventsDay(day, hour.getHours())}
+                        {this.renderEvents(day, hour.getHours(), "day-event", "day-events")}
                     </div>
                 </div>
             );
@@ -227,51 +274,6 @@ class Schedule extends Component {
         }
 
         return <div className="table">{hours}</div>;
-    }
-
-    renderEventsWeek(day, hour) {
-        const result = [];
-        let events = []
-        let startOfDay = dateFns.startOfDay(day)
-        let endOfDay = dateFns.endOfDay(day)
-
-        for (let index = 0; index < this.state.events.length; index++) {
-            let event = this.state.events[index]
-            let start_date = new Date(event.start_date)
-            let finish_date = new Date(event.finish_date)
-            let add = false
-
-            if (start_date <= endOfDay && finish_date >= startOfDay) {
-                if (start_date >= startOfDay) {
-                    if (finish_date <= endOfDay) {
-                        if (start_date.getHours() <= hour && finish_date.getHours() >= hour) {
-                            add = true
-                        }
-                    } else {
-                        if (start_date.getHours() <= hour) {
-                            add = true
-                        }
-                    }
-                }
-
-                if (start_date < startOfDay) {
-                    if (finish_date < endOfDay) {
-                        if (finish_date.getHours() >= hour) {
-                            add = true
-                        }
-                    } else {
-                        add = true
-                    }
-                }
-
-                if (add === true) {
-                    result.push(<div className={'week-event'} key={event.id + "_" + event.title}
-                                     onClick={(e) => this.onEventClick(e, event)}>{event.title}</div>)
-                    events.push(event)
-                }
-            }
-        }
-        return <div className="week-events">{result}</div>;
     }
 
     renderWeekTable() {
@@ -318,7 +320,7 @@ class Schedule extends Component {
                 days.push(
                     <div className="week-view-day" key={day + '-week-view-day'}
                          onClick={() => this.onDateClick(cloneday, cloneHour)}>
-                        {this.renderEventsWeek(day, hour.getHours())}
+                        {this.renderEvents(day, hour.getHours(), "week-event", "week-events")}
                     </div>
                 );
                 day = dateFns.addDays(day, 1);
@@ -448,6 +450,10 @@ class Schedule extends Component {
                 {this.renderTable()}
                 <EventModal show={this.state.isOpen} onCancel={this.toggleModal} onOk={this.complite}
                             event={this.state.event} date={this.state.clickedDate}></EventModal>
+                <Modal show={this.state.isOpenNotification} onOk={this.dismissNotification}
+                       header={"Notification about event \"" + this.state.notificationEvent.title + "\""}>
+                    Event "{this.state.notificationEvent.title}" starts in {this.state.notificationEvent.start_date}
+                </Modal>
             </div>
         )
     }
@@ -467,6 +473,9 @@ const mapDispatchToProps = dispatch => {
         },
         loadEvents: (startDate, finishDate) => {
             return dispatch(events.loadEvents(startDate, finishDate));
+        },
+        loadNotifications: (startDate, finishDate) => {
+            return dispatch(events.loadNotifications(startDate, finishDate));
         },
         addEvent: (model) => {
             return dispatch(events.addEvent(model));

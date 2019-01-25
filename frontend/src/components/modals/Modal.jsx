@@ -9,6 +9,18 @@ class Modal extends React.Component {
             return null;
         }
 
+        let buttons;
+        if (this.props.onCancel) {
+            buttons = <div className={'button-group'}>
+                <button className={"btn btn-secondary"} onClick={this.props.onCancel}> CANCEL</button>
+                <button className={"btn btn-secondary"} onClick={this.props.onOk}> OK</button>
+            </div>
+        } else {
+            buttons = <div className={'button-group'}>
+                <button className={"btn btn-secondary"} onClick={this.props.onOk}> OK</button>
+            </div>
+        }
+
         return (
             <div className="backdrop" onClick={this.props.onCancel}>
                 <div className="modal-window">
@@ -19,22 +31,12 @@ class Modal extends React.Component {
                         {this.props.children}
                     </div>
                     <div className="footer">
-                        <div className={'button-group'}>
-                            <button className={"btn btn-secondary"} onClick={this.props.onCancel}> CANCEL</button>
-                            <button className={"btn btn-secondary"} onClick={this.props.onOk}> OK </button>
-                        </div>
+                        {buttons}
                     </div>
                 </div>
             </div>
         );
     }
 }
-
-Modal.propTypes = {
-    onCancel: PropTypes.func.isRequired,
-    onOk: PropTypes.func.isRequired,
-    show: PropTypes.bool,
-    children: PropTypes.node
-};
 
 export default Modal;
