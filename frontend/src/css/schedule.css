@@ -20,7 +20,7 @@
 .month-view-day {
     width: calc(100% / 7);
     height: 120px;
-    border: 0.5px solid var(--border-color);
+    border: 0.1px solid var(--border-color);
     cursor: pointer;
 }
 
@@ -43,11 +43,7 @@
     color: var(--neutral-color);
 }
 
-.more-events {
-    height: 5px;
-}
-
-.empty {
+.empty{
     color: var(--event-background);
 }
 
@@ -117,12 +113,22 @@
 }
 
 .more-events {
-    margin: 5px;
-    padding: 2px 4px;
-    text-align: center;
+    margin: 1% 5%;
 
+    padding: 2px 4px;
+    width: 90%;
+    text-align: center;
     background: var(--text-color);
-    height: 100%;
     border-radius: 5px;
+    color: var(--neutral-color);
+}
+
+.number{
+    text-align: center;
+    font-size: 10pt;
+}
+
+.number:hover{
+    background:var(--text-color) ;
     color: var(--neutral-color);
 }

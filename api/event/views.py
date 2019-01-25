@@ -49,6 +49,7 @@ class EventList(APIView):
         events = self.repeatedEvents(startDate=startDate, finishDate=finishDate, events=events, user=request.user)
         if notification:
             events = self.notification(events=events)
+        events = sorted(events, key=lambda x: x.start_date)
         serializer = EventSerializer(events, many=True)
         return Response(serializer.data)
 

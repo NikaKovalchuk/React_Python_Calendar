@@ -6,7 +6,8 @@ import "../css/schedule.css"
 import EventModal from "./modals/EventModal";
 import Modal from "./modals/Modal";
 
-const viewType = {day: 1, week: 2, month: 3}
+const viewType = {day: 0, week: 1, month: 2}
+const eventsPosition = {top: 0, middle: 1, bottom: 2}
 
 class Schedule extends Component {
 
@@ -85,9 +86,9 @@ class Schedule extends Component {
         });
     }
 
-    viewAllEvents = (e, day) => {
+    viewDay = (e, day) => {
         this.setState({
-            selectedDate : day,
+            selectedDate: day,
             view: viewType.day
         })
         e.stopPropagation();
@@ -279,8 +280,9 @@ class Schedule extends Component {
         const end_of_week = dateFns.endOfWeek(today)
         const result = [];
         const events_limit = 3;
-
         let events_for_today = [];
+        let prevDayEventsPositions = [];
+
         for (let index = 0; index < this.state.events.length; index++) {
             let event = this.state.events[index]
             let finish_date = new Date(event.finish_date)
@@ -303,27 +305,56 @@ class Schedule extends Component {
             }
 
             if (start_date <= end_of_today && start_date >= begin_of_today) {
-                const eventStyle = {
-                    width: width + '%',
-                };
+                let eventStyle = {width: width + '%',};
+                if (finish_date > end_of_week) {
+                    eventStyle = {
+                        width: width + 5 + '%',
+                        borderRadius: "5px 0px 0px 5px",
+                        marginRight: 0,
+                    };
+                }
 
                 if (events_for_today.length > events_limit) {
                     result.pop()
-                    result.push(<div className={"more-events"} onClick={(e) => this.viewAllEvents(e, today)}
+                    let buttonStyle = {}
+                    if (result.length < events_limit - 1) {
+                        let margin = 1
+                        if (result.length === 0) margin = 26
+                        buttonStyle = {marginTop: margin + '%',}
+                    }
+                    result.push(<div className={"more-events"} style={buttonStyle}
+                                     onClick={(e) => this.viewDay(e, today)}
                                      key={"more"}> View all events </div>)
                 } else {
+                    if (result.length === 0 && events_for_today.length > 1) {
+                        eventStyle = {
+                            marginTop: events_for_today.length > 2 ? '60px' : ' 30px',
+                            width: width + '%',
+                        }
+                        event.position = 1
+                    }
                     result.push(<div className={'month-event'} style={eventStyle} key={event.id}
                                      onClick={(e) => this.onEventClick(e, event)}>{event.title}</div>)
                 }
 
             } else if (start_date < begin_of_week && finish_date > begin_of_week && begin_of_today <= begin_of_week) {
-                const eventStyle = {width: width + '%'};
+                let radius = "0px 5px 5px 0px"
+                if (finish_date > end_of_week) {
+                    radius = "0px"
+                    width = width+5
+                }
+                let eventStyle = {
+                    width: width + 5 + '%',
+                    borderRadius: radius,
+                    marginLeft: 0,
+                };
                 result.push(<div className={'month-event empty'} style={eventStyle}
                                  key={event.id + "_" + event.title + today}
                                  onClick={(e) => this.onEventClick(e, event)}>{event.title}</div>)
             }
 
         }
+
         return <div className="month-events">{result}</div>;
     }
 
@@ -347,7 +378,7 @@ class Schedule extends Component {
                             : dateFns.isSameDay(day, selectedDate) ? "selected" : ""}`}
                          onClick={() => this.onDateClick(cloneDay, null)}
                          key={day}>
-                        <span className="number">{dateFns.format(day, "D")}</span>
+                        <div className="number" onClick={(e) => this.viewDay(e, cloneDay)}>{dateFns.format(day, "D")}</div>
                         {this.eventsMonth(day)}
                     </div>
                 );
