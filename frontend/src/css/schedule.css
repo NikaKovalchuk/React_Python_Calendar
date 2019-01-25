@@ -11,8 +11,9 @@
 
 .view-buttons {
     text-align: right;
-    width:calc(100% / 2);
-    display: inline-block;margin-bottom: 10px;
+    width: calc(100% / 2);
+    display: inline-block;
+    margin-bottom: 10px;
 }
 
 
@@ -42,7 +43,7 @@
     color: var(--neutral-color);
 }
 
-.more-events{
+.more-events {
     height: 5px;
 }
 
@@ -66,7 +67,7 @@
     text-align: center;
 }
 
-.week-event{
+.week-event {
     display: inline-block;
     font-size: 11pt;
     font-size: 10pt;
@@ -79,7 +80,7 @@
     color: var(--neutral-color);
 }
 
-.day-event{
+.day-event {
     display: inline-block;
     font-size: 11pt;
     font-size: 10pt;
@@ -92,7 +93,7 @@
     color: var(--neutral-color);
 }
 
-.day-title{
+.day-title {
     width: 100%;
     color: var(--neutral-color);
     background: var(--event-background);
@@ -115,3 +116,13 @@
     background: #98a8b6;
 }
 
+.more-events {
+    margin: 5px;
+    padding: 2px 4px;
+    text-align: center;
+
+    background: var(--text-color);
+    height: 100%;
+    border-radius: 5px;
+    color: var(--neutral-color);
+}

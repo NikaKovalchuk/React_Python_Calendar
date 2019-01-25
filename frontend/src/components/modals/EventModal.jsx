@@ -30,18 +30,17 @@ class EventModal extends Component {
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
-        let hour = new Date().getHours()
         let searchValue = /\+[0-9]*\:[0-9]*/
 
         if (nextProps.date != null) {
             let date = new Date(nextProps.date)
-            date = moment(new Date(date.setHours(hour))).format();
+            date = moment(date).format();
             this.setState({
                 start_date: date.replace(searchValue, '')
             })
 
             date = new Date(date)
-            date = moment(new Date(date.setHours(hour + 1))).format();
+            date = moment(new Date(date.setHours(date.getHours() + 1))).format();
             this.setState({
                 finish_date: date.replace(searchValue, '')
             })
@@ -131,7 +130,7 @@ class EventModal extends Component {
         if (event.start_date > event.finish_date) {
             error = "Finish Date must be greater than  Start date"
         }
-        if (event.title === "" || event.text === "") {
+        if (event.title === "" || event.title === undefined || event.text === "" || event.text === undefined) {
             error = "Please fill in all fields."
         }
         if (error !== null) {
