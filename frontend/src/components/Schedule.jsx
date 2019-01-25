@@ -240,7 +240,7 @@ class Schedule extends Component {
         return <div className="month-events">{result}</div>;
     }
 
-    
+
     renderDayTable() {
         const {selectedDate} = this.state;
         const dayStart = dateFns.startOfDay(selectedDate)
