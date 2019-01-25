@@ -17,6 +17,9 @@ class Event(models.Model):
     archived = models.BooleanField(null=True, blank=True, default=False)
     archived_date = models.DateTimeField(blank=True, null=True)
 
+    notification = models.IntegerField(default=0, blank=True, null=True)
+    notice = models.BooleanField(null=False, blank=False, default=False)
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:

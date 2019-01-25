@@ -25,6 +25,9 @@ export default function events(state = initialState, action) {
         case 'LOAD_EVENTS':
             return [...action.events];
 
+        case 'LOAD_NOTIFICATIONS':
+            return [...action.events];
+
         default:
             return state;
     }
