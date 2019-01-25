@@ -85,6 +85,13 @@ class Schedule extends Component {
         });
     }
 
+    viewAllEvents = (e, day) => {
+        this.setState({
+            selectedDate : day,
+            view: viewType.day
+        })
+        e.stopPropagation();
+    }
 
     dismissNotification = () => {
         let event = this.state.notificationEvent
@@ -302,8 +309,8 @@ class Schedule extends Component {
 
                 if (events_for_today.length > events_limit) {
                     result.pop()
-                    result.push(<div className={"more-events"}
-                                     key={"more"}> {events_for_today.length - events_limit + 1} more events</div>)
+                    result.push(<div className={"more-events"} onClick={(e) => this.viewAllEvents(e, today)}
+                                     key={"more"}> View all events </div>)
                 } else {
                     result.push(<div className={'month-event'} style={eventStyle} key={event.id}
                                      onClick={(e) => this.onEventClick(e, event)}>{event.title}</div>)
@@ -351,7 +358,6 @@ class Schedule extends Component {
         }
         return <div className="table">{month}</div>;
     }
-
 
     shedule() {
         let table;
