@@ -246,7 +246,7 @@ class Schedule extends Component {
         const dayStart = dateFns.startOfDay(selectedDate)
         const dayEnd = dateFns.endOfDay(selectedDate)
         const day = selectedDate
-        const timeFormat = "HH:mm";
+        const timeFormat = "hh:mm A";
         const hours = [];
         const dateFormat = "D";
 
@@ -282,7 +282,7 @@ class Schedule extends Component {
         const dayStart = dateFns.startOfDay(selectedDate)
         const dayEnd = dateFns.endOfDay(selectedDate)
         const dateFormat = "D";
-        const timeFormat = "HH:mm";
+        const timeFormat = "hh:mm A";
         const hours = [];
 
         let days = [];
@@ -452,7 +452,7 @@ class Schedule extends Component {
                             event={this.state.event} date={this.state.clickedDate}></EventModal>
                 <Modal show={this.state.isOpenNotification} onOk={this.dismissNotification}
                        header={"Notification about event \"" + this.state.notificationEvent.title + "\""}>
-                    Event "{this.state.notificationEvent.title}" starts in {this.state.notificationEvent.start_date}
+                    Event "{this.state.notificationEvent.title}" starts in {new Date(this.state.notificationEvent.start_date).toLocaleString()}
                 </Modal>
             </div>
         )

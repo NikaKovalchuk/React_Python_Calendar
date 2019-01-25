@@ -22,6 +22,8 @@ class EventModal extends Component {
             notice: false,
 
             isOpen: false,
+            isOpenError: false,
+            errorMessage: null,
             repeatOptions: [{0: 'No'}, {1: 'Day'}, {2: 'Week'}, {3: 'Month'}, {4: 'Year'}], // заменить на enum
             notificationOptions: [{0: 'No'}, {1: 'Day'}, {2: 'Hour'}, {3: '30 minutes'}, {4: '10 minutes'}] // заменить на enum
         };
@@ -108,6 +110,7 @@ class EventModal extends Component {
     }
 
     onOk = () => {
+
         let event = {
             id: this.state.id,
             title: this.state.title,
@@ -115,11 +118,38 @@ class EventModal extends Component {
             start_date: this.state.start_date,
             finish_date: this.state.finish_date,
             repeat: this.state.repeat,
-            notification: this.state.notification ,
-            notice: this.state.notification !== this.state.notificationOptions['No'] ? true:false
+            notification: this.state.notification,
+            notice: this.state.notification !== this.state.notificationOptions['No'] ? true : false
         }
-        this.props.onOk(event)
+        if (this.validate(event)) {
+            this.props.onOk(event)
+        }
     };
+
+    validate = (event) => {
+        let error = null
+        if (event.start_date > event.finish_date) {
+            error = "Finish Date must be greater than  Start date"
+        }
+        if (event.title === "" || event.text === "") {
+            error = "Please fill in all fields."
+        }
+        if (error !== null) {
+            this.setState({
+                isOpenError: true,
+                errorMessage: error
+            })
+            return false
+        }
+        return true
+    }
+
+    toggleErrorModal = () => {
+        this.setState({
+            isOpenError: false,
+            errorMessage: null
+        })
+    }
 
     delete = () => {
         this.props.deleteEvent(this.state.id).then(response => {
@@ -219,6 +249,10 @@ class EventModal extends Component {
                     <Modal show={this.state.isOpen} onCancel={this.toggleModal} onOk={this.delete}
                            header={"Remove event \"" + this.state.title + "\""}>
                         Are you sure you want to delete the event "{this.state.title}"?
+                    </Modal>
+                    <Modal show={this.state.isOpenError} onOk={this.toggleErrorModal}
+                           header={"Error"}>
+                        {this.state.errorMessage}
                     </Modal>
                 </div>
             </div>

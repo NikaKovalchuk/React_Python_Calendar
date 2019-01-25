@@ -120,7 +120,6 @@ class EventList(APIView):
             if abs(event.start_date.date() - today.date()).days <= 1:
                 diff = datetime.combine(date.min, event.start_date.time()) - datetime.combine(date.min, today.time())
                 if event.notice:
-                    print(diff.seconds, 60 * 60 * 24)
                     if event.notification == self.notifications['day']:
                         if diff.seconds < 60 * 60 * 24:
                             result.append(event)
@@ -133,7 +132,6 @@ class EventList(APIView):
                     if event.notification == self.notifications['ten-minutes']:
                         if diff.seconds < 60 * 10:
                             result.append(event)
-        print (result)
         return result
 
 
