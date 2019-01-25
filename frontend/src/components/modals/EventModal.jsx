@@ -19,49 +19,47 @@ class EventModal extends Component {
             finish_date: new Date(),
             repeat: 0,
             notification: 0,
+            notice: false,
+
             isOpen: false,
             repeatOptions: [{0: 'No'}, {1: 'Day'}, {2: 'Week'}, {3: 'Month'}, {4: 'Year'}], // заменить на enum
-            NotificationOptions: [{0: 'No'}, {1: 'Day'}, {2: 'Hour'}, {3: '30 minutes'}, {4: '10 minutes'}] // заменить на enum
+            notificationOptions: [{0: 'No'}, {1: 'Day'}, {2: 'Hour'}, {3: '30 minutes'}, {4: '10 minutes'}] // заменить на enum
         };
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
         let hour = new Date().getHours()
+        let searchValue = /\+[0-9]*\:[0-9]*/
 
         if (nextProps.date != null) {
             let date = new Date(nextProps.date)
-            date = new Date(date.setHours(hour))
-            date = moment(date).format();
-            let value = date.replace(/\+[0-9]*\:[0-9]*/, '')
+            date = moment(new Date(date.setHours(hour))).format();
             this.setState({
-                start_date: value
+                start_date: date.replace(searchValue, '')
             })
 
             date = new Date(date)
-            date = new Date(date.setHours(hour + 1))
-            date = moment(date).format();
-            value = date.replace(/\+[0-9]*\:[0-9]*/, '')
+            date = moment(new Date(date.setHours(hour + 1))).format();
             this.setState({
-                finish_date: value
+                finish_date: date.replace(searchValue, '')
             })
         }
 
         if (nextProps.event !== {}) {
             if (nextProps.event.start_date) {
                 let date = moment(nextProps.event.start_date).format();
-                let value = date.replace(/\+[0-9]*\:[0-9]*/, '')
-
                 this.setState({
-                    start_date: value
+                    start_date: date.replace(searchValue, '')
                 })
             }
             if (nextProps.event.finish_date) {
                 let date = moment(nextProps.event.finish_date).format();
-                let value = date.replace(/\+[0-9]*\:[0-9]*/, '')
-
                 this.setState({
-                    finish_date: value
+                    finish_date: date.replace(searchValue, '')
                 })
+            }
+            if (nextProps.event.notification !== this.state.notificationOptions['No']) {
+                this.setState({notice: true})
             }
             this.setState({
                 id: nextProps.event.id,
@@ -75,7 +73,7 @@ class EventModal extends Component {
 
     selectNotification() {
         let options = []
-        options = this.state.NotificationOptions.map((o) => {
+        options = this.state.notificationOptions.map((o) => {
             o.key = Object.keys(o)[0]
             o.value = Object.values(o)[0]
             return (
@@ -90,29 +88,6 @@ class EventModal extends Component {
                            this.setState({notification: e.target.value})
                        }}
         >{options}</select>
-    }
-
-    onOk = () => {
-        let event = {
-            id: this.state.id,
-            title: this.state.title,
-            text: this.state.text,
-            start_date: this.state.start_date,
-            finish_date: this.state.finish_date,
-            repeat: this.state.repeat,
-            notification: this.state.notification,
-        }
-        this.props.onOk(event)
-    };
-
-    delete = () => {
-        this.props.deleteEvent(this.state.id).then(response => {
-            this.props.onCancel()
-        })
-    };
-
-    toggleModal = () => {
-        this.setState({isOpen: !this.state.isOpen});
     }
 
     selectRepeat() {
@@ -131,6 +106,31 @@ class EventModal extends Component {
                            this.setState({repeat: e.target.value})
                        }}>{options}</select>
     }
+
+    onOk = () => {
+        let event = {
+            id: this.state.id,
+            title: this.state.title,
+            text: this.state.text,
+            start_date: this.state.start_date,
+            finish_date: this.state.finish_date,
+            repeat: this.state.repeat,
+            notification: this.state.notification ,
+            notice: this.state.notification !== this.state.notificationOptions['No'] ? true:false
+        }
+        this.props.onOk(event)
+    };
+
+    delete = () => {
+        this.props.deleteEvent(this.state.id).then(response => {
+            this.props.onCancel()
+        })
+    };
+
+    toggleModal = () => {
+        this.setState({isOpen: !this.state.isOpen});
+    }
+
 
     render() {
         if (!this.props.show) {

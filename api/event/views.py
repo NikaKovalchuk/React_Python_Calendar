@@ -7,11 +7,8 @@ from django.http import Http404, HttpResponse
 from rest_framework import status, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from tablib import Dataset
-
 from app.settings import ADMIN_USER_ID
 from .models import Event
-from .resources import EventResource
 from .serializers import EventSerializer, NewEventSerializer
 
 
@@ -26,6 +23,7 @@ class EventList(APIView):
 
         finishDate = datetime.now()
         finishDate = finishDate.replace(hour=23, minute=59, second=59)
+        notification = False
 
         if not request.user.id:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
@@ -35,6 +33,8 @@ class EventList(APIView):
                 startDate = dateutil.parser.parse(request.query_params['startDate'])
             if 'finishDate' in request.query_params:
                 finishDate = dateutil.parser.parse(request.query_params['finishDate'])
+            if 'notification' in request.query_params:
+                notification = True
 
         events = Event.objects.filter(start_date__gte=startDate, finish_date__lte=finishDate, user=request.user.id,
                                       archived=False, repeat=self.repeat['no']) | \
@@ -47,7 +47,8 @@ class EventList(APIView):
 
         events = list(events)
         events = self.repeatedEvents(startDate=startDate, finishDate=finishDate, events=events, user=request.user)
-        notification = EventSerializer(self.notification(events), many=True)
+        if notification:
+            events = self.notification(events=events)
         serializer = EventSerializer(events, many=True)
         return Response(serializer.data)
 
@@ -119,6 +120,7 @@ class EventList(APIView):
             if abs(event.start_date.date() - today.date()).days <= 1:
                 diff = datetime.combine(date.min, event.start_date.time()) - datetime.combine(date.min, today.time())
                 if event.notice:
+                    print(diff.seconds, 60 * 60 * 24)
                     if event.notification == self.notifications['day']:
                         if diff.seconds < 60 * 60 * 24:
                             result.append(event)
@@ -131,6 +133,7 @@ class EventList(APIView):
                     if event.notification == self.notifications['ten-minutes']:
                         if diff.seconds < 60 * 10:
                             result.append(event)
+        print (result)
         return result
 
 
@@ -169,25 +172,3 @@ class EventDetail(APIView):
         event = self.get_object(pk, request)
         event.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class EventsExport(APIView):
-    permission_classes = [permissions.IsAuthenticated, ]
-
-    def get(self, request):
-        event_resource = EventResource()
-        dataset = event_resource.export()
-        response = HttpResponse(dataset.json, content_type='application/json')
-        response['Content-Disposition'] = 'attachment; filename="calendar.json"'
-        return response
-
-    def post(self, request):
-        event_resource = EventResource()
-        dataset = Dataset()
-        new_events = request.FILES['file']
-
-        imported_data = dataset.load(new_events.read())
-        result = event_resource.import_data(dataset, dry_run=True)
-
-        if not result.has_errors():
-            event_resource.import_data(dataset, dry_run=False)  # Actually import now

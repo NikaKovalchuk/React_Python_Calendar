@@ -59,6 +59,31 @@ export const deleteEvent = (id) => {
     }
 }
 
+
+export const loadNotifications = (startDate, finishDate) => {
+    return (dispatch, getState) => {
+        let headers = {"Content-Type": "application/json"};
+        let {token} = getState().auth;
+        if (token) {
+            headers["Authorization"] = `Token ${token}`;
+        }
+        startDate = new Date(startDate).toISOString()
+        finishDate = new Date(finishDate).toISOString()
+
+        return fetch("http://localhost:8000/api/event/?notification=true&startDate=" + startDate + "&finishDate=" + finishDate, {
+            headers,
+            method: "GET",
+        })
+            .then(res => res.json())
+            .then(events => {
+                return dispatch({
+                    type: 'LOAD_NOTIFICATIONS',
+                    events
+                })
+            })
+    }
+}
+
 export const loadEvents = (startDate, finishDate) => {
     return (dispatch, getState) => {
         let headers = {"Content-Type": "application/json"};
