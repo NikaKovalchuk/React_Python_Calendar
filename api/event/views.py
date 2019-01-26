@@ -43,6 +43,9 @@ class EventList(APIView):
                      archived=False, repeat=self.repeat['no']) | \
                  Event.objects.filter(
                      start_date__gte=start_date, finish_date__gte=finish_date, user=request.user.id,
+                     archived=False, repeat=self.repeat['no']) | \
+                 Event.objects.filter(
+                     start_date__lte=start_date, finish_date__gte=finish_date, user=request.user.id,
                      archived=False, repeat=self.repeat['no'])
 
         events = list(events)

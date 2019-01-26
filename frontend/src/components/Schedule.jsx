@@ -7,7 +7,6 @@ import EventModal from "./modals/EventModal";
 import Modal from "./modals/Modal";
 
 const viewType = {day: 0, week: 1, month: 2}
-const eventsPosition = {top: 0, middle: 1, bottom: 2}
 
 class Schedule extends Component {
 
@@ -281,7 +280,6 @@ class Schedule extends Component {
         const result = [];
         const events_limit = 3;
         let events_for_today = [];
-        let prevDayEventsPositions = [];
 
         for (let index = 0; index < this.state.events.length; index++) {
             let event = this.state.events[index]
@@ -290,32 +288,26 @@ class Schedule extends Component {
             let event_width = 0
 
             if (finish_date < end_of_week && finish_date > begin_of_week && start_date > begin_of_week && start_date < end_of_week) {
-                event_width = finish_date.getDate() - start_date.getDate()
+                event_width = finish_date.getDay() - start_date.getDay()
             } else if (start_date > begin_of_week && start_date < end_of_week) {
-                event_width = end_of_week.getDate() - start_date.getDate()
+                event_width = end_of_week.getDay() - start_date.getDay()
             } else if (finish_date < end_of_week && finish_date > begin_of_week) {
-                event_width = finish_date.getDate() - begin_of_week.getDate()
+                event_width = finish_date.getDay() - begin_of_week.getDay()
             } else {
-                event_width = end_of_week.getDate() - begin_of_week.getDate()
+                event_width = end_of_week.getDay() - begin_of_week.getDay()
             }
 
-            const width = 90 + event_width * 100
+            let width = 90 + event_width * 100
             if (start_date < end_of_today && finish_date > begin_of_today) {
                 events_for_today.push(event)
             }
 
             if (start_date <= end_of_today && start_date >= begin_of_today) {
                 let eventStyle = {width: width + '%',};
-                if (finish_date > end_of_week) {
-                    eventStyle = {
-                        width: width + 5 + '%',
-                        borderRadius: "5px 0px 0px 5px",
-                        marginRight: 0,
-                    };
-                }
 
                 if (events_for_today.length > events_limit) {
                     result.pop()
+
                     let buttonStyle = {}
                     if (result.length < events_limit - 1) {
                         let margin = 1
@@ -331,7 +323,6 @@ class Schedule extends Component {
                             marginTop: events_for_today.length > 2 ? '60px' : ' 30px',
                             width: width + '%',
                         }
-                        event.position = 1
                     }
                     result.push(<div className={'month-event'} style={eventStyle} key={event.id}
                                      onClick={(e) => this.onEventClick(e, event)}>{event.title}</div>)
@@ -341,7 +332,7 @@ class Schedule extends Component {
                 let radius = "0px 5px 5px 0px"
                 if (finish_date > end_of_week) {
                     radius = "0px"
-                    width = width+5
+                    width = width + 5
                 }
                 let eventStyle = {
                     width: width + 5 + '%',
@@ -378,7 +369,8 @@ class Schedule extends Component {
                             : dateFns.isSameDay(day, selectedDate) ? "selected" : ""}`}
                          onClick={() => this.onDateClick(cloneDay, null)}
                          key={day}>
-                        <div className="number" onClick={(e) => this.viewDay(e, cloneDay)}>{dateFns.format(day, "D")}</div>
+                        <div className="number"
+                             onClick={(e) => this.viewDay(e, cloneDay)}>{dateFns.format(day, "D")}</div>
                         {this.eventsMonth(day)}
                     </div>
                 );
