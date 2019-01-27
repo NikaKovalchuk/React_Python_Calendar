@@ -56,7 +56,6 @@ class EventList(APIView):
         serializer = EventSerializer(events, many=True)
         return Response(serializer.data)
 
-    @staticmethod
     def post(request):
         serializer_context = {'request': request, }
 
@@ -78,51 +77,32 @@ class EventList(APIView):
         )
 
         for event in extra:
-            checked_date = start_date
-            while checked_date < finish_date:
+            checked_start_date = start_date - timedelta(days=(event.finish_date - event.start_date).days)
+            while checked_start_date < finish_date:
+                new_event = copy.copy(event)
+                new_event.start_date = checked_start_date.replace(hour=new_event.start_date.hour,
+                                                                  minute=new_event.start_date.minute)
+                finish_checked_date = checked_start_date + timedelta(
+                    days=abs(event.start_date.date() - event.finish_date.date()).days)
+                new_event.finish_date = finish_checked_date.replace(hour=new_event.finish_date.hour,
+                                                                    minute=new_event.finish_date.minute)
+
                 if event.repeat == self.repeat['day']:
-                    new_event = copy.copy(event)
-                    new_event.start_date = checked_date.replace(hour=new_event.start_date.hour,
-                                                                minute=new_event.start_date.minute)
-                    finish_checked_date = checked_date + timedelta(
-                        days=abs(event.start_date.date() - event.finish_date.date()).days)
-                    new_event.finish_date = finish_checked_date.replace(hour=new_event.finish_date.hour,
-                                                                        minute=new_event.finish_date.minute)
                     events.append(new_event)
 
                 if event.repeat == self.repeat['week']:
-                    if abs(event.start_date.date() - checked_date.date()).days % 7 == 0:
-                        new_event = copy.copy(event)
-                        new_event.start_date = checked_date.replace(hour=new_event.start_date.hour,
-                                                                    minute=new_event.start_date.minute)
-                        finish_checked_date = checked_date + timedelta(
-                            days=abs(event.start_date.date() - event.finish_date.date()).days)
-                        new_event.finish_date = finish_checked_date.replace(hour=new_event.finish_date.hour,
-                                                                            minute=new_event.finish_date.minute)
+                    if abs(event.start_date.date() - checked_start_date.date()).days % 7 == 0:
                         events.append(new_event)
 
                 if event.repeat == self.repeat['month']:
-                    if event.start_date.day == checked_date.day:
-                        new_event = copy.copy(event)
-                        new_event.start_date = checked_date.replace(hour=new_event.start_date.hour,
-                                                                    minute=new_event.start_date.minute)
-                        finish_checked_date = checked_date + timedelta(
-                            days=abs(event.start_date.date() - event.finish_date.date()).days)
-                        new_event.finish_date = finish_checked_date.replace(hour=new_event.finish_date.hour,
-                                                                            minute=new_event.finish_date.minute)
+                    if event.start_date.day == checked_start_date.day:
                         events.append(new_event)
 
                 if event.repeat == self.repeat['year']:
-                    if event.start_date.day == checked_date.day and event.start_date.month == checked_date.month:
-                        new_event = copy.copy(event)
-                        new_event.start_date = checked_date.replace(hour=new_event.start_date.hour,
-                                                                    minute=new_event.start_date.minute)
-                        finish_checked_date = checked_date + timedelta(
-                            days=abs(event.start_date.date() - event.finish_date.date()).days)
-                        new_event.finish_date = finish_checked_date.replace(hour=new_event.finish_date.hour,
-                                                                            minute=new_event.finish_date.minute)
+                    if event.start_date.day == checked_start_date.day and event.start_date.month == checked_start_date.month:
                         events.append(new_event)
-                checked_date = checked_date + timedelta(days=1)
+
+                checked_start_date = checked_start_date + timedelta(days=1)
         return events
 
     def notification(self, events):
