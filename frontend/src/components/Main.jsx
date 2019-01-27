@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {auth, events} from "../actions";
+import {auth} from "../actions";
 import Calendar from "./Calendar"
 import Schedule from "./Schedule"
 import "../css/main.css"
@@ -50,7 +50,7 @@ const mapStateToProps = state => {
         auth: state.auth,
         events: state.events,
     }
-}
+};
 
 const mapDispatchToProps = dispatch => {
     return {
@@ -58,6 +58,6 @@ const mapDispatchToProps = dispatch => {
             return dispatch(auth.loadUser());
         },
     }
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

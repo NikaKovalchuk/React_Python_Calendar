@@ -3,10 +3,11 @@ import datetime
 from datetime import datetime, timedelta, date
 
 import dateutil.parser
-from django.http import Http404, HttpResponse
+from django.http import Http404
 from rest_framework import status, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
 from app.settings import ADMIN_USER_ID
 from .models import Event
 from .serializers import EventSerializer, NewEventSerializer

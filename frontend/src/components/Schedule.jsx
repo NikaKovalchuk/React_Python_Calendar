@@ -6,7 +6,7 @@ import "../css/schedule.css"
 import EventModal from "./modals/EventModal";
 import Modal from "./modals/Modal";
 
-const viewType = {day: 0, week: 1, month: 2}
+const viewType = {day: 0, week: 1, month: 2};
 
 class Schedule extends Component {
 
@@ -24,8 +24,8 @@ class Schedule extends Component {
                 id: null,
                 title: "",
                 text: "",
-                start_date: new Date().toISOString(),
-                finish_date: new Date(new Date().setHours(new Date().getHours() + 1)).toISOString(),
+                startDate: new Date().toISOString(),
+                finishDate: new Date(new Date().setHours(new Date().getHours() + 1)).toISOString(),
                 repeat: 0,
                 notice: false,
                 notification: 0,
@@ -33,7 +33,6 @@ class Schedule extends Component {
             event: {},
             notificationEvent: {},
             notifications: {},
-
             events: {},
             isOpen: false,
             isOpenNotification: false,
@@ -48,7 +47,7 @@ class Schedule extends Component {
     }
 
     componentWillReceiveProps(props) {
-        let update = false
+        let update = false;
 
         if (props.selectedDate) {
             if (props.selectedDate !== this.state.selectedDate) {
@@ -74,7 +73,7 @@ class Schedule extends Component {
         this.props.loadNotifications(startDate, finishDate).then(response => {
             this.setState({notifications: this.props.events});
             if (this.props.events !== []) {
-                let event = this.props.events[this.props.events.length - 1]
+                let event = this.props.events[this.props.events.length - 1];
                 if (event) {
                     this.setState({
                         isOpenNotification: true,
@@ -89,34 +88,34 @@ class Schedule extends Component {
         this.setState({
             selectedDate: day,
             view: viewType.day
-        })
+        });
         e.stopPropagation();
-    }
+    };
 
     dismissNotification = () => {
-        let event = this.state.notificationEvent
-        let events = this.state.notifications
-        events.pop()
-        event.notice = false
-        this.props.updateEvent(event.id, event)
+        let event = this.state.notificationEvent;
+        let events = this.state.notifications;
+        events.pop();
+        event.notice = false;
+        this.props.updateEvent(event.id, event);
 
         if (events !== []) {
-            let event = events[events.length - 1]
+            let event = events[events.length - 1];
             this.setState({
                 isOpenNotification: event ? true : false,
                 notificationEvent: event ? event : {},
                 notifications: events,
             });
         }
-    }
+    };
 
     toggleModal = () => {
         if (this.state.isOpen === true) {
-            this.setState({event: this.state.newEvent,})
+            this.setState({event: this.state.newEvent,});
             this.updateEvents(this.state.selectedDate)
         }
         this.setState({isOpen: !this.state.isOpen});
-    }
+    };
 
     complite = (event) => {
         if (event.id) {
@@ -128,7 +127,7 @@ class Schedule extends Component {
                 this.toggleModal()
             });
         }
-    }
+    };
 
 
     onDateClick = (day, hour) => {
@@ -140,70 +139,73 @@ class Schedule extends Component {
             clickedDate: day,
         });
         this.toggleModal()
-    }
+    };
 
     onEventClick = (e, event) => {
         this.setState({
             event: event,
             clickedDate: null,
         });
-        this.toggleModal()
+        this.toggleModal();
         e.stopPropagation();
-    }
+    };
 
     events(day, hour) {
         const result = [];
-        let startOfDay = dateFns.startOfDay(day)
-        let endOfDay = dateFns.endOfDay(day)
-        let events = []
-        const event_height = 20;
-        const between_days_height = 10;
-        const day_length = 23
-        const class_name = "week-and-day-event"
-        const class_begin = " begin"
-        const class_middle = " middle"
-        const class_end = " end"
+        let startOfDay = dateFns.startOfDay(day);
+        let endOfDay = dateFns.endOfDay(day);
+        let events = [];
+
+        const eventHeight = 20;
+        const betweenDaysHeight = 10;
+        const dayLength = 23;
+        const eventMargin = 5;
+
+        const className = "week-and-day-event";
+        const classBegin = " begin";
+        const classMiddle = " middle";
+        const classEnd = " end";
 
         for (let index = 0; index < this.state.events.length; index++) {
-            let event = this.state.events[index]
-            let start_date = new Date(event.start_date)
-            let finish_date = new Date(event.finish_date)
-            let add = false
-            let event_style = []
-            let height = event_height
+            let event = this.state.events[index];
+            let startDate = new Date(event.start_date);
+            let finishDate = new Date(event.finish_date);
+            let add = false;
+            let eventStyle = [];
+            let height = eventHeight;
 
-            if (start_date <= endOfDay && finish_date >= startOfDay) {
-                let current_class = class_name
-                if (start_date >= startOfDay) {
-                    if (start_date.getHours() == hour) {
+            if (startDate <= endOfDay && finishDate >= startOfDay) {
+                let currentClass = className;
+                if (startDate >= startOfDay) {
+                    if (startDate.getHours() == hour) {
                         add = true
                     }
-                    if (finish_date <= endOfDay) {
-                        height = height + (finish_date.getHours() - hour) * (event_height + between_days_height)
+                    if (finishDate <= endOfDay) {
+                        height = height + (finishDate.getHours() - hour) * (eventHeight + betweenDaysHeight)
                     } else {
-                        height = height + (day_length-hour) * (event_height + between_days_height) + 5
-                        current_class += class_begin
+                        height = height + (dayLength - hour) * (eventHeight + betweenDaysHeight) + eventMargin;
+                        currentClass += classBegin
                     }
                 }
 
-                if (start_date < startOfDay) {
+                if (startDate < startOfDay) {
                     if (startOfDay.getHours() == hour) {
                         add = true
                     }
-                    if (finish_date <= endOfDay) {
-                        height = height + (finish_date.getHours() - hour) * (event_height + between_days_height) + 5
-                        current_class += class_end
+                    if (finishDate <= endOfDay) {
+                        height = height + (finishDate.getHours() - hour) * (eventHeight + betweenDaysHeight) + eventMargin;
+                        currentClass += classEnd
                     } else
-                        height = height + (day_length-hour) * (event_height + between_days_height) + 10
-                        current_class += class_middle
+                        height = height + (dayLength - hour) * (eventHeight + betweenDaysHeight) + eventMargin * 2;
+                    currentClass += classMiddle
                 }
 
                 if (add === true) {
-                    event_style = {
+                    eventStyle = {
                         height: height + 'px',
-                    }
-                    result.push(<div className={current_class} key={event.id} style={event_style}
-                                     onClick={(e) => this.onEventClick(e, event)}>{event.title}</div>)
+                    };
+                    result.push(<div className={currentClass} key={event.id} style={eventStyle}
+                                     onClick={(e) => this.onEventClick(e, event)}>{event.title}</div>);
                     events.push(event)
                 }
 
@@ -214,16 +216,16 @@ class Schedule extends Component {
 
     dayTable() {
         const {selectedDate} = this.state;
-        const dayStart = dateFns.startOfDay(selectedDate)
-        const dayEnd = dateFns.endOfDay(selectedDate)
-        const day = selectedDate
+        const dayStart = dateFns.startOfDay(selectedDate);
+        const dayEnd = dateFns.endOfDay(selectedDate);
+        const day = selectedDate;
         const hours = [];
 
         let hour = dayStart;
         hours.push(<div className="day-title" key={day}><span>{dateFns.format(day, "D")}</span></div>);
 
         while (hour <= dayEnd) {
-            const cloneHour = hour
+            const cloneHour = hour;
             hours.push(
                 <div className="row" key={'row' + hour}>
                     <div className={'day-view-time'} key={'day-view-time'}>
@@ -244,8 +246,8 @@ class Schedule extends Component {
     weekTable() {
         const {selectedDate} = this.state;
         const weekStart = dateFns.startOfWeek(selectedDate);
-        const dayStart = dateFns.startOfDay(selectedDate)
-        const dayEnd = dateFns.endOfDay(selectedDate)
+        const dayStart = dateFns.startOfDay(selectedDate);
+        const dayEnd = dateFns.endOfDay(selectedDate);
         const hours = [];
 
         let week = [];
@@ -262,7 +264,7 @@ class Schedule extends Component {
             day = dateFns.addDays(day, 1);
         }
         hours.push(<div className="row" key={day}> {week} </div>);
-        week = []
+        week = [];
 
         while (hour <= dayEnd) {
             let day = weekStart;
@@ -273,8 +275,8 @@ class Schedule extends Component {
             );
 
             for (let i = 0; i < 7; i++) {
-                const cloneHour = hour
-                const cloneday = day
+                const cloneHour = hour;
+                const cloneday = day;
                 week.push(
                     <div className="week-view-day" key={day + '-week-view-day'}
                          onClick={() => this.onDateClick(cloneday, cloneHour)}>
@@ -291,87 +293,98 @@ class Schedule extends Component {
     }
 
     eventsMonth(today) {
-        const begin_of_today = dateFns.startOfDay(today)
-        const end_of_today = dateFns.endOfDay(today)
-        const begin_of_week = dateFns.startOfWeek(today)
-        const end_of_week = dateFns.endOfWeek(today)
+        const eventsLimit = 3;
+        const cellWidth = 100;
+        const eventMargin = 5;
+        const eventWidth = cellWidth - 2 * eventMargin;
+        const eventheight = 25;
+
+        const beginOfToday = dateFns.startOfDay(today);
+        const endOfToday = dateFns.endOfDay(today);
+        const beginOfWeek = dateFns.startOfWeek(today);
+        const endOfWeek = dateFns.endOfWeek(today);
         const result = [];
-        const events_limit = 3;
-        let events_for_today = [];
-        const class_name = "month-event"
-        const class_begin = " begin"
-        const class_middle = " middle"
-        const class_end = " end"
+        let eventsForToday = [];
+
+        const className = "month-event";
+        const classBegin = " begin";
+        const classMiddle = " middle";
+        const classEnd = " end";
 
         for (let index = 0; index < this.state.events.length; index++) {
-            let event = this.state.events[index]
-            let finish_date = new Date(event.finish_date)
-            let start_date = new Date(event.start_date)
-            let event_width = 0
-            let current_class = class_name
+            let event = this.state.events[index];
+            let finishDate = new Date(event.finish_date);
+            let startDate = new Date(event.start_date);
+            let numberOfDays = 0;
+            let currentClass = className;
 
-            if (finish_date < end_of_week && finish_date > begin_of_week && start_date > begin_of_week && start_date < end_of_week) {
-                event_width = finish_date.getDay() - start_date.getDay()
-            } else if (start_date > begin_of_week && start_date < end_of_week) {
-                event_width = end_of_week.getDay() - start_date.getDay()
-            } else if (finish_date < end_of_week && finish_date > begin_of_week) {
-                event_width = finish_date.getDay() - begin_of_week.getDay()
+            if (finishDate < endOfWeek && finishDate > beginOfWeek && startDate > beginOfWeek && startDate < endOfWeek) {
+                numberOfDays = finishDate.getDay() - startDate.getDay()
+            } else if (startDate > beginOfWeek && startDate < endOfWeek) {
+                numberOfDays = endOfWeek.getDay() - startDate.getDay()
+            } else if (finishDate < endOfWeek && finishDate > beginOfWeek) {
+                numberOfDays = finishDate.getDay() - beginOfWeek.getDay()
             } else {
-                event_width = end_of_week.getDay() - begin_of_week.getDay()
+                numberOfDays = endOfWeek.getDay() - beginOfWeek.getDay()
             }
 
-            let width = 90 + event_width * 100
-            if (start_date < end_of_today && finish_date > begin_of_today) {
-                events_for_today.push(event)
+            let width = eventWidth + numberOfDays * cellWidth;
+            if (startDate < endOfToday && finishDate > beginOfToday) {
+                eventsForToday.push(event)
             }
 
-            if (start_date <= end_of_today && start_date >= begin_of_today) {
-                if (events_for_today.length > events_limit) {
-                    result.pop()
+            if (startDate <= endOfToday && startDate >= beginOfToday) {
+                if (eventsForToday.length > eventsLimit) {
+                    result.pop();
 
-                    let buttonStyle = {}
-                    if (result.length < events_limit - 1) {
-                        let margin = 1
-                        if (result.length === 0) margin = 26
+                    let buttonStyle = {};
+                    if (result.length < eventsLimit - 1) {
+                        let margin = 1;
+                        if (result.length === 0) margin = 25;
                         buttonStyle = {marginTop: margin + '%',}
                     }
                     result.push(<div className={"more-events"} style={buttonStyle}
                                      onClick={(e) => this.viewDay(e, today)}
                                      key={"more"}> View all events </div>)
                 } else {
-                    if (finish_date > end_of_week){
-                        current_class += class_begin
+                    if (finishDate > endOfWeek) {
+                        currentClass += classBegin;
                         width += 5
                     }
                     let eventStyle = {width: width + '%',};
-                    if (result.length === 0 && events_for_today.length > 1) {
+                    if (result.length === 0 && eventsForToday.length > 1) {
+                        let margin = eventheight + eventMargin;
+                        if (eventsForToday.length > 2) {
+                            margin *= 2
+                        }
                         eventStyle = {
-                            marginTop: events_for_today.length > 2 ? '60px' : ' 30px',
+                            marginTop: margin + 'px',
                             width: width + '%',
                         }
 
                     }
-                    result.push(<div className={current_class} style={eventStyle} key={event.id}
+                    result.push(<div className={currentClass} style={eventStyle} key={event.id}
                                      onClick={(e) => this.onEventClick(e, event)}>{event.title}</div>)
                 }
 
-            } else if (start_date < begin_of_week && finish_date > begin_of_week && begin_of_today <= begin_of_week) {
-                let class_to_add = class_end
-                if (finish_date > end_of_week) {
-                    class_to_add = class_middle
-                    width = width + 5
+            } else if (startDate < beginOfWeek && finishDate > beginOfWeek && beginOfToday <= beginOfWeek) {
+                let classToAdd = classEnd;
+                if (finishDate > endOfWeek) {
+                    classToAdd = classMiddle;
+                    width = width + eventMargin
                 }
-                current_class += class_to_add
+                currentClass += classToAdd;
                 let eventStyle = {
-                    width: width + 5 + '%',
+                    width: width + eventMargin + '%',
                 };
-                result.push(<div className={current_class} style={eventStyle}
+                result.push(<div className={currentClass} style={eventStyle}
                                  key={event.id + "_" + event.title + today}
                                  onClick={(e) => this.onEventClick(e, event)}>{event.title}</div>)
             }
 
         }
 
+        console.log(eventsForToday);
         return <div className="month-events">{result}</div>;
     }
 
@@ -477,7 +490,7 @@ const mapStateToProps = state => {
         auth: state.auth,
         events: state.events,
     }
-}
+};
 
 const mapDispatchToProps = dispatch => {
     return {
@@ -497,6 +510,6 @@ const mapDispatchToProps = dispatch => {
             return dispatch(events.updateEvent(id, model));
         },
     }
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Schedule);

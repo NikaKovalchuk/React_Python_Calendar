@@ -37,21 +37,12 @@
    margin: 10px;
 }
 
-.event-modal-window {
-    background: #fff;
-    border-radius: 5px;
-    max-width: 1000px;
+.modal-window.event {
     min-height: 450px;
-    margin: 0 auto;
-    padding: 30px;
 }
 
 .event-modal-body {
     font-size: 20pt;
     font-family: var(--main-font);
     height: 340px;
-}
-
-.event-footer {
-    text-align: center;
 }

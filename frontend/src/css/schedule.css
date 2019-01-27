@@ -16,18 +16,15 @@
     margin-bottom: 10px;
 }
 
-
-
-
-
-more-events {
+.more-events {
     margin: 1% 5%;
-
     padding: 2px 4px;
+
     width: 90%;
     text-align: center;
-    background: var(--text-color);
     border-radius: 5px;
+
+    background: var(--text-color);
     color: var(--neutral-color);
 }
 
@@ -54,11 +51,11 @@ more-events {
 }
 
 .month-event {
-    display: inline-block;
     font-size: 11pt;
     font-size: 10pt;
+    max-height: 25px;
 
-    margin: 1% 5%;
+    margin: 5px 5%;
     padding: 2px 4px;
     position: sticky;
 
@@ -104,8 +101,9 @@ more-events {
     display: inline-block;
     font-size: 11pt;
     font-size: 10pt;
-    position: absolute;
 
+    vertical-align: top;
+    max-width: calc(90% /2) ;
     margin: 5px;
     padding: 2px 4px;
 
@@ -129,10 +127,6 @@ more-events {
     margin-top: 0px;
     border-radius: 0px 0px 5px 5px;
 }
-
-
-
-
 
 
 

@@ -1,3 +1,9 @@
+.form {
+    float: left;
+    display: inline;
+    margin-top: 1%;
+}
+
 .group {
     margin-bottom: 2%;
     clear: both;
@@ -20,21 +26,4 @@
     padding-left: 0.5em;
     padding-right: 0.5em;
     font-size: 15pt;
-}
-
-.form {
-    float: left;
-    display: inline;
-}
-
-.actions {
-    float: left;
-}
-
-.dynamic-form {
-    margin-top: 1%;
-}
-
-.back-button{
-    margin-top: 1%;
 }

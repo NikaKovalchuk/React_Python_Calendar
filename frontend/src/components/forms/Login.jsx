@@ -25,7 +25,7 @@ class Login extends Component {
         }
         return (
             <div className={'form'}>
-                <form onSubmit={this.onSubmit} className={'dynamic-form '}>
+                <form onSubmit={this.onSubmit}>
                     <fieldset>
                         <legend className={'title'}>Login</legend>
                         {this.props.errors.length > 0 && (

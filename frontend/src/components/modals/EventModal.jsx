@@ -184,13 +184,13 @@ class EventModal extends Component {
 
         return (
             <div className="backdrop">
-                <div className="event-modal-window">
+                <div className="modal-window event">
                     <div className="header">
                         {label}
                     </div>
                     <div className="event-modal-body">
                         <div className="form">
-                            <form className="dynamic-form">
+                            <form>
 
                                 <div key={'gtitle'} className="group">
                                     <label className="label" key={'ltitle'} htmlFor={'title'}> Title </label>
@@ -242,7 +242,7 @@ class EventModal extends Component {
                             </form>
                         </div>
                     </div>
-                    <div className="event-footer">
+                    <div className="footer">
                         {buttons}
                     </div>
                     <Modal show={this.state.isOpen} onCancel={this.toggleModal} onOk={this.delete}
