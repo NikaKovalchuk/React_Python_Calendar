@@ -56,6 +56,7 @@ class EventList(APIView):
         serializer = EventSerializer(events, many=True)
         return Response(serializer.data)
 
+    @staticmethod
     def post(request):
         serializer_context = {'request': request, }
 
