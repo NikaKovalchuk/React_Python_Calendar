@@ -1,6 +1,7 @@
 import copy
 import datetime
 from datetime import datetime, timedelta, date
+from django.utils import timezone
 
 import dateutil.parser
 from django.http import Http404
@@ -19,10 +20,10 @@ class EventList(APIView):
     notifications = {'no': 0, 'day': 1, 'hour': 2, 'half-hour': 3, 'ten-minutes': 4}
 
     def get(self, request):
-        start_date = datetime.now()
+        start_date = timezone.now()
         start_date = start_date.replace(hour=0, minute=0, second=0)
 
-        finish_date = datetime.now()
+        finish_date = timezone.now()
         finish_date = finish_date.replace(hour=23, minute=59, second=59)
         notification = False
 

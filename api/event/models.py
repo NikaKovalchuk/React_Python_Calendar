@@ -1,6 +1,6 @@
-from datetime import datetime
 from api.user.models import User
 from django.db import models
+from django.utils import timezone
 
 
 class Event(models.Model):
@@ -8,10 +8,10 @@ class Event(models.Model):
     title = models.CharField(max_length=100, null=False)
     text = models.TextField(max_length=1000, null=False, blank=True)
 
-    create_date = models.DateTimeField(default=datetime.now, blank=True, null=True)
-    update_date = models.DateTimeField(default=datetime.now, blank=True, null=True)
-    start_date = models.DateTimeField(default=datetime.now, blank=True, null=True)
-    finish_date = models.DateTimeField(default=datetime.now, blank=True, null=True)
+    create_date = models.DateTimeField(default=timezone.now, blank=True, null=True)
+    update_date = models.DateTimeField(default=timezone.now, blank=True, null=True)
+    start_date = models.DateTimeField(default=timezone.now, blank=True, null=True)
+    finish_date = models.DateTimeField(default=timezone.now, blank=True, null=True)
     repeat = models.IntegerField(default=0, blank=True, null=True)
 
     archived = models.BooleanField(null=True, blank=True, default=False)
@@ -33,12 +33,12 @@ class Event(models.Model):
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None, *args, **kwargs):
-        self.update_date = datetime.now()
+        self.update_date = timezone.now()
         super(Event, self).save(*args, **kwargs)
 
     def delete(self, using=None, keep_parents=False):
         self.archived = True
-        self.archived_date = datetime.now()
+        self.archived_date = timezone.now()
         self.save()
 
     def get_user(self):
