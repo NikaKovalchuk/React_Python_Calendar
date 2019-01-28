@@ -19,7 +19,7 @@
 .more-events {
     margin: 1% 5%;
     padding: 2px 4px;
-    font-size: 10pt;
+    font-size: 11pt;
 
     width: 90%;
     text-align: center;
@@ -58,7 +58,6 @@
 
     margin: 5px 5%;
     padding: 2px 4px;
-    position: sticky;
     opacity: 0.8;
 
     border-radius: 5px;

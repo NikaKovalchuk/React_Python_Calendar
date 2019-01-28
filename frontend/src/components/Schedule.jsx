@@ -340,7 +340,7 @@ class Schedule extends Component {
                     let buttonStyle = {};
                     if (result.length < eventsLimit - 1) {
                         let margin = 1;
-                        if (result.length === 0) margin = 25;
+                        if (result.length === 0) margin = 30;
                         buttonStyle = {marginTop: margin + '%',}
                     }
                     result.push(<div className={"more-events"} style={buttonStyle}
