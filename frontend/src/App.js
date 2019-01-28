@@ -27,7 +27,7 @@ class RootContainerComponent extends Component {
                 return <Redirect to="/login"/>;
             }
         }}/>
-    }
+    };
 
 
     render() {
@@ -55,7 +55,7 @@ const mapStateToProps = state => {
     return {
         auth: state.auth,
     }
-}
+};
 
 const mapDispatchToProps = dispatch => {
     return {
@@ -63,7 +63,7 @@ const mapDispatchToProps = dispatch => {
             return dispatch(auth.loadUser());
         }
     }
-}
+};
 
 let RootContainer = connect(mapStateToProps, mapDispatchToProps)(RootContainerComponent);
 

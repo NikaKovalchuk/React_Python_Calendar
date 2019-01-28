@@ -26,7 +26,7 @@ class Register extends Component {
         }
         return (
             <div className={'form'}>
-                <form onSubmit={this.onSubmit} className={'dynamic-form '}>
+                <form onSubmit={this.onSubmit} >
                     <fieldset>
                         <legend className={'title'}>Register</legend>
                         {this.props.errors.length > 0 && (

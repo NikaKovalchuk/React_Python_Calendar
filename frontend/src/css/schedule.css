@@ -11,33 +11,75 @@
 
 .view-buttons {
     text-align: right;
-    width:calc(100% / 2);
-    display: inline-block;margin-bottom: 10px;
+    width: calc(100% / 2);
+    display: inline-block;
+    margin-bottom: 10px;
 }
 
+.more-events {
+    margin: 1% 5%;
+    padding: 2px 4px;
+    font-size: 11pt;
+
+    width: 90%;
+    text-align: center;
+    border-radius: 5px;
+
+    background: var(--text-color);
+    color: var(--neutral-color);
+}
+
+.number{
+    text-align: center;
+    font-size: 10pt;
+}
+
+.number:hover{
+    background:var(--text-color) ;
+    color: var(--neutral-color);
+}
 
 .month-view-day {
     width: calc(100% / 7);
     height: 120px;
-    border: 0.5px solid var(--border-color);
+    border: 0.1px solid var(--border-color);
     cursor: pointer;
 }
 
 .month-view-day span {
-    margin: 5px;
+    margin: 1% 5%;
     font-size: 82.5%;
 }
 
 .month-event {
-    display: inline-block;
     font-size: 11pt;
-    margin: 5px;
+    font-size: 10pt;
+    max-height: 25px;
+
+    margin: 5px 5%;
+    padding: 2px 4px;
+    opacity: 0.8;
+
     border-radius: 5px;
     background: var(--event-background);
     color: var(--neutral-color);
-    padding: 2px 4px;
-    font-size: 10pt;
 }
+
+.month-event.begin {
+    border-radius: 5px 0px 0px 5px;
+    margin-right: 0px;
+}
+
+.month-event.middle {
+    border-radius: 0px;
+    margin-left: 0px;
+}
+.month-event.end {
+    border-radius: 0px 5px 5px 0px;
+    margin-left: 0px;
+}
+
+
 
 .empty-week-title {
     width: 5%;
@@ -45,7 +87,8 @@
 
 .week-view-day {
     width: calc(95% / 7);
-    border: 0.5px solid var(--border-color);
+    border: 0.1px solid var(--border-color);
+    height: 30px;
 }
 
 .week-view-day-title {
@@ -55,11 +98,40 @@
     text-align: center;
 }
 
-.week-event{
+.week-and-day-event {
+    display: inline-block;
+    font-size: 11pt;
+    font-size: 10pt;
 
+    vertical-align: top;
+    max-width: calc(90% /2) ;
+    margin: 5px;
+    padding: 2px 4px;
+
+    border-radius: 5px;
+    background: var(--event-background);
+    color: var(--neutral-color);
+    opacity: 0.9;
 }
 
-.day-title{
+.week-and-day-event.begin {
+    margin-bottom: 0px;
+    border-radius: 5px 5px 0px 0px ;
+}
+
+.week-and-day-event.middle {
+    margin: 0px 5px;
+    border-radius: 0px;
+}
+
+.week-and-day-event.end {
+    margin-top: 0px;
+    border-radius: 0px 0px 5px 5px;
+}
+
+
+
+.day-title {
     width: 100%;
     color: var(--neutral-color);
     background: var(--event-background);
@@ -67,6 +139,7 @@
 }
 
 .day-view-time {
+     height: 30px;
     width: 5%;
     color: var(--neutral-color);
     background: var(--event-background);
@@ -74,11 +147,7 @@
 }
 
 .day-view-data {
+    height: 30px;
     width: 95%;
-    border: 0.5px solid var(--border-color);
+    border: 0.1px solid var(--border-color);
 }
-
-.disabled .event {
-    background: #98a8b6;
-}
-

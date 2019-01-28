@@ -51,7 +51,7 @@ const mapStateToProps = state => {
         events: state.events,
         user: state.auth.user,
     }
-}
+};
 
 const mapDispatchToProps = dispatch => {
     return {
@@ -63,6 +63,6 @@ const mapDispatchToProps = dispatch => {
         },
         logout: () => dispatch(auth.logout()),
     }
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ToolBar);

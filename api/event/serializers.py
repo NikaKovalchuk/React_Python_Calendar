@@ -9,13 +9,15 @@ class EventSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Event
-        fields = ('id', 'title', 'text', 'start_date', 'finish_date', 'archived', 'user', 'repeat', 'notification', 'notice')
+        fields = (
+        'id', 'title', 'text', 'start_date', 'finish_date', 'archived', 'user', 'repeat', 'notification', 'notice')
+
 
 class ExportEventSerializer(serializers.HyperlinkedModelSerializer):
-
     class Meta:
         model = Event
         fields = ('title', 'text', 'start_date', 'finish_date', 'archived', 'repeat')
+
 
 class NewEventSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

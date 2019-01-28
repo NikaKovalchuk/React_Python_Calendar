@@ -6,7 +6,7 @@ import "../css/schedule.css"
 import EventModal from "./modals/EventModal";
 import Modal from "./modals/Modal";
 
-const viewType = {day: 1, week: 2, month: 3}
+const viewType = {day: 0, week: 1, month: 2};
 
 class Schedule extends Component {
 
@@ -24,16 +24,16 @@ class Schedule extends Component {
                 id: null,
                 title: "",
                 text: "",
-                start_date: new Date().toISOString(),
-                finish_date: new Date(new Date().setHours(new Date().getHours() + 1)).toISOString(),
+                startDate: new Date().toISOString(),
+                finishDate: new Date(new Date().setHours(new Date().getHours() + 1)).toISOString(),
                 repeat: 0,
                 notice: false,
                 notification: 0,
             },
+
             event: {},
             notificationEvent: {},
             notifications: {},
-
             events: {},
             isOpen: false,
             isOpenNotification: false,
@@ -48,7 +48,7 @@ class Schedule extends Component {
     }
 
     componentWillReceiveProps(props) {
-        let update = false
+        let update = false;
 
         if (props.selectedDate) {
             if (props.selectedDate !== this.state.selectedDate) {
@@ -64,7 +64,6 @@ class Schedule extends Component {
         }
     }
 
-
     updateEvents(date) {
         const startDate = dateFns.startOfWeek(dateFns.startOfMonth(date)).toISOString();
         const finishDate = dateFns.endOfWeek(dateFns.endOfMonth(date)).toISOString();
@@ -75,7 +74,7 @@ class Schedule extends Component {
         this.props.loadNotifications(startDate, finishDate).then(response => {
             this.setState({notifications: this.props.events});
             if (this.props.events !== []) {
-                let event = this.props.events[this.props.events.length - 1]
+                let event = this.props.events[this.props.events.length - 1];
                 if (event) {
                     this.setState({
                         isOpenNotification: true,
@@ -86,32 +85,40 @@ class Schedule extends Component {
         });
     }
 
-    toggleModal = () => {
-        if (this.state.isOpen == true) {
-            this.setState({event: this.state.newEvent,})
-            this.updateEvents(this.state.selectedDate)
-        }
-        this.setState({isOpen: !this.state.isOpen});
-    }
+    viewDay = (e, day) => {
+        this.setState({
+            selectedDate: day,
+            view: viewType.day
+        });
+        e.stopPropagation();
+    };
 
     dismissNotification = () => {
-        let event = this.state.notificationEvent
-        let events = this.state.notifications
-        events.pop()
-        event.notice = false
-        this.props.updateEvent(event.id, event)
+        let event = this.state.notificationEvent;
+        let events = this.state.notifications;
+        events.pop();
+        event.notice = false;
+        this.props.updateEvent(event.id, event);
 
         if (events !== []) {
-            let event = events[events.length - 1]
+            let event = events[events.length - 1];
             this.setState({
                 isOpenNotification: event ? true : false,
                 notificationEvent: event ? event : {},
                 notifications: events,
             });
         }
-    }
+    };
 
-    complite = (event) => {
+    toggleModal = () => {
+        if (this.state.isOpen === true) {
+            this.setState({event: this.state.newEvent,});
+            this.updateEvents(this.state.selectedDate)
+        }
+        this.setState({isOpen: !this.state.isOpen});
+    };
+
+    complete = (event) => {
         if (event.id) {
             this.props.updateEvent(event.id, event).then(response => {
                 this.toggleModal()
@@ -121,7 +128,7 @@ class Schedule extends Component {
                 this.toggleModal()
             });
         }
-    }
+    };
 
     onDateClick = (day, hour) => {
         if (hour != null) {
@@ -132,19 +139,304 @@ class Schedule extends Component {
             clickedDate: day,
         });
         this.toggleModal()
-    }
+    };
 
     onEventClick = (e, event) => {
-
         this.setState({
             event: event,
             clickedDate: null,
         });
-        this.toggleModal()
+        this.toggleModal();
         e.stopPropagation();
+    };
+
+    events(day, hour) {
+        const result = [];
+        let startOfDay = dateFns.startOfDay(day);
+        let endOfDay = dateFns.endOfDay(day);
+        let events = [];
+
+        const eventHeight = 20;
+        const betweenDaysHeight = 10;
+        const dayLength = 23;
+        const eventMargin = 5;
+
+        const className = "week-and-day-event";
+        const classBegin = " begin";
+        const classMiddle = " middle";
+        const classEnd = " end";
+
+        for (let index = 0; index < this.state.events.length; index++) {
+            let event = this.state.events[index];
+            let startDate = new Date(event.start_date);
+            let finishDate = new Date(event.finish_date);
+            let add = false;
+            let eventStyle = [];
+            let height = eventHeight;
+
+            if (startDate <= endOfDay && finishDate >= startOfDay) {
+                let currentClass = className;
+                if (startDate >= startOfDay) {
+                    if (startDate.getHours() == hour) {
+                        add = true
+                    }
+                    if (finishDate <= endOfDay) {
+                        height = height + (finishDate.getHours() - hour) * (eventHeight + betweenDaysHeight)
+                    } else {
+                        height = height + (dayLength - hour) * (eventHeight + betweenDaysHeight) + eventMargin;
+                        currentClass += classBegin
+                    }
+                }
+
+                if (startDate < startOfDay) {
+                    if (startOfDay.getHours() == hour) {
+                        add = true
+                    }
+                    if (finishDate <= endOfDay) {
+                        height = height + (finishDate.getHours() - hour) * (eventHeight + betweenDaysHeight) + eventMargin;
+                        currentClass += classEnd
+                    } else
+                        height = height + (dayLength - hour) * (eventHeight + betweenDaysHeight) + eventMargin * 2;
+                    currentClass += classMiddle
+                }
+
+                if (add === true) {
+                    eventStyle = {
+                        height: height + 'px',
+                    };
+                    result.push(<div className={currentClass} key={event.id} style={eventStyle}
+                                     onClick={(e) => this.onEventClick(e, event)}>{event.title}</div>);
+                    events.push(event)
+                }
+
+            }
+        }
+        return <div>{result}</div>;
     }
 
-    renderButtons() {
+    dayTable() {
+        const {selectedDate} = this.state;
+        const dayStart = dateFns.startOfDay(selectedDate);
+        const dayEnd = dateFns.endOfDay(selectedDate);
+        const day = selectedDate;
+        const hours = [];
+
+        let hour = dayStart;
+        hours.push(<div className="day-title" key={day}><span>{dateFns.format(day, "D")}</span></div>);
+
+        while (hour <= dayEnd) {
+            const cloneHour = hour;
+            hours.push(
+                <div className="row" key={'row' + hour}>
+                    <div className={'day-view-time'} key={'day-view-time'}>
+                        <span>{dateFns.format(hour, "hh:mm A")}</span>
+                    </div>
+                    <div className={'day-view-data'} key={'day-view-data'}
+                         onClick={() => this.onDateClick(day, cloneHour)}>
+                        {this.events(day, hour.getHours())}
+                    </div>
+                </div>
+            );
+            hour = dateFns.addHours(hour, 1)
+        }
+
+        return <div className="table">{hours}</div>;
+    }
+
+    weekTable() {
+        const {selectedDate} = this.state;
+        const weekStart = dateFns.startOfWeek(selectedDate);
+        const dayStart = dateFns.startOfDay(selectedDate);
+        const dayEnd = dateFns.endOfDay(selectedDate);
+        const hours = [];
+
+        let week = [];
+        let hour = dayStart;
+        let day = weekStart;
+
+        week.push(<div className="empty-week-title" key={'empty'}></div>);
+        for (let i = 0; i < 7; i++) {
+            week.push(
+                <div className="week-view-day-title" key={day + '-week-view-day-title'}>
+                    <span>{dateFns.format(day, "D")}</span>
+                </div>
+            );
+            day = dateFns.addDays(day, 1);
+        }
+        hours.push(<div className="row" key={day}> {week} </div>);
+        week = [];
+
+        while (hour <= dayEnd) {
+            let day = weekStart;
+            week.push(
+                <div className="day-view-time" key={hour + "-day-view-time"}>
+                    <span>{dateFns.format(hour, "hh:mm A")}</span>
+                </div>
+            );
+
+            for (let i = 0; i < 7; i++) {
+                const cloneHour = hour;
+                const cloneday = day;
+                week.push(
+                    <div className="week-view-day" key={day + '-week-view-day'}
+                         onClick={() => this.onDateClick(cloneday, cloneHour)}>
+                        {this.events(day, hour.getHours())}
+                    </div>
+                );
+                day = dateFns.addDays(day, 1);
+            }
+            hours.push(<div className="row" key={day + ' ' + hour}> {week} </div>);
+            week = [];
+            hour = dateFns.addHours(hour, 1)
+        }
+        return <div className="table">{hours}</div>;
+    }
+
+    eventsMonth(today) {
+        const defaultClass = "month-event";
+        const classBegin = " begin";
+        const classMiddle = " middle";
+        const classEnd = " end";
+
+        const cellWidth = 100;
+        const eventsLimit = 3;
+        const eventMargin = 5;
+        const eventHeight = 25;
+        const eventWidth = cellWidth - 2 * eventMargin;
+
+        const beginOfToday = dateFns.startOfDay(today);
+        const endOfToday = dateFns.endOfDay(today);
+        const beginOfWeek = dateFns.startOfWeek(today);
+        const endOfWeek = dateFns.endOfWeek(today);
+        const result = [];
+
+        let eventsForToday = [];
+        for (let index = 0; index < this.state.events.length; index++) {
+            let event = this.state.events[index];
+            let finishDate = new Date(event.finish_date);
+            let startDate = new Date(event.start_date);
+            let numberOfDays = 0;
+            let currentClass = defaultClass;
+
+            if (finishDate < endOfWeek && finishDate > beginOfWeek && startDate > beginOfWeek && startDate < endOfWeek) {
+                numberOfDays = finishDate.getDay() - startDate.getDay()
+            } else if (startDate > beginOfWeek && startDate < endOfWeek) {
+                numberOfDays = endOfWeek.getDay() - startDate.getDay()
+            } else if (finishDate < endOfWeek && finishDate > beginOfWeek) {
+                numberOfDays = finishDate.getDay() - beginOfWeek.getDay()
+            } else {
+                numberOfDays = endOfWeek.getDay() - beginOfWeek.getDay()
+            }
+
+            let width = eventWidth + numberOfDays * cellWidth;
+            if (startDate < endOfToday && finishDate > beginOfToday) {
+                eventsForToday.push(event)
+            }
+
+            if (startDate <= endOfToday && startDate >= beginOfToday) {
+                if (eventsForToday.length > eventsLimit) {
+                    result.pop();
+
+                    let buttonStyle = {};
+                    if (result.length < eventsLimit - 1) {
+                        let margin = 1;
+                        if (result.length === 0) margin = 30;
+                        buttonStyle = {marginTop: margin + '%',}
+                    }
+                    result.push(<div className={"more-events"} style={buttonStyle}
+                                     onClick={(e) => this.viewDay(e, today)}
+                                     key={"more"}> View all events </div>)
+                } else {
+                    if (finishDate > endOfWeek) {
+                        currentClass += classBegin;
+                        width += 5
+                    }
+                    let eventStyle = {width: width + '%',};
+                    if (result.length === 0 && eventsForToday.length > 1) {
+                        let margin = eventHeight + eventMargin;
+                        if (eventsForToday.length > 2) {
+                            margin *= 2
+                        }
+                        eventStyle = {
+                            marginTop: margin + 'px',
+                            width: width + '%',
+                        }
+
+                    }
+                    result.push(<div className={currentClass} style={eventStyle} key={event.id}
+                                     onClick={(e) => this.onEventClick(e, event)}>{event.title}</div>)
+                }
+
+            } else if (startDate < beginOfWeek && finishDate > beginOfWeek && beginOfToday <= beginOfWeek) {
+                let classToAdd = classEnd;
+                if (finishDate > endOfWeek) {
+                    classToAdd = classMiddle;
+                    width = width + eventMargin
+                }
+                currentClass += classToAdd;
+                let eventStyle = {
+                    width: width + eventMargin + '%',
+                };
+                result.push(<div className={currentClass} style={eventStyle}
+                                 key={event.id + "_" + event.title + today}
+                                 onClick={(e) => this.onEventClick(e, event)}>{event.title}</div>)
+            }
+
+        }
+        return <div className="month-events">{result}</div>;
+    }
+
+    monthTable() {
+        const {selectedDate} = this.state;
+        const monthStart = dateFns.startOfMonth(selectedDate);
+        const monthEnd = dateFns.endOfMonth(monthStart);
+        const startDate = dateFns.startOfWeek(monthStart);
+        const endDate = dateFns.endOfWeek(monthEnd);
+
+        let month = [];
+        let week = [];
+        let day = startDate;
+
+        while (day <= endDate) {
+            for (let i = 0; i < 7; i++) {
+                const cloneDay = day;
+                week.push(
+                    <div className={`month-view-day`}
+                         onClick={() => this.onDateClick(cloneDay, null)}
+                         key={day}>
+                        <div className="number"
+                             onClick={(e) => this.viewDay(e, cloneDay)}>{dateFns.format(day, "D")}</div>
+                        {this.eventsMonth(day)}
+                    </div>
+                );
+                day = dateFns.addDays(day, 1);
+            }
+            month.push(<div className="row" key={day + "row"}> {week} </div>);
+            week = [];
+        }
+        return <div className="table">{month}</div>;
+    }
+
+    shedule() {
+        let table;
+
+        if (this.state.view === viewType.day) {
+            table = this.dayTable()
+        }
+        if (this.state.view === viewType.week) {
+            table = this.weekTable()
+        }
+        if (this.state.view === viewType.month) {
+            table = this.monthTable()
+        }
+        return (
+            <div className={'shedule'}>
+                {table}
+            </div>
+        )
+    }
+
+    buttons() {
         return (
             <div>
                 <div className={'today-button'}>
@@ -172,232 +464,19 @@ class Schedule extends Component {
         )
     }
 
-    renderEvents(day, hour, elementClass, blockClass){
-        const result = [];
-        let startOfDay = dateFns.startOfDay(day)
-        let endOfDay = dateFns.endOfDay(day)
-        let events = []
-
-        for (let index = 0; index < this.state.events.length; index++) {
-            let event = this.state.events[index]
-            let start_date = new Date(event.start_date)
-            let finish_date = new Date(event.finish_date)
-            let add = false
-
-            if (start_date <= endOfDay && finish_date >= startOfDay) {
-
-                if (start_date >= startOfDay) {
-                    if (finish_date <= endOfDay) {
-                        if (start_date.getHours() <= hour && finish_date.getHours() >= hour) {
-                            add = true
-                        }
-                    } else {
-                        if (start_date.getHours() <= hour) {
-                            add = true
-                        }
-                    }
-                }
-
-                if (start_date < startOfDay) {
-                    if (finish_date < endOfDay) {
-                        if (finish_date.getHours() >= hour) {
-                            add = true
-                        }
-                    } else {
-                        add = true
-                    }
-                }
-
-                if (add == true) {
-                    result.push(<div className={elementClass} key={event.id}
-                                     onClick={(e) => this.onEventClick(e, event)}>{event.title}</div>)
-                    events.push(event)
-                }
-
-            }
-        }
-        return <div className={blockClass}>{result}</div>;
-    }
-
-    renderEventsMonth(day) {
-        const result = [];
-        let events = []
-        let start_day = dateFns.endOfDay(day)
-        let end_day = dateFns.startOfDay(day)
-
-        for (let index = 0; index < this.state.events.length; index++) {
-            let event = this.state.events[index]
-            let start_date = new Date(event.start_date)
-            let finish_date = new Date(event.finish_date)
-
-            if (start_date <= start_day && finish_date >= end_day) {
-                result.push(<div className={'month-event'} key={event.id + "_" + event.title}
-                                 onClick={(e) => this.onEventClick(e, event)}>{event.title}</div>)
-                events.push(event)
-            }
-
-        }
-        return <div className="month-events">{result}</div>;
-    }
-
-
-    renderDayTable() {
-        const {selectedDate} = this.state;
-        const dayStart = dateFns.startOfDay(selectedDate)
-        const dayEnd = dateFns.endOfDay(selectedDate)
-        const day = selectedDate
-        const timeFormat = "HH:mm";
-        const hours = [];
-        const dateFormat = "D";
-
-        let hour = dayStart;
-        let formattedDate = dateFns.format(day, dateFormat);
-
-        hours.push(<div className="day-title" key={formattedDate}><span>{formattedDate}</span></div>);
-
-        while (hour <= dayEnd) {
-            const cloneHour = hour
-            let formattedTime = dateFns.format(hour, timeFormat);
-
-            hours.push(
-                <div className="row" key={'row' + hour}>
-                    <div className={'day-view-time'} key={'day-view-time'}>
-                        <span>{formattedTime}</span>
-                    </div>
-                    <div className={'day-view-data'} key={'day-view-data'}
-                         onClick={() => this.onDateClick(day, cloneHour)}>
-                        {this.renderEvents(day, hour.getHours(), "day-event", "day-events")}
-                    </div>
-                </div>
-            );
-            hour = dateFns.addHours(hour, 1)
-        }
-
-        return <div className="table">{hours}</div>;
-    }
-
-    renderWeekTable() {
-        const {selectedDate} = this.state;
-        const weekStart = dateFns.startOfWeek(selectedDate);
-        const dayStart = dateFns.startOfDay(selectedDate)
-        const dayEnd = dateFns.endOfDay(selectedDate)
-        const dateFormat = "D";
-        const timeFormat = "HH:mm";
-        const hours = [];
-
-        let days = [];
-        let hour = dayStart;
-        let day = weekStart;
-
-        days.push(<div className="empty-week-title" key={'empty'}></div>);
-
-        for (let i = 0; i < 7; i++) {
-            let formattedDate = dateFns.format(day, dateFormat);
-            days.push(
-                <div className="week-view-day-title" key={formattedDate + '-week-view-day-title'}>
-                    <span>{formattedDate}</span>
-                </div>
-            );
-            day = dateFns.addDays(day, 1);
-        }
-
-        hours.push(<div className="row" key={day}> {days} </div>);
-        days = []
-
-        while (hour <= dayEnd) {
-            let day = weekStart;
-            let formattedTime = dateFns.format(hour, timeFormat);
-
-            days.push(
-                <div className="day-view-time" key={formattedTime + "-day-view-time"}>
-                    <span>{formattedTime}</span>
-                </div>
-            );
-            for (let i = 0; i < 7; i++) {
-                const cloneHour = hour
-                const cloneday = day
-
-                days.push(
-                    <div className="week-view-day" key={day + '-week-view-day'}
-                         onClick={() => this.onDateClick(cloneday, cloneHour)}>
-                        {this.renderEvents(day, hour.getHours(), "week-event", "week-events")}
-                    </div>
-                );
-                day = dateFns.addDays(day, 1);
-            }
-            hours.push(
-                <div className="row" key={day + ' ' + hour}>
-                    {days}
-                </div>
-            );
-            days = [];
-            hour = dateFns.addHours(hour, 1)
-        }
-        return <div className="table">{hours}</div>;
-    }
-
-    renderMonthTable() {
-        const {selectedDate} = this.state;
-        const monthStart = dateFns.startOfMonth(selectedDate);
-        const monthEnd = dateFns.endOfMonth(monthStart);
-        const startDate = dateFns.startOfWeek(monthStart);
-        const endDate = dateFns.endOfWeek(monthEnd);
-        const dateFormat = "D";
-
-        let rows = [];
-        let days = [];
-        let day = startDate;
-        let formattedDate = "";
-
-        while (day <= endDate) {
-            for (let i = 0; i < 7; i++) {
-                const cloneDay = day;
-                formattedDate = dateFns.format(day, dateFormat);
-
-                days.push(
-                    <div className={`month-view-day ${
-                        !dateFns.isSameMonth(day, monthStart) ? "disabled"
-                            : dateFns.isSameDay(day, selectedDate) ? "selected" : ""}`}
-                         onClick={() => this.onDateClick(cloneDay, null)}
-                         key={day}>
-                        <span className="number">{formattedDate}</span>
-                        {this.renderEventsMonth(day)}
-                    </div>
-                );
-                day = dateFns.addDays(day, 1);
-            }
-            rows.push(<div className="row" key={day + "row"}> {days} </div>);
-            days = [];
-        }
-        return <div className="table">{rows}</div>;
-    }
-
-    renderTable() {
-        let table;
-        if (this.state.view === viewType.day) {
-            table = this.renderDayTable()
-        } else if (this.state.view === viewType.week) {
-            table = this.renderWeekTable()
-        } else {
-            table = this.renderMonthTable()
-        }
-        return (
-            <div className={'shedule'}>
-                {table}
-            </div>
-        )
-    }
-
     render() {
         return (
             <div className={'tall'}>
-                {this.renderButtons()}
-                {this.renderTable()}
-                <EventModal show={this.state.isOpen} onCancel={this.toggleModal} onOk={this.complite}
+
+                {this.buttons()}
+                {this.shedule()}
+
+                <EventModal show={this.state.isOpen} onCancel={this.toggleModal} onOk={this.complete}
                             event={this.state.event} date={this.state.clickedDate}></EventModal>
                 <Modal show={this.state.isOpenNotification} onOk={this.dismissNotification}
                        header={"Notification about event \"" + this.state.notificationEvent.title + "\""}>
-                    Event "{this.state.notificationEvent.title}" starts in {this.state.notificationEvent.start_date}
+                    Event "{this.state.notificationEvent.title}" starts
+                    in {new Date(this.state.notificationEvent.start_date).toLocaleString()}
                 </Modal>
             </div>
         )
@@ -409,7 +488,7 @@ const mapStateToProps = state => {
         auth: state.auth,
         events: state.events,
     }
-}
+};
 
 const mapDispatchToProps = dispatch => {
     return {
@@ -429,6 +508,6 @@ const mapDispatchToProps = dispatch => {
             return dispatch(events.updateEvent(id, model));
         },
     }
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Schedule);

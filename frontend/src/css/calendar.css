@@ -1,28 +1,8 @@
-
 .icon {
-    font-family: var(--main-font);
-    font-style: normal;
     display: inline-block;
     vertical-align: middle;
     font-size: 10pt;
-    text-transform: none;
-    letter-spacing: normal;
-    word-wrap: normal;
-    white-space: nowrap;
-    direction: ltr;
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
     -moz-osx-font-smoothing: grayscale;
-    font-feature-settings: 'liga';
-}
-
-
-header {
-    display: block;
-    width: 100%;
-    padding: 1.75em 0;
-    border-bottom: 1px solid var(--border-color);
-    background: var(--neutral-color);
 }
 
 /* GRID */
@@ -70,15 +50,10 @@ header {
 /* Calendar */
 
 .calendar {
-    display: block;
-    position: relative;
-    width: 100%;
-    background: var(--neutral-color);
     border: 1px solid var(--border-color);
 }
 
 .calendar .header {
-    font-family: var(--main-font);
     text-transform: uppercase;
     font-weight: 700;
     font-size: 115%;
@@ -147,7 +122,7 @@ header {
 
 .calendar .body .cell .number {
     position: absolute;
-    font-size: 82.5%;
+    font-size: 75%;
     line-height: 1;
     top: .75em;
     right: .75em;

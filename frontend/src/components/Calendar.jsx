@@ -24,21 +24,24 @@ class Calendar extends React.Component {
         }
     }
 
-
     renderHeader() {
         const dateFormat = "MMM YYYY";
 
         return (
             <div className="header row flex-middle">
-                <div className="col col-start">
-                    <div className="icon" onClick={this.prevMonth}>Prev</div>
+                <div className="col col-start" onClick={() => {
+                    this.setState({viewDate: dateFns.subMonths(this.state.viewDate, 1)})
+                }}>
+                    <div className={"icon"}> Prev</div>
                 </div>
                 <div className="col col-center">
             <span>
               {dateFns.format(this.state.viewDate, dateFormat)}
             </span>
                 </div>
-                <div className="col col-end" onClick={this.nextMonth}>
+                <div className="col col-end" onClick={() => {
+                    this.setState({viewDate: dateFns.addMonths(this.state.viewDate, 1)})
+                }}>
                     <div className="icon">Next</div>
                 </div>
             </div>
@@ -100,20 +103,10 @@ class Calendar extends React.Component {
         return <div className="body">{rows}</div>;
     }
 
-
     onDateClick = day => {
         this.setState({selectedDate: day});
         this.props.changeDate(day);
-    }
-
-    nextMonth = () => {
-        this.setState({viewDate: dateFns.addMonths(this.state.viewDate, 1)});
-    }
-
-    prevMonth = () => {
-        this.setState({viewDate: dateFns.subMonths(this.state.viewDate, 1)});
-    }
-
+    };
 
     render() {
         return (
