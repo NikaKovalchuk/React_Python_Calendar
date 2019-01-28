@@ -22,6 +22,7 @@
     font-family: var(--main-font);
 }
 
+
 .modal-body {
     font-size: 20pt;
     font-family: var(--main-font);
@@ -29,20 +30,13 @@
     text-align: center;
 }
 
+
+
+
 .footer {
     text-align: center;
 }
 
 .button-group button{
    margin: 10px;
-}
-
-.modal-window.event {
-    min-height: 450px;
-}
-
-.event-modal-body {
-    font-size: 20pt;
-    font-family: var(--main-font);
-    height: 340px;
 }

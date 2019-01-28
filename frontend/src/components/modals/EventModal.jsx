@@ -24,8 +24,8 @@ class EventModal extends Component {
             isOpen: false,
             isOpenError: false,
             errorMessage: null,
-            repeatOptions: [{0: 'No'}, {1: 'Day'}, {2: 'Week'}, {3: 'Month'}, {4: 'Year'}], // заменить на enum
-            notificationOptions: [{0: 'No'}, {1: 'Day'}, {2: 'Hour'}, {3: '30 minutes'}, {4: '10 minutes'}] // заменить на enum
+            repeatOptions: [{0: 'No'}, {1: 'Day'}, {2: 'Week'}, {3: 'Month'}, {4: 'Year'}], // TODO : move it somewhere
+            notificationOptions: [{0: 'No'}, {1: 'Day'}, {2: 'Hour'}, {3: '30 minutes'}, {4: '10 minutes'}]  // TODO : move it somewhere
         };
     }
 
@@ -33,8 +33,8 @@ class EventModal extends Component {
         let searchValue = /\+[0-9]*\:[0-9]*/
 
         if (nextProps.date != null) {
-            let date = new Date(nextProps.date)
-            date = moment(date).format();
+            /* Convert date to ISOformat to use it in datetime-local component*/
+            let date = moment(new Date(nextProps.date)).format();
             this.setState({
                 start_date: date.replace(searchValue, '')
             })
@@ -143,13 +143,6 @@ class EventModal extends Component {
         return true
     }
 
-    toggleErrorModal = () => {
-        this.setState({
-            isOpenError: false,
-            errorMessage: null
-        })
-    }
-
     delete = () => {
         this.props.deleteEvent(this.state.id).then(response => {
             this.props.onCancel()
@@ -188,7 +181,7 @@ class EventModal extends Component {
                     <div className="header">
                         {label}
                     </div>
-                    <div className="event-modal-body">
+                    <div className="modal-body">
                         <div className="form">
                             <form>
 
@@ -249,8 +242,10 @@ class EventModal extends Component {
                            header={"Remove event \"" + this.state.title + "\""}>
                         Are you sure you want to delete the event "{this.state.title}"?
                     </Modal>
-                    <Modal show={this.state.isOpenError} onOk={this.toggleErrorModal}
-                           header={"Error"}>
+
+                    <Modal show={this.state.isOpenError} onOk={() => {
+                        this.setState({isOpenError: false, errorMessage: null})
+                    }} header={"Error"}>
                         {this.state.errorMessage}
                     </Modal>
                 </div>

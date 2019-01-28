@@ -30,6 +30,7 @@ class Schedule extends Component {
                 notice: false,
                 notification: 0,
             },
+
             event: {},
             notificationEvent: {},
             notifications: {},
@@ -117,7 +118,7 @@ class Schedule extends Component {
         this.setState({isOpen: !this.state.isOpen});
     };
 
-    complite = (event) => {
+    complete = (event) => {
         if (event.id) {
             this.props.updateEvent(event.id, event).then(response => {
                 this.toggleModal()
@@ -128,7 +129,6 @@ class Schedule extends Component {
             });
         }
     };
-
 
     onDateClick = (day, hour) => {
         if (hour != null) {
@@ -293,30 +293,30 @@ class Schedule extends Component {
     }
 
     eventsMonth(today) {
-        const eventsLimit = 3;
+        const defaultClass = "month-event";
+        const classBegin = " begin";
+        const classMiddle = " middle";
+        const classEnd = " end";
+
         const cellWidth = 100;
+        const eventsLimit = 3;
         const eventMargin = 5;
+        const eventHeight = 25;
         const eventWidth = cellWidth - 2 * eventMargin;
-        const eventheight = 25;
 
         const beginOfToday = dateFns.startOfDay(today);
         const endOfToday = dateFns.endOfDay(today);
         const beginOfWeek = dateFns.startOfWeek(today);
         const endOfWeek = dateFns.endOfWeek(today);
         const result = [];
+
         let eventsForToday = [];
-
-        const className = "month-event";
-        const classBegin = " begin";
-        const classMiddle = " middle";
-        const classEnd = " end";
-
         for (let index = 0; index < this.state.events.length; index++) {
             let event = this.state.events[index];
             let finishDate = new Date(event.finish_date);
             let startDate = new Date(event.start_date);
             let numberOfDays = 0;
-            let currentClass = className;
+            let currentClass = defaultClass;
 
             if (finishDate < endOfWeek && finishDate > beginOfWeek && startDate > beginOfWeek && startDate < endOfWeek) {
                 numberOfDays = finishDate.getDay() - startDate.getDay()
@@ -353,7 +353,7 @@ class Schedule extends Component {
                     }
                     let eventStyle = {width: width + '%',};
                     if (result.length === 0 && eventsForToday.length > 1) {
-                        let margin = eventheight + eventMargin;
+                        let margin = eventHeight + eventMargin;
                         if (eventsForToday.length > 2) {
                             margin *= 2
                         }
@@ -383,8 +383,6 @@ class Schedule extends Component {
             }
 
         }
-
-        console.log(eventsForToday);
         return <div className="month-events">{result}</div>;
     }
 
@@ -473,7 +471,7 @@ class Schedule extends Component {
                 {this.buttons()}
                 {this.shedule()}
 
-                <EventModal show={this.state.isOpen} onCancel={this.toggleModal} onOk={this.complite}
+                <EventModal show={this.state.isOpen} onCancel={this.toggleModal} onOk={this.complete}
                             event={this.state.event} date={this.state.clickedDate}></EventModal>
                 <Modal show={this.state.isOpenNotification} onOk={this.dismissNotification}
                        header={"Notification about event \"" + this.state.notificationEvent.title + "\""}>
