@@ -109,7 +109,6 @@
     padding: 2px 4px;
 
     border-radius: 5px;
-    background: var(--event-background);
     color: var(--neutral-color);
     opacity: 0.9;
 }

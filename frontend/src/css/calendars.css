@@ -1,0 +1,45 @@
+.calendars {
+    margin-top: 10%;
+}
+
+.calendars-list {
+    height: 200px;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+.calendars-list.element {
+    height: 30px;
+    padding: 2%;
+    border-bottom: 1px solid var(--border-color);
+    display: inline-block;
+}
+
+.name {
+    width: 75%;
+    display: inline-block;
+    padding: 2% 5%;
+}
+
+.control-panel{
+    width: 25%;
+    display: inline-block;
+    vertical-align: top;
+    padding: 2%;
+}
+
+.color{
+    margin-left: 10%;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    display: inline-block;
+    text-align: right;
+}
+
+.show{
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    margin: 0 2px;
+}

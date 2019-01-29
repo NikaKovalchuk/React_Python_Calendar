@@ -265,9 +265,6 @@ const mapDispatchToProps = dispatch => {
         deleteEvent: (id) => {
             return dispatch(events.deleteEvent(id));
         },
-        updateEvent: (id, model) => {
-            return dispatch(events.updateEvent(id, model));
-        },
     }
 }
 

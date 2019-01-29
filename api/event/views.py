@@ -1,17 +1,17 @@
 import copy
 import datetime
 from datetime import datetime, timedelta, date
-from django.utils import timezone
 
 import dateutil.parser
 from django.http import Http404
+from django.utils import timezone
 from rest_framework import status, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from app.settings import ADMIN_USER_ID
-from .models import Event
-from .serializers import EventSerializer, NewEventSerializer
+from .models import Event, Calendar
+from .serializers import EventSerializer, NewEventSerializer, CalendarSerializer, NewCalendarSerializer
 
 
 class EventList(APIView):
@@ -26,6 +26,7 @@ class EventList(APIView):
         finish_date = timezone.now()
         finish_date = finish_date.replace(hour=23, minute=59, second=59)
         notification = False
+        calendar = []
 
         if not request.user.id:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
@@ -37,21 +38,24 @@ class EventList(APIView):
                 finish_date = dateutil.parser.parse(request.query_params['finishDate'])
             if 'notification' in request.query_params:
                 notification = True
+            if 'calendar' in request.query_params:
+                calendar = request.query_params['calendar'].split(',')
 
         events = Event.objects.filter(start_date__gte=start_date, finish_date__lte=finish_date, user=request.user.id,
-                                      archived=False, repeat=self.repeat['no']) | \
+                                      archived=False, repeat=self.repeat['no'], calendar_id__in=calendar) | \
                  Event.objects.filter(
                      start_date__lte=start_date, finish_date__lte=finish_date, user=request.user.id,
-                     archived=False, repeat=self.repeat['no']) | \
+                     archived=False, repeat=self.repeat['no'], calendar_id__in=calendar) | \
                  Event.objects.filter(
                      start_date__gte=start_date, finish_date__gte=finish_date, user=request.user.id,
-                     archived=False, repeat=self.repeat['no']) | \
+                     archived=False, repeat=self.repeat['no'], calendar_id__in=calendar) | \
                  Event.objects.filter(
                      start_date__lte=start_date, finish_date__gte=finish_date, user=request.user.id,
-                     archived=False, repeat=self.repeat['no'])
+                     archived=False, repeat=self.repeat['no'], calendar_id__in=calendar)
 
         events = list(events)
-        events = self.repeatedEvents(start_date=start_date, finish_date=finish_date, events=events, user=request.user)
+        events = self.repeatedEvents(start_date=start_date, finish_date=finish_date, events=events, user=request.user,
+                                     calendar=calendar)
         if notification:
             events = self.notification(events=events)
         events = sorted(events, key=lambda x: x.start_date)
@@ -72,11 +76,12 @@ class EventList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def repeatedEvents(self, start_date, finish_date, events, user):
+    def repeatedEvents(self, start_date, finish_date, events, user, calendar):
         extra = Event.objects.filter(
             user=user.id,
             archived=False,
             repeat__isnull=False,
+            calendar_id__in=calendar
         )
 
         for event in extra:
@@ -165,4 +170,64 @@ class EventDetail(APIView):
     def delete(self, request, pk):
         event = self.get_object(pk, request)
         event.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class CalendarList(APIView):
+    permission_classes = [permissions.IsAuthenticated, ]
+
+    def get(self, request):
+        calendars = Calendar.objects.filter(user=request.user, archived=False)
+        serializer = CalendarSerializer(calendars, many=True)
+        return Response(serializer.data)
+
+    @staticmethod
+    def post(request):
+        serializer_context = {'request': request, }
+
+        if not request.data:
+            return Response(status=status.HTTP_411_LENGTH_REQUIRED)
+
+        serializer = NewCalendarSerializer(data=request.data, context=serializer_context)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CalendarDetail(APIView):
+    permission_classes = [permissions.IsAuthenticated, ]
+
+    @staticmethod
+    def get_object(pk, request):
+        try:
+            if request.user.id == ADMIN_USER_ID:
+                return Calendar.objects.filter(archived=False, pk=pk).first()
+            else:
+                return Calendar.objects.filter(user=request.user.id, archived=False, pk=pk).first()
+            return Calendar.objects.filter(pk=pk).first()
+        except Event.DoesNotExist:
+            raise Http404()
+
+    def get(self, request, pk):
+        calendar = self.get_object(pk, request)
+        if calendar:
+            serializer = CalendarSerializer(calendar)
+            return Response(serializer.data)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, pk):
+        calendar = self.get_object(pk, request)
+        if not request.data:
+            return Response(status=status.HTTP_411_LENGTH_REQUIRED)
+        serializer = CalendarSerializer(calendar, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        calendar = self.get_object(pk, request)
+        calendar.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

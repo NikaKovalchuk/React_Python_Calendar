@@ -84,7 +84,7 @@ export const loadNotifications = (startDate, finishDate) => {
     }
 }
 
-export const loadEvents = (startDate, finishDate) => {
+export const loadEvents = (startDate, finishDate, calendars) => {
     return (dispatch, getState) => {
         let headers = {"Content-Type": "application/json"};
         let {token} = getState().auth;
@@ -95,7 +95,7 @@ export const loadEvents = (startDate, finishDate) => {
         startDate = new Date(startDate).toISOString()
         finishDate = new Date(finishDate).toISOString()
 
-        return fetch("http://localhost:8000/api/event/?startDate=" + startDate + "&finishDate=" + finishDate, {
+        return fetch("http://localhost:8000/api/event/?startDate=" + startDate + "&finishDate=" + finishDate + "&calendar=" + calendars, {
             headers,
             method: "GET",
         })
@@ -104,6 +104,48 @@ export const loadEvents = (startDate, finishDate) => {
                 return dispatch({
                     type: 'LOAD_EVENTS',
                     events
+                })
+            })
+    }
+}
+
+export const loadCalendars = (id) => {
+    return (dispatch, getState) => {
+        let headers = {"Content-Type": "application/json"};
+        let {token} = getState().auth;
+        if (token) {
+            headers["Authorization"] = `Token ${token}`;
+        }
+
+        return fetch("http://localhost:8000/api/event/calendar/?user=" + id, {
+            headers,
+            method: "GET",
+        })
+            .then(res => res.json())
+            .then(calendars => {
+                return dispatch({
+                    type: 'LOAD_CALENDARS',
+                    calendars
+                })
+            })
+    }
+}
+
+export const updateCalendar = (index, calendar) => {
+    return (dispatch, getState) => {
+        let body = JSON.stringify(calendar)
+        let headers = {"Content-Type": "application/json"};
+        let {token} = getState().auth;
+        if (token) {
+            headers["Authorization"] = `Token ${token}`;
+        }
+
+        return fetch("http://localhost:8000/api/event/calendar/" + index + "/", {headers, method: "PUT", body})
+            .then(res => res.json())
+            .then(calendar => {
+                return dispatch({
+                    type: 'UPDATE_CALENDAR',
+                    calendar
                 })
             })
     }

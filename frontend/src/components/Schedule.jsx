@@ -19,7 +19,7 @@ class Schedule extends Component {
             selectedDate: this.props.selectedDate,
             clickedDate: null,
             id: null,
-
+            calendars: this.props.calendars,
             newEvent: {
                 id: null,
                 title: "",
@@ -49,7 +49,7 @@ class Schedule extends Component {
 
     componentWillReceiveProps(props) {
         let update = false;
-
+        let calendars = []
         if (props.selectedDate) {
             if (props.selectedDate !== this.state.selectedDate) {
                 if (new Date(props.selectedDate).getMonth() !== new Date(this.state.selectedDate).getMonth()) {
@@ -58,17 +58,31 @@ class Schedule extends Component {
                 this.setState({selectedDate: props.selectedDate});
             }
         }
+        if (props.calendars) {
+            if (props.calendars !== this.state.calendars) {
+                update = true
+                this.setState({
+                    calendars : this.props.calendars
+                })
+                for (let index=0; index < props.calendars.length; index++){
+                    let calendar = props.calendars[index]
+                    if (calendar.show == true){
+                        calendars.push(calendar.id)
+                    }
+                }
+            }
+        }
 
         if (update) {
-            this.updateEvents(props.selectedDate)
+            this.updateEvents(props.selectedDate, calendars)
         }
     }
 
-    updateEvents(date) {
+    updateEvents(date, calendars) {
         const startDate = dateFns.startOfWeek(dateFns.startOfMonth(date)).toISOString();
         const finishDate = dateFns.endOfWeek(dateFns.endOfMonth(date)).toISOString();
 
-        this.props.loadEvents(startDate, finishDate).then(response => {
+        this.props.loadEvents(startDate, finishDate, calendars).then(response => {
             this.setState({events: this.props.events});
         });
         this.props.loadNotifications(startDate, finishDate).then(response => {
@@ -203,6 +217,7 @@ class Schedule extends Component {
                 if (add === true) {
                     eventStyle = {
                         height: height + 'px',
+                        backgroundColor: event.calendar.color
                     };
                     result.push(<div className={currentClass} key={event.id} style={eventStyle}
                                      onClick={(e) => this.onEventClick(e, event)}>{event.title}</div>);
@@ -351,7 +366,10 @@ class Schedule extends Component {
                         currentClass += classBegin;
                         width += 5
                     }
-                    let eventStyle = {width: width + '%',};
+                    let eventStyle = {
+                        width: width + '%',
+                        backgroundColor: event.calendar.color
+                    };
                     if (result.length === 0 && eventsForToday.length > 1) {
                         let margin = eventHeight + eventMargin;
                         if (eventsForToday.length > 2) {
@@ -360,6 +378,7 @@ class Schedule extends Component {
                         eventStyle = {
                             marginTop: margin + 'px',
                             width: width + '%',
+                            backgroundColor: event.calendar.color
                         }
 
                     }
@@ -376,6 +395,7 @@ class Schedule extends Component {
                 currentClass += classToAdd;
                 let eventStyle = {
                     width: width + eventMargin + '%',
+                    backgroundColor: event.calendar.color
                 };
                 result.push(<div className={currentClass} style={eventStyle}
                                  key={event.id + "_" + event.title + today}
@@ -495,8 +515,8 @@ const mapDispatchToProps = dispatch => {
         loadUser: () => {
             return dispatch(auth.loadUser());
         },
-        loadEvents: (startDate, finishDate) => {
-            return dispatch(events.loadEvents(startDate, finishDate));
+        loadEvents: (startDate, finishDate, calendars) => {
+            return dispatch(events.loadEvents(startDate, finishDate, calendars));
         },
         loadNotifications: (startDate, finishDate) => {
             return dispatch(events.loadNotifications(startDate, finishDate));
