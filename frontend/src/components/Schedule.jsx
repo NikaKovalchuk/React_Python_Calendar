@@ -20,6 +20,7 @@ class Schedule extends Component {
             clickedDate: null,
             id: null,
             calendars: this.props.calendars,
+            calendarsId: [],
             newEvent: {
                 id: null,
                 title: "",
@@ -29,6 +30,7 @@ class Schedule extends Component {
                 repeat: 0,
                 notice: false,
                 notification: 0,
+                calendar: this.props.calendars[0],
             },
 
             event: {},
@@ -62,27 +64,30 @@ class Schedule extends Component {
             if (props.calendars !== this.state.calendars) {
                 update = true
                 this.setState({
-                    calendars : this.props.calendars
+                    calendars: this.props.calendars
                 })
-                for (let index=0; index < props.calendars.length; index++){
+                for (let index = 0; index < props.calendars.length; index++) {
                     let calendar = props.calendars[index]
-                    if (calendar.show == true){
+                    if (calendar.show == true) {
                         calendars.push(calendar.id)
                     }
                 }
+                this.setState({
+                    calendarsId: calendars
+                })
             }
         }
 
         if (update) {
-            this.updateEvents(props.selectedDate, calendars)
+            this.updateEvents(props.selectedDate)
         }
     }
 
-    updateEvents(date, calendars) {
+    updateEvents(date) {
         const startDate = dateFns.startOfWeek(dateFns.startOfMonth(date)).toISOString();
         const finishDate = dateFns.endOfWeek(dateFns.endOfMonth(date)).toISOString();
 
-        this.props.loadEvents(startDate, finishDate, calendars).then(response => {
+        this.props.loadEvents(startDate, finishDate, this.state.calendarsId).then(response => {
             this.setState({events: this.props.events});
         });
         this.props.loadNotifications(startDate, finishDate).then(response => {
@@ -492,7 +497,8 @@ class Schedule extends Component {
                 {this.shedule()}
 
                 <EventModal show={this.state.isOpen} onCancel={this.toggleModal} onOk={this.complete}
-                            event={this.state.event} date={this.state.clickedDate}></EventModal>
+                            event={this.state.event} date={this.state.clickedDate}
+                            calendars={this.state.calendars}></EventModal>
                 <Modal show={this.state.isOpenNotification} onOk={this.dismissNotification}
                        header={"Notification about event \"" + this.state.notificationEvent.title + "\""}>
                     Event "{this.state.notificationEvent.title}" starts

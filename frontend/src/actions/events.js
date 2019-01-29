@@ -95,7 +95,7 @@ export const loadEvents = (startDate, finishDate, calendars) => {
         startDate = new Date(startDate).toISOString()
         finishDate = new Date(finishDate).toISOString()
 
-        return fetch("http://localhost:8000/api/event/?startDate=" + startDate + "&finishDate=" + finishDate + "&calendar=" + calendars, {
+        return fetch("http://localhost:8000/api/event/?startDate=" + startDate + "&finishDate=" + finishDate + calendars, {
             headers,
             method: "GET",
         })

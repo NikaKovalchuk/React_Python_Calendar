@@ -64,7 +64,7 @@ class EventList(APIView):
 
     @staticmethod
     def post(request):
-        serializer_context = {'request': request, }
+        serializer_context = {'request': request, 'data': request.data}
 
         if not request.data:
             return Response(status=status.HTTP_411_LENGTH_REQUIRED)
@@ -161,7 +161,8 @@ class EventDetail(APIView):
         event = self.get_object(pk, request)
         if not request.data:
             return Response(status=status.HTTP_411_LENGTH_REQUIRED)
-        serializer = EventSerializer(event, data=request.data)
+        serializer_context = {'request': request, 'data': request.data}
+        serializer = EventSerializer(event, data=request.data, context=serializer_context)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)

@@ -21,6 +21,10 @@ class EventModal extends Component {
             notification: 0,
             notice: false,
 
+            calendars: {},
+            calendar: {},
+            calendarId: undefined,
+
             isOpen: false,
             isOpenError: false,
             errorMessage: null,
@@ -42,11 +46,18 @@ class EventModal extends Component {
             date = new Date(date)
             date = moment(new Date(date.setHours(date.getHours() + 1))).format();
             this.setState({
-                finish_date: date.replace(searchValue, '')
+                finish_date: date.replace(searchValue, ''),
+                calendar: nextProps.calendars[0],
+                calendarId: nextProps.calendars[0].id,
+                id: nextProps.event.id,
+                title: nextProps.event.title,
+                text: nextProps.event.text,
+                repeat: nextProps.event.repeat,
+                notification: nextProps.event.notification,
             })
         }
 
-        if (nextProps.event !== {}) {
+        if (nextProps.event.id!=undefined) {
             if (nextProps.event.start_date) {
                 let date = moment(nextProps.event.start_date).format();
                 this.setState({
@@ -68,6 +79,13 @@ class EventModal extends Component {
                 text: nextProps.event.text,
                 repeat: nextProps.event.repeat,
                 notification: nextProps.event.notification,
+                calendar: nextProps.event.calendar,
+                calendarId: nextProps.event.calendar ? nextProps.event.calendar.id : 0,
+            })
+        }
+        if (nextProps.calendars) {
+            this.setState({
+                calendars: nextProps.calendars,
             })
         }
     }
@@ -108,6 +126,37 @@ class EventModal extends Component {
                        }}>{options}</select>
     }
 
+    selectCalendar() {
+        let options = []
+        let calendars = this.state.calendars
+        for (let index = 0; index < calendars.length; index++) {
+            let calendar = calendars[index]
+            options.push(
+                <option className="input" key={calendar.id} value={calendar.id}>
+                    {calendar.name}</option>
+            )
+        }
+
+        return <select className="input" value={this.state.calendarId}
+                       onChange={(e) => {
+                           this.changeCalendar(e.target.value)
+                       }}>{options}</select>
+    }
+
+    changeCalendar(id) {
+        let calendar = []
+        let calendars = this.state.calendars
+        for (let index = 0; index < calendars.length; index++) {
+            if (calendars[index].id == id) {
+                calendar = calendars[index]
+            }
+        }
+        this.setState({
+            calendar: calendar,
+            calendarId: calendar.id
+        })
+    }
+
     onOk = () => {
 
         let event = {
@@ -118,9 +167,11 @@ class EventModal extends Component {
             finish_date: this.state.finish_date,
             repeat: this.state.repeat,
             notification: this.state.notification,
-            notice: this.state.notification !== this.state.notificationOptions['No'] ? true : false
+            notice: this.state.notification !== this.state.notificationOptions['No'] ? true : false,
+            calendar: this.state.calendar,
         }
         if (this.validate(event)) {
+            console.log(event)
             this.props.onOk(event)
         }
     };
@@ -153,7 +204,6 @@ class EventModal extends Component {
         this.setState({isOpen: !this.state.isOpen});
     }
 
-
     render() {
         if (!this.props.show) {
             return null;
@@ -184,7 +234,6 @@ class EventModal extends Component {
                     <div className="modal-body">
                         <div className="form">
                             <form>
-
                                 <div key={'gtitle'} className="group">
                                     <label className="label" key={'ltitle'} htmlFor={'title'}> Title </label>
                                     <input className="input" type={'text'} key={'title'} value={this.state.title}
@@ -230,6 +279,12 @@ class EventModal extends Component {
                                     <label className="label" key={'lnotification'}
                                            htmlFor={'notification'}> Notice </label>
                                     {this.selectNotification()}
+                                </div>
+
+                                <div key={'gcalendar'} className="group">
+                                    <label className="label" key={'lcalendar'}
+                                           htmlFor={'notification'}> Calendar </label>
+                                    {this.selectCalendar()}
                                 </div>
 
                             </form>

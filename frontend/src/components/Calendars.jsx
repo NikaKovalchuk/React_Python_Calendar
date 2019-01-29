@@ -27,7 +27,7 @@ class Calendars extends React.Component {
         });
     }
 
-    changeShow (calendar){
+    changeShow(calendar) {
         calendar.show = !calendar.show
         this.props.updateCalendar(calendar.id, calendar).then(response => {
             this.loadCalendars()
@@ -47,7 +47,8 @@ class Calendars extends React.Component {
                 <div className={"name"}>{calendar.name}</div>
                 <div className={"control-panel"}>
                     <div className={"show"}>
-                        <input type="checkbox" checked={calendar.show} onChange={() => this.changeShow(calendar)}></input>
+                        <input type="checkbox" checked={calendar.show}
+                               onChange={() => this.changeShow(calendar)}></input>
                     </div>
                     <div className={"color"} style={colorStyle}></div>
                 </div>
