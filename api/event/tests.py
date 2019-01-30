@@ -1,9 +1,7 @@
-from datetime import datetime
-
 from django.test import TestCase
 
 from api.user.models import User
-from .models import Event
+from api.event.models import Event, Calendar
 
 
 class EventModelTestCase(TestCase):
@@ -11,8 +9,11 @@ class EventModelTestCase(TestCase):
     def setUp(self):
         TestUser = User.objects.create(username='TestUser')
         TestUser2 = User.objects.create(username='TestUser2')
-        Event.objects.create(title="Test1", text="text", user=TestUser)
-        Event.objects.create(title="Test2", text="TEXT", repeat=2, notification=1, user=TestUser2)
+
+        TestCalendar = Calendar.objects.create(name="calendar", user=TestUser)
+
+        Event.objects.create(title="Test1", text="text", user=TestUser, calendar=TestCalendar)
+        Event.objects.create(title="Test2", text="TEXT", repeat=2, notification=1, user=TestUser2, calendar=TestCalendar)
 
     def checkCreation(self, title='Test1', text='text', username='TestUser'):
         test = Event.objects.get(title=title)
@@ -67,7 +68,7 @@ class EventModelTestCase(TestCase):
         self.checkCreation(title='Test2', text='TEXT', username='TestUser2')
         print("checkCreation   ERRORS ")
         self.checkCreation(title='Test1', text='TEXT', username='TestUser2')
-        self.checkCreation(title='Test2', username='TestUser1')
+        self.checkCreation(title='Test2', username='TestUser')
 
         print("\ncheckGetUser")
         self.checkGetUser(title='Test1', username='TestUser')
