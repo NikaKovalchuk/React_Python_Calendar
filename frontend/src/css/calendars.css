@@ -3,9 +3,9 @@
 }
 
 .calendars-list {
-    height: 280px;
+    max-height: 280px;
     overflow: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .calendars-list.element {
@@ -21,7 +21,7 @@
     padding: 2% 5%;
 }
 
-.control-panel{
+.control-panel {
     width: 25%;
     display: inline-block;
     vertical-align: top;
@@ -33,12 +33,13 @@
     height: 15px;
     display: inline-block;
 }
-.color{
+
+.color {
     margin-left: 10%;
     border-radius: 50%;
     text-align: right;
 }
 
-.show{
+.show {
     margin: 0 2px;
 }

@@ -2,10 +2,10 @@ import React from "react";
 import '../css/calendars.css'
 import {auth, events} from "../actions";
 import {connect} from "react-redux";
-import CalendarModal from "./modals/CalendarModal";
-import ImportModal from "./modals/ImportModal";
+import Calendar from "./modals/Calendar";
+import Import from "./modals/Import";
 
-class Calendars extends React.Component {
+class CalendarsList extends React.Component {
     constructor(props) {
         super(props);
 
@@ -134,12 +134,12 @@ class Calendars extends React.Component {
                 {this.buttons()}
                 {this.list()}
 
-                <CalendarModal show={this.state.isOpen} onCancel={this.toggleModal} onOk={this.complete}
-                               calendar={this.state.calendar}></CalendarModal>
+                <Calendar show={this.state.isOpen} onCancel={this.toggleModal} onOk={this.complete}
+                               calendar={this.state.calendar}></Calendar>
 
 
-                <ImportModal show={this.state.isOpenImport} onCancel={this.toggleModalImport}
-                             onOk={this.completeImport}></ImportModal>
+                <Import show={this.state.isOpenImport} onCancel={this.toggleModalImport}
+                             onOk={this.completeImport}></Import>
 
             </div>
         );
@@ -175,4 +175,4 @@ const mapDispatchToProps = dispatch => {
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Calendars);
+export default connect(mapStateToProps, mapDispatchToProps)(CalendarsList);

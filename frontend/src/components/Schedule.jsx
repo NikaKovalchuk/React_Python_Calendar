@@ -3,8 +3,8 @@ import {connect} from 'react-redux';
 import {auth, events} from "../actions";
 import dateFns from "date-fns";
 import "../css/schedule.css"
-import EventModal from "./modals/EventModal";
-import Modal from "./modals/Modal";
+import Event from "./modals/Event";
+import Info from "./modals/Info";
 
 const viewType = {day: 0, week: 1, month: 2};
 
@@ -496,14 +496,14 @@ class Schedule extends Component {
                 {this.buttons()}
                 {this.shedule()}
 
-                <EventModal show={this.state.isOpen} onCancel={this.toggleModal} onOk={this.complete}
+                <Event show={this.state.isOpen} onCancel={this.toggleModal} onOk={this.complete}
                             event={this.state.event} date={this.state.clickedDate}
-                            calendars={this.state.calendars}></EventModal>
-                <Modal show={this.state.isOpenNotification} onOk={this.dismissNotification}
-                       header={"Notification about event \"" + this.state.notificationEvent.title + "\""}>
+                            calendars={this.state.calendars}></Event>
+                <Info show={this.state.isOpenNotification} onOk={this.dismissNotification}
+                      header={"Notification about event \"" + this.state.notificationEvent.title + "\""}>
                     Event "{this.state.notificationEvent.title}" starts
                     in {new Date(this.state.notificationEvent.start_date).toLocaleString()}
-                </Modal>
+                </Info>
             </div>
         )
     }

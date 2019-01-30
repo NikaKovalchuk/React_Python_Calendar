@@ -160,11 +160,13 @@ class EventDetail(APIView):
 
     def put(self, request, pk):
         event = self.get_object(pk, request)
+        calendar = Calendar.objects.get(id=request.data['calendar']['id'])
         if not request.data:
             return Response(status=status.HTTP_411_LENGTH_REQUIRED)
-        serializer_context = {'request': request, 'data': request.data}
+        serializer_context = {'request': request}
         serializer = EventSerializer(event, data=request.data, context=serializer_context)
         if serializer.is_valid():
+            serializer.validated_data['calendar'] = calendar
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -183,7 +185,8 @@ class CalendarList(APIView):
         calendars = Calendar.objects.filter(user=request.user, archived=False)
         if request.query_params is not None:
             if 'import' in request.query_params:
-                calendars = Calendar.objects.filter(archived=False, access=self.access['public']).exclude(user=request.user)
+                calendars = Calendar.objects.filter(archived=False, access=self.access['public']).exclude(
+                    user=request.user)
         serializer = CalendarSerializer(calendars, many=True)
         return Response(serializer.data)
 

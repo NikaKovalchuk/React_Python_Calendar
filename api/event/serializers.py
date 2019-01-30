@@ -29,12 +29,6 @@ class EventSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'title', 'text', 'start_date', 'finish_date',
                   'archived', 'user', 'repeat', 'notification', 'notice', 'calendar')
 
-    def update(self, instance, validated_data):
-        calendar = Calendar.objects.get(id=self.context['data']['calendar']['id'])
-        instance.calendar = calendar
-        instance.save()
-        return instance
-
 
 class ExportEventSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

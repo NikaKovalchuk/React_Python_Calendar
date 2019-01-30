@@ -2,9 +2,9 @@ import React, {Component} from 'react';
 import "../../css/form.css"
 import {events} from "../../actions";
 import {connect} from "react-redux";
-import Modal from "./Modal"
+import Info from "./Info"
 
-class CalendarModal extends Component {
+class Calendar extends Component {
 
     constructor(props) {
         super(props);
@@ -12,40 +12,41 @@ class CalendarModal extends Component {
         this.state = {
             name: "",
             id: undefined,
-            access: 0,
+            access: 1,
             color: this.getRandomColor(),
             isOpen: false,
             accessOptions: [{0: 'Public'}, {1: 'Private'}], // TODO : move it somewhere
+            isOpenError: false,
+            errorMessage: null,
         };
     }
 
 
     componentWillReceiveProps(nextProps, nextContext) {
-        if (nextProps.calendar!=undefined && nextProps.calendar.id != undefined) {
-                this.setState({
-                    name: nextProps.calendar.name,
-                    access: nextProps.calendar.access,
-                    color: nextProps.calendar.color,
-                    id:nextProps.calendar.id,
-                })
-        }
-        else {
+        if (nextProps.calendar != undefined && nextProps.calendar.id != undefined) {
+            this.setState({
+                name: nextProps.calendar.name,
+                access: nextProps.calendar.access,
+                color: nextProps.calendar.color,
+                id: nextProps.calendar.id,
+            })
+        } else {
             this.setState({
                 name: "",
-                access: 0,
+                access: 1,
                 color: this.getRandomColor(),
-                id:undefined,
+                id: undefined,
             })
         }
     }
 
     getRandomColor() {
-      var letters = '0123456789abcdef';
-      var color = '#';
-      for (var i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-      }
-      return color;
+        var letters = '0123456789abcdef';
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
     }
 
     selectAccess() {
@@ -74,7 +75,12 @@ class CalendarModal extends Component {
             access: this.state.access,
             color: this.state.color,
         }
-        this.props.onOk(calendar)
+        if (this.state.name == ""){
+             this.setState({
+                isOpenError: true,
+                errorMessage: "Please fill in all fields"
+            })
+        }else  this.props.onOk(calendar)
     };
 
     delete = () => {
@@ -93,7 +99,7 @@ class CalendarModal extends Component {
         }
 
         let buttons, label;
-        if (this.state.id!== undefined) {
+        if (this.state.id !== undefined) {
             buttons = <div className={'button-group'}>
                 <button className={"btn btn-secondary"} onClick={this.props.onCancel}> CANCEL</button>
                 <button className={"btn btn-danger"} onClick={this.toggleModal}> DELETE</button>
@@ -145,10 +151,15 @@ class CalendarModal extends Component {
                     <div className="footer">
                         {buttons}
                     </div>
-                    <Modal show={this.state.isOpen} onCancel={this.toggleModal} onOk={this.delete}
-                           header={"Remove calendar \"" + this.state.name + "\""}>
+                    <Info show={this.state.isOpen} onCancel={this.toggleModal} onOk={this.delete}
+                          header={"Remove calendar \"" + this.state.name + "\""}>
                         Are you sure you want to delete the calendar "{this.state.name}"?
-                    </Modal>
+                    </Info>
+                    <Info show={this.state.isOpenError} onOk={() => {
+                        this.setState({isOpenError: false, errorMessage: null})
+                    }} header={"Error"}>
+                        {this.state.errorMessage}
+                    </Info>
                 </div>
             </div>
         );
@@ -169,4 +180,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CalendarModal);
+export default connect(mapStateToProps, mapDispatchToProps)(Calendar);

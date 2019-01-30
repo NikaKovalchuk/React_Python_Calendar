@@ -2,9 +2,9 @@ import React, {Component} from 'react';
 import "../../css/form.css"
 import {events} from "../../actions";
 import {connect} from "react-redux";
-import Modal from "./Modal";
+import Info from "./Info";
 
-class ImportModal extends Component {
+class Import extends Component {
 
     constructor(props) {
         super(props);
@@ -47,7 +47,7 @@ class ImportModal extends Component {
 
     };
 
-    onCancel=() =>{
+    onCancel = () => {
         this.setState({
             search: "",
             chosenCalendars: []
@@ -152,11 +152,11 @@ class ImportModal extends Component {
                     </div>
                 </div>
 
-                <Modal show={this.state.isOpenError} onOk={() => {
+                <Info show={this.state.isOpenError} onOk={() => {
                     this.setState({isOpenError: false, errorMessage: null})
                 }} header={"Error"}>
                     {this.state.errorMessage}
-                </Modal>
+                </Info>
             </div>
         );
     }
@@ -176,4 +176,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ImportModal);
+export default connect(mapStateToProps, mapDispatchToProps)(Import);

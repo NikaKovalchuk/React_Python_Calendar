@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {auth} from "../actions";
 import Calendar from "./Calendar"
-import Calendars from "./Calendars"
+import CalendarsList from "./CalendarsList"
 import Schedule from "./Schedule"
 import "../css/main.css"
 
@@ -38,7 +38,7 @@ class Main extends Component {
                 <div className={'side-bar'}>
                     <Calendar currentDate={this.state.date} selectedDate={this.state.selectedDate}
                               changeDate={this.changeDate}/>
-                    <Calendars calendars={this.state.calendars} changeCalendars={this.changeCalendars} />
+                    <CalendarsList calendars={this.state.calendars} changeCalendars={this.changeCalendars} />
                 </div>
                 <div className={'scheduler'}>
                     <Schedule currentDate={this.state.date} selectedDate={this.state.selectedDate}

@@ -6,7 +6,7 @@
     right: 0;
     background: rgba(0, 0, 0, 0.3);
     padding: 50px;
-    z-index:1;
+    z-index: 1;
 }
 
 .modal-window {
@@ -32,26 +32,24 @@
 }
 
 
-
-
 .footer {
     text-align: center;
 }
 
-.button-group button{
-   margin: 10px;
+.button-group button {
+    margin: 10px;
 }
 
-.variants{
+.variants {
     width: 100%;
-    height: 400px;
+    max-height: 400px;
     margin-bottom: 10px;
     border: 2px solid var(--border-color);
     overflow: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
-.variant{
+.variant {
     width: 100%;
     border-bottom: 2px solid var(--border-color);
     overflow: hidden;
@@ -59,11 +57,15 @@
     padding-left: 10px;
 }
 
-.variant:hover{
+.variant:hover {
     background: var(--today-background);
+}
+
+.variant:last-child {
+    border-bottom: none;
 }
 
 .variant.chosen {
     background: var(--event-background);
-    color: var( --neutral-color)
+    color: var(--neutral-color)
 }
