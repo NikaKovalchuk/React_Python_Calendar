@@ -12,7 +12,7 @@ class CalendarModal extends Component {
         this.state = {
             name: "",
             id: undefined,
-            access: 0,
+            access: 1,
             color: this.getRandomColor(),
             isOpen: false,
             accessOptions: [{0: 'Public'}, {1: 'Private'}], // TODO : move it somewhere
@@ -32,7 +32,7 @@ class CalendarModal extends Component {
         else {
             this.setState({
                 name: "",
-                access: 0,
+                access: 1,
                 color: this.getRandomColor(),
                 id:undefined,
             })
