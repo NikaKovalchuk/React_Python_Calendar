@@ -3,6 +3,7 @@ import '../css/calendars.css'
 import {auth, events} from "../actions";
 import {connect} from "react-redux";
 import CalendarModal from "./modals/CalendarModal";
+import ImportModal from "./modals/ImportModal";
 
 class Calendars extends React.Component {
     constructor(props) {
@@ -12,6 +13,7 @@ class Calendars extends React.Component {
             user: {},
             calendars: this.props.calendars,
             isOpen: false,
+            isOpenImport: false,
             calendar: {},
             accessOptions: [{0: 'Public'}, {1: 'Private'}],
         }
@@ -53,6 +55,16 @@ class Calendars extends React.Component {
         });
     };
 
+    toggleModalImport = (calendar) => {
+        this.setState({
+            isOpenImport: !this.state.isOpenImport
+        });
+    };
+
+    completeImport = (calendar) => {
+        console.log('completeImport')
+    };
+
     changeShow(e, calendar) {
         e.stopPropagation();
         calendar.show = !calendar.show
@@ -85,8 +97,9 @@ class Calendars extends React.Component {
             result.push(<div className={"element"} key={calendar.id} onClick={() => this.toggleModal(calendar)}>
                 <div className={"name"}>{calendar.name}</div>
                 <div className={"control-panel"}>
-                    <div className={"show"} onClick={(e) => this.changeShow(e,calendar)}>
-                        <input type="checkbox" checked={calendar.show} onChange={()=>{}}></input>
+                    <div className={"show"} onClick={(e) => this.changeShow(e, calendar)}>
+                        <input type="checkbox" checked={calendar.show} onChange={() => {
+                        }}></input>
                     </div>
                     <div className={"color"} style={colorStyle}></div>
                 </div>
@@ -103,7 +116,8 @@ class Calendars extends React.Component {
                     <button type="button" className="btn wide btn-secondary btn-sm"
                             onClick={() => this.toggleModal()}>Add calendar
                     </button>
-                    <button type="button" className="btn wide btn-secondary btn-sm">Import calendar
+                    <button type="button" className="btn wide btn-secondary btn-sm"
+                            onClick={() => this.toggleModalImport()}>Import calendar
                     </button>
                 </div>
             </div>
@@ -119,6 +133,11 @@ class Calendars extends React.Component {
 
                 <CalendarModal show={this.state.isOpen} onCancel={this.toggleModal} onOk={this.complete}
                                calendar={this.state.calendar}></CalendarModal>
+
+
+                <ImportModal show={this.state.isOpenImport} onCancel={this.toggleModalImport}
+                             onOk={this.completeImport}></ImportModal>
+
             </div>
         );
     }

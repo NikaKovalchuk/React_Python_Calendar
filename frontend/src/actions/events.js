@@ -128,15 +128,19 @@ export const addCalendar = (body) => {
     }
 }
 
-export const loadCalendars = () => {
+export const loadCalendars = (importCalendar=false) => {
     return (dispatch, getState) => {
         let headers = {"Content-Type": "application/json"};
         let {token} = getState().auth;
         if (token) {
             headers["Authorization"] = `Token ${token}`;
         }
+        let params = ""
+        if (importCalendar == true ){
+            params = "?import=true"
+        }
 
-        return fetch("http://localhost:8000/api/event/calendar/", {
+        return fetch("http://localhost:8000/api/event/calendar/" + params, {
             headers,
             method: "GET",
         })

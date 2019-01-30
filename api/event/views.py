@@ -180,6 +180,9 @@ class CalendarList(APIView):
 
     def get(self, request):
         calendars = Calendar.objects.filter(user=request.user, archived=False)
+        if request.query_params is not None:
+            if 'import' in request.query_params:
+                calendars = Calendar.objects.filter(archived=False).exclude(user=request.user)
         serializer = CalendarSerializer(calendars, many=True)
         return Response(serializer.data)
 

@@ -41,3 +41,26 @@
 .button-group button{
    margin: 10px;
 }
+
+.variants{
+    width: 100%;
+    height: 400px;
+    margin-bottom: 10px;
+    border: 2px solid var(--border-color);
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+.variant{
+    width: 100%;
+    margin-bottom: 10px;
+    border-bottom: 2px solid var(--border-color);
+    overflow: hidden;
+    text-align: left;
+    padding-left: 10px;
+}
+
+.variant:last-child{
+    border-bottom: none;
+}
+
