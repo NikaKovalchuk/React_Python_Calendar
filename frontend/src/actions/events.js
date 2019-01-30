@@ -59,7 +59,7 @@ export const deleteEvent = (id) => {
     }
 }
 
-export const loadNotifications = (startDate, finishDate) => {
+export const loadNotifications = (startDate, finishDate, calendars) => {
     return (dispatch, getState) => {
         let headers = {"Content-Type": "application/json"};
         let {token} = getState().auth;
@@ -69,7 +69,7 @@ export const loadNotifications = (startDate, finishDate) => {
         startDate = new Date(startDate).toISOString()
         finishDate = new Date(finishDate).toISOString()
 
-        return fetch("http://localhost:8000/api/event/?notification=true&startDate=" + startDate + "&finishDate=" + finishDate, {
+        return fetch("http://localhost:8000/api/event/?notification=true&startDate=" + startDate + "&finishDate=" + finishDate + "&calendar=" + calendars, {
             headers,
             method: "GET",
         })

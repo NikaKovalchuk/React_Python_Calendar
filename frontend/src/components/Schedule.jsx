@@ -90,7 +90,7 @@ class Schedule extends Component {
         this.props.loadEvents(startDate, finishDate, this.state.calendarsId).then(response => {
             this.setState({events: this.props.events});
         });
-        this.props.loadNotifications(startDate, finishDate).then(response => {
+        this.props.loadNotifications(startDate, finishDate, this.state.calendarsId).then(response => {
             this.setState({notifications: this.props.events});
             if (this.props.events !== []) {
                 let event = this.props.events[this.props.events.length - 1];
@@ -524,8 +524,8 @@ const mapDispatchToProps = dispatch => {
         loadEvents: (startDate, finishDate, calendars) => {
             return dispatch(events.loadEvents(startDate, finishDate, calendars));
         },
-        loadNotifications: (startDate, finishDate) => {
-            return dispatch(events.loadNotifications(startDate, finishDate));
+        loadNotifications: (startDate, finishDate, calendars) => {
+            return dispatch(events.loadNotifications(startDate, finishDate, calendars));
         },
         addEvent: (model) => {
             return dispatch(events.addEvent(model));
