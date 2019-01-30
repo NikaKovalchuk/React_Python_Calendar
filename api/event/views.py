@@ -177,12 +177,13 @@ class EventDetail(APIView):
 
 class CalendarList(APIView):
     permission_classes = [permissions.IsAuthenticated, ]
+    access = {'public': 0, 'private': 1}
 
     def get(self, request):
         calendars = Calendar.objects.filter(user=request.user, archived=False)
         if request.query_params is not None:
             if 'import' in request.query_params:
-                calendars = Calendar.objects.filter(archived=False).exclude(user=request.user)
+                calendars = Calendar.objects.filter(archived=False, access=self.access['public']).exclude(user=request.user)
         serializer = CalendarSerializer(calendars, many=True)
         return Response(serializer.data)
 
@@ -236,3 +237,32 @@ class CalendarDetail(APIView):
         calendar = self.get_object(pk, request)
         calendar.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ImportCalendar(APIView):
+    permission_classes = [permissions.IsAuthenticated, ]
+    access = {'public': 0, 'private': 1}
+
+    def get(self, request):
+        if request.query_params is not None:
+            if 'id' in request.query_params:
+                calendars = request.query_params['id'].split(',')
+            else:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        calendars = Calendar.objects.filter(id__in=calendars)
+        for calendar in calendars:
+            new_calendar = calendar
+            id = calendar.id
+            new_calendar.pk = None
+            new_calendar.user = request.user
+            new_calendar.access = self.access['private']
+            new_calendar.save()
+            events = Event.objects.filter(calendar_id=id)
+            for event in events:
+                new_event = event
+                new_event.pk = None
+                new_event.user = request.user
+                new_event.notice = False
+                new_event.calendar = new_calendar
+                new_event.save()
+        return Response(status=status.HTTP_200_OK)

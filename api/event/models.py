@@ -8,7 +8,7 @@ class Calendar(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100, null=False)
     color = models.CharField(max_length=7, null=False, default="#4f5b69")
-    access = models.IntegerField(default=0, blank=True, null=True)
+    access = models.IntegerField(default=1, blank=True, null=True)
     show = models.BooleanField(null=True, blank=True, default=True)
 
     create_date = models.DateTimeField(default=timezone.now, blank=True, null=True)

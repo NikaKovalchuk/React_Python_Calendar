@@ -55,14 +55,17 @@ class Calendars extends React.Component {
         });
     };
 
-    toggleModalImport = (calendar) => {
+    toggleModalImport = () => {
         this.setState({
             isOpenImport: !this.state.isOpenImport
         });
     };
 
-    completeImport = (calendar) => {
-        console.log('completeImport')
+    completeImport = (calendarsId) => {
+        this.props.importCalendars(calendarsId).then(response => {
+            this.toggleModalImport()
+            this.loadCalendars()
+        });
     };
 
     changeShow(e, calendar) {
@@ -155,6 +158,9 @@ const mapDispatchToProps = dispatch => {
     return {
         loadCalendars: () => {
             return dispatch(events.loadCalendars());
+        },
+        importCalendars: (calendarsId) => {
+            return dispatch(events.importCalendars(calendarsId));
         },
         updateCalendar: (id, calendar) => {
             return dispatch(events.updateCalendar(id, calendar));

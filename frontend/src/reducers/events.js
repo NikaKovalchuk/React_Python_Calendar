@@ -34,6 +34,9 @@ export default function events(state = initialState, action) {
         case 'UPDATE_CALENDAR':
             return [...state];
 
+        case 'IMPORT_CALENDAR':
+            return [...state];
+
         case 'DELETE_CALENDAR':
             return [...state];
 

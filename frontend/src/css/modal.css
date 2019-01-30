@@ -53,14 +53,17 @@
 
 .variant{
     width: 100%;
-    margin-bottom: 10px;
     border-bottom: 2px solid var(--border-color);
     overflow: hidden;
     text-align: left;
     padding-left: 10px;
 }
 
-.variant:last-child{
-    border-bottom: none;
+.variant:hover{
+    background: var(--today-background);
 }
 
+.variant.chosen {
+    background: var(--event-background);
+    color: var( --neutral-color)
+}

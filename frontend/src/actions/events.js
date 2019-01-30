@@ -59,7 +59,6 @@ export const deleteEvent = (id) => {
     }
 }
 
-
 export const loadNotifications = (startDate, finishDate) => {
     return (dispatch, getState) => {
         let headers = {"Content-Type": "application/json"};
@@ -186,6 +185,24 @@ export const deleteCalendar = (id) => {
             .then(res => {
                 return dispatch({
                     type: 'DELETE_CALENDAR'
+                })
+            })
+    }
+}
+
+export const importCalendars = (calendarsId) => {
+    return (dispatch, getState) => {
+        let headers = {"Content-Type": "application/json"};
+        let {token} = getState().auth;
+        if (token) {
+            headers["Authorization"] = `Token ${token}`;
+        }
+        let params = "?id=" + calendarsId
+
+        return fetch("http://localhost:8000/api/event/calendar/import/" + params, {headers, method: "GET",})
+            .then(res => {
+                return dispatch({
+                    type: 'IMPORT_CALENDAR'
                 })
             })
     }
