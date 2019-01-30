@@ -39,7 +39,8 @@ class EventList(APIView):
             if 'notification' in request.query_params:
                 notification = True
             if 'calendar' in request.query_params:
-                calendar = request.query_params['calendar'].split(',')
+                if request.query_params['calendar'] != "":
+                    calendar = request.query_params['calendar'].split(',')
 
         events = Event.objects.filter(start_date__gte=start_date, finish_date__lte=finish_date, user=request.user.id,
                                       archived=False, repeat=self.repeat['no'], calendar_id__in=calendar) | \

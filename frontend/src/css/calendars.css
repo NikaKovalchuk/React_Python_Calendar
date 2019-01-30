@@ -3,7 +3,7 @@
 }
 
 .calendars-list {
-    height: 200px;
+    height: 280px;
     overflow: hidden;
     overflow-y: scroll;
 }
@@ -28,18 +28,17 @@
     padding: 2%;
 }
 
-.color{
-    margin-left: 10%;
+.control-panel div {
     width: 15px;
     height: 15px;
-    border-radius: 50%;
     display: inline-block;
+}
+.color{
+    margin-left: 10%;
+    border-radius: 50%;
     text-align: right;
 }
 
 .show{
-    width: 15px;
-    height: 15px;
-    display: inline-block;
     margin: 0 2px;
 }

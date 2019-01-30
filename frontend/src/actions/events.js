@@ -109,7 +109,26 @@ export const loadEvents = (startDate, finishDate, calendars) => {
     }
 }
 
-export const loadCalendars = (id) => {
+export const addCalendar = (body) => {
+    return (dispatch, getState) => {
+        let headers = {"Content-Type": "application/json"};
+        let {token} = getState().auth;
+        if (token) {
+            headers["Authorization"] = `Token ${token}`;
+        }
+        body = JSON.stringify(body)
+
+        return fetch("http://localhost:8000/api/event/calendar/", {headers, method: "POST", body})
+            .then(res => res.json())
+            .then(calendar => {
+                return dispatch({
+                    type: 'ADD_CALENDAR'
+                })
+            })
+    }
+}
+
+export const loadCalendars = () => {
     return (dispatch, getState) => {
         let headers = {"Content-Type": "application/json"};
         let {token} = getState().auth;
@@ -117,7 +136,7 @@ export const loadCalendars = (id) => {
             headers["Authorization"] = `Token ${token}`;
         }
 
-        return fetch("http://localhost:8000/api/event/calendar/?user=" + id, {
+        return fetch("http://localhost:8000/api/event/calendar/", {
             headers,
             method: "GET",
         })
@@ -150,3 +169,21 @@ export const updateCalendar = (index, calendar) => {
             })
     }
 }
+
+export const deleteCalendar = (id) => {
+    return (dispatch, getState) => {
+        let headers = {"Content-Type": "application/json"};
+        let {token} = getState().auth;
+        if (token) {
+            headers["Authorization"] = `Token ${token}`;
+        }
+
+        return fetch("http://localhost:8000/api/event/calendar/" + id + "/", {headers, method: "DELETE",})
+            .then(res => {
+                return dispatch({
+                    type: 'DELETE_CALENDAR'
+                })
+            })
+    }
+}
+

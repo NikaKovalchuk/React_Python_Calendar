@@ -171,7 +171,6 @@ class EventModal extends Component {
             calendar: this.state.calendar,
         }
         if (this.validate(event)) {
-            console.log(event)
             this.props.onOk(event)
         }
     };

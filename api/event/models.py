@@ -39,6 +39,7 @@ class Calendar(models.Model):
     def delete(self, using=None, keep_parents=False):
         self.archived = True
         self.archived_date = timezone.now()
+        self.show = False
         self.save()
 
 

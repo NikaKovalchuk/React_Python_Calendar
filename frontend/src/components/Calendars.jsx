@@ -2,6 +2,7 @@ import React from "react";
 import '../css/calendars.css'
 import {auth, events} from "../actions";
 import {connect} from "react-redux";
+import CalendarModal from "./modals/CalendarModal";
 
 class Calendars extends React.Component {
     constructor(props) {
@@ -10,6 +11,9 @@ class Calendars extends React.Component {
         this.state = {
             user: {},
             calendars: this.props.calendars,
+            isOpen: false,
+            calendar: {},
+            accessOptions: [{0: 'Public'}, {1: 'Private'}],
         }
     }
 
@@ -21,18 +25,53 @@ class Calendars extends React.Component {
     }
 
     loadCalendars() {
-        this.props.loadCalendars(this.state.user.id).then(response => {
+        this.props.loadCalendars().then(response => {
             this.setState({calendars: this.props.events});
             this.props.changeCalendars(this.props.events)
         });
     }
 
-    changeShow(calendar) {
+    toggleModal = (calendar) => {
+        if (this.state.isOpen == true) {
+            this.loadCalendars()
+            this.setState({
+                calendar: calendar,
+            })
+        } else {
+            if (calendar) {
+                this.setState({
+                    calendar: calendar
+                });
+            } else {
+                this.setState({
+                    calendar: {},
+                });
+            }
+        }
+        this.setState({
+            isOpen: !this.state.isOpen
+        });
+    };
+
+    changeShow(e, calendar) {
+        e.stopPropagation();
         calendar.show = !calendar.show
         this.props.updateCalendar(calendar.id, calendar).then(response => {
             this.loadCalendars()
         });
     }
+
+    complete = (calendar) => {
+        if (calendar.id) {
+            this.props.updateCalendar(calendar.id, calendar).then(response => {
+                this.toggleModal()
+            });
+        } else {
+            this.props.addCalendar(calendar).then(response => {
+                this.toggleModal()
+            });
+        }
+    };
 
     list() {
         let result = []
@@ -43,12 +82,11 @@ class Calendars extends React.Component {
             let colorStyle = {
                 backgroundColor: calendar.color
             };
-            result.push(<div className={"element"} key={calendar.id}>
+            result.push(<div className={"element"} key={calendar.id} onClick={() => this.toggleModal(calendar)}>
                 <div className={"name"}>{calendar.name}</div>
                 <div className={"control-panel"}>
-                    <div className={"show"}>
-                        <input type="checkbox" checked={calendar.show}
-                               onChange={() => this.changeShow(calendar)}></input>
+                    <div className={"show"} onClick={(e) => this.changeShow(e,calendar)}>
+                        <input type="checkbox" checked={calendar.show} onChange={()=>{}}></input>
                     </div>
                     <div className={"color"} style={colorStyle}></div>
                 </div>
@@ -61,8 +99,9 @@ class Calendars extends React.Component {
     buttons() {
         return (
             <div>
-                <div className="wide btn-group btn-group-toggle" data-toggle="buttons">
-                    <button type="button" className="btn wide btn-secondary btn-sm">Add calendar
+                <div className=" btn-group wide btn-group-toggle btn-group-center" data-toggle="buttons">
+                    <button type="button" className="btn wide btn-secondary btn-sm"
+                            onClick={() => this.toggleModal()}>Add calendar
                     </button>
                     <button type="button" className="btn wide btn-secondary btn-sm">Import calendar
                     </button>
@@ -77,8 +116,10 @@ class Calendars extends React.Component {
             <div className={'calendars'}>
                 {this.buttons()}
                 {this.list()}
-            </div>
 
+                <CalendarModal show={this.state.isOpen} onCancel={this.toggleModal} onOk={this.complete}
+                               calendar={this.state.calendar}></CalendarModal>
+            </div>
         );
     }
 }
@@ -99,6 +140,10 @@ const mapDispatchToProps = dispatch => {
         updateCalendar: (id, calendar) => {
             return dispatch(events.updateCalendar(id, calendar));
         },
+        addCalendar: (calendar) => {
+            return dispatch(events.addCalendar(calendar));
+        },
+
         loadUser: () => {
             return dispatch(auth.loadUser());
         },
