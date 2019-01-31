@@ -3,8 +3,8 @@ import {connect} from 'react-redux';
 import {auth, events} from "../actions";
 import dateFns from "date-fns";
 import "../css/schedule.css"
-import EventModal from "./modals/EventModal";
-import Modal from "./modals/Modal";
+import Event from "./modals/Event";
+import Info from "./modals/Info";
 
 const viewType = {day: 0, week: 1, month: 2};
 
@@ -19,7 +19,8 @@ class Schedule extends Component {
             selectedDate: this.props.selectedDate,
             clickedDate: null,
             id: null,
-
+            calendars: this.props.calendars,
+            calendarsId: [],
             newEvent: {
                 id: null,
                 title: "",
@@ -29,6 +30,7 @@ class Schedule extends Component {
                 repeat: 0,
                 notice: false,
                 notification: 0,
+                calendar: this.props.calendars[0],
             },
 
             event: {},
@@ -49,13 +51,30 @@ class Schedule extends Component {
 
     componentWillReceiveProps(props) {
         let update = false;
-
+        let calendars = []
         if (props.selectedDate) {
             if (props.selectedDate !== this.state.selectedDate) {
                 if (new Date(props.selectedDate).getMonth() !== new Date(this.state.selectedDate).getMonth()) {
                     update = true
                 }
                 this.setState({selectedDate: props.selectedDate});
+            }
+        }
+        if (props.calendars) {
+            if (props.calendars !== this.state.calendars) {
+                update = true
+                this.setState({
+                    calendars: this.props.calendars
+                })
+                for (let index = 0; index < props.calendars.length; index++) {
+                    let calendar = props.calendars[index]
+                    if (calendar.show == true) {
+                        calendars.push(calendar.id)
+                    }
+                }
+                this.setState({
+                    calendarsId: calendars
+                })
             }
         }
 
@@ -68,10 +87,10 @@ class Schedule extends Component {
         const startDate = dateFns.startOfWeek(dateFns.startOfMonth(date)).toISOString();
         const finishDate = dateFns.endOfWeek(dateFns.endOfMonth(date)).toISOString();
 
-        this.props.loadEvents(startDate, finishDate).then(response => {
+        this.props.loadEvents(startDate, finishDate, this.state.calendarsId).then(response => {
             this.setState({events: this.props.events});
         });
-        this.props.loadNotifications(startDate, finishDate).then(response => {
+        this.props.loadNotifications(startDate, finishDate, this.state.calendarsId).then(response => {
             this.setState({notifications: this.props.events});
             if (this.props.events !== []) {
                 let event = this.props.events[this.props.events.length - 1];
@@ -203,6 +222,7 @@ class Schedule extends Component {
                 if (add === true) {
                     eventStyle = {
                         height: height + 'px',
+                        backgroundColor: event.calendar.color
                     };
                     result.push(<div className={currentClass} key={event.id} style={eventStyle}
                                      onClick={(e) => this.onEventClick(e, event)}>{event.title}</div>);
@@ -351,7 +371,10 @@ class Schedule extends Component {
                         currentClass += classBegin;
                         width += 5
                     }
-                    let eventStyle = {width: width + '%',};
+                    let eventStyle = {
+                        width: width + '%',
+                        backgroundColor: event.calendar.color
+                    };
                     if (result.length === 0 && eventsForToday.length > 1) {
                         let margin = eventHeight + eventMargin;
                         if (eventsForToday.length > 2) {
@@ -360,6 +383,7 @@ class Schedule extends Component {
                         eventStyle = {
                             marginTop: margin + 'px',
                             width: width + '%',
+                            backgroundColor: event.calendar.color
                         }
 
                     }
@@ -376,6 +400,7 @@ class Schedule extends Component {
                 currentClass += classToAdd;
                 let eventStyle = {
                     width: width + eventMargin + '%',
+                    backgroundColor: event.calendar.color
                 };
                 result.push(<div className={currentClass} style={eventStyle}
                                  key={event.id + "_" + event.title + today}
@@ -471,13 +496,14 @@ class Schedule extends Component {
                 {this.buttons()}
                 {this.shedule()}
 
-                <EventModal show={this.state.isOpen} onCancel={this.toggleModal} onOk={this.complete}
-                            event={this.state.event} date={this.state.clickedDate}></EventModal>
-                <Modal show={this.state.isOpenNotification} onOk={this.dismissNotification}
-                       header={"Notification about event \"" + this.state.notificationEvent.title + "\""}>
+                <Event show={this.state.isOpen} onCancel={this.toggleModal} onOk={this.complete}
+                            event={this.state.event} date={this.state.clickedDate}
+                            calendars={this.state.calendars}></Event>
+                <Info show={this.state.isOpenNotification} onOk={this.dismissNotification}
+                      header={"Notification about event \"" + this.state.notificationEvent.title + "\""}>
                     Event "{this.state.notificationEvent.title}" starts
                     in {new Date(this.state.notificationEvent.start_date).toLocaleString()}
-                </Modal>
+                </Info>
             </div>
         )
     }
@@ -495,11 +521,11 @@ const mapDispatchToProps = dispatch => {
         loadUser: () => {
             return dispatch(auth.loadUser());
         },
-        loadEvents: (startDate, finishDate) => {
-            return dispatch(events.loadEvents(startDate, finishDate));
+        loadEvents: (startDate, finishDate, calendars) => {
+            return dispatch(events.loadEvents(startDate, finishDate, calendars));
         },
-        loadNotifications: (startDate, finishDate) => {
-            return dispatch(events.loadNotifications(startDate, finishDate));
+        loadNotifications: (startDate, finishDate, calendars) => {
+            return dispatch(events.loadNotifications(startDate, finishDate, calendars));
         },
         addEvent: (model) => {
             return dispatch(events.addEvent(model));

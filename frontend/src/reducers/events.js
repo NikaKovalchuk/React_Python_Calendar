@@ -28,6 +28,22 @@ export default function events(state = initialState, action) {
         case 'LOAD_NOTIFICATIONS':
             return [...action.events];
 
+        case 'ADD_CALENDAR':
+            return [...state];
+
+        case 'UPDATE_CALENDAR':
+            return [...state];
+
+        case 'IMPORT_CALENDAR':
+            return [...state];
+
+        case 'DELETE_CALENDAR':
+            return [...state];
+
+        case 'LOAD_CALENDARS':
+            return [...action.calendars];
+
+
         default:
             return state;
     }

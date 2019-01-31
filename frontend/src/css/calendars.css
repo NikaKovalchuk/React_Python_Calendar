@@ -1,0 +1,45 @@
+.calendars {
+    margin-top: 10%;
+}
+
+.calendars-list {
+    max-height: 280px;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.calendars-list.element {
+    height: 30px;
+    padding: 2%;
+    border-bottom: 1px solid var(--border-color);
+    display: inline-block;
+}
+
+.name {
+    width: 75%;
+    display: inline-block;
+    padding: 2% 5%;
+}
+
+.control-panel {
+    width: 25%;
+    display: inline-block;
+    vertical-align: top;
+    padding: 2%;
+}
+
+.control-panel div {
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+}
+
+.color {
+    margin-left: 10%;
+    border-radius: 50%;
+    text-align: right;
+}
+
+.show {
+    margin: 0 2px;
+}

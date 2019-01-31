@@ -1,7 +1,7 @@
 import React from 'react';
 import "../../css/modal.css"
 
-class Modal extends React.Component {
+class Info extends React.Component {
 
     render() {
         if (!this.props.show) {
@@ -38,4 +38,4 @@ class Modal extends React.Component {
     }
 }
 
-export default Modal;
+export default Info;

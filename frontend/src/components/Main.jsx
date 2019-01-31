@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {auth} from "../actions";
 import Calendar from "./Calendar"
+import CalendarsList from "./CalendarsList"
 import Schedule from "./Schedule"
 import "../css/main.css"
 
@@ -11,7 +12,7 @@ class Main extends Component {
 
         this.state = {
             user: {},
-            events: {},
+            calendars: {},
             date: new Date(new Date().setHours(0, 0, 0,)),
             selectedDate: new Date(new Date().setHours(0, 0, 0)),
         };
@@ -27,18 +28,21 @@ class Main extends Component {
         this.setState({selectedDate: date});
     };
 
+    changeCalendars = (calendars) => {
+        this.setState({calendars: calendars});
+    };
+
     render() {
         return (
             <div className={"main-content"}>
                 <div className={'side-bar'}>
-                    <div className={'calendar'}>
-                        <Calendar currentDate={this.state.date} selectedDate={this.state.selectedDate}
-                                  changeDate={this.changeDate}/>
-                    </div>
+                    <Calendar currentDate={this.state.date} selectedDate={this.state.selectedDate}
+                              changeDate={this.changeDate}/>
+                    <CalendarsList calendars={this.state.calendars} changeCalendars={this.changeCalendars} />
                 </div>
                 <div className={'scheduler'}>
                     <Schedule currentDate={this.state.date} selectedDate={this.state.selectedDate}
-                              changeDate={this.changeDate}/>
+                              calendars={this.state.calendars} changeDate={this.changeDate}/>
                 </div>
             </div>
         )
