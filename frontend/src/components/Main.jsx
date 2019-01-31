@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {auth} from "../actions";
 import Calendar from "./Calendar"
 import CalendarsList from "./CalendarsList"
 import Schedule from "./Schedule"
@@ -11,18 +10,11 @@ class Main extends Component {
         super(props);
 
         this.state = {
-            user: {},
             calendars: {},
-            date: new Date(new Date().setHours(0, 0, 0,)),
             selectedDate: new Date(new Date().setHours(0, 0, 0)),
         };
     };
 
-    componentDidMount() {
-        this.props.loadUser().then(response => {
-            this.setState({user: this.props.auth.user});
-        });
-    };
 
     changeDate = (date) => {
         this.setState({selectedDate: date});
@@ -36,13 +28,12 @@ class Main extends Component {
         return (
             <div className={"main-content"}>
                 <div className={'side-bar'}>
-                    <Calendar currentDate={this.state.date} selectedDate={this.state.selectedDate}
-                              changeDate={this.changeDate}/>
-                    <CalendarsList calendars={this.state.calendars} changeCalendars={this.changeCalendars} />
+                    <Calendar selectedDate={this.state.selectedDate} changeDate={this.changeDate}/>
+                    <CalendarsList calendars={this.state.calendars} changeCalendars={this.changeCalendars} user={this.props.auth} />
                 </div>
                 <div className={'scheduler'}>
-                    <Schedule currentDate={this.state.date} selectedDate={this.state.selectedDate}
-                              calendars={this.state.calendars} changeDate={this.changeDate}/>
+                    <Schedule selectedDate={this.state.selectedDate} calendars={this.state.calendars}
+                              changeDate={this.changeDate}  user={this.props.auth} />
                 </div>
             </div>
         )
@@ -57,11 +48,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-    return {
-        loadUser: () => {
-            return dispatch(auth.loadUser());
-        },
-    }
+    return {}
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

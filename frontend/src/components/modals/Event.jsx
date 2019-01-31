@@ -34,7 +34,7 @@ class Event extends Component {
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
-        let searchValue = /\+[0-9]*\:[0-9]*/
+        let searchValue = /\+[0-9]*:[0-9]*/
 
         if (nextProps.date != null) {
             /* Convert date to ISOformat to use it in datetime-local component*/
@@ -57,7 +57,7 @@ class Event extends Component {
             })
         }
 
-        if (nextProps.event.id!=undefined) {
+        if (nextProps.event.id!==undefined) {
             if (nextProps.event.start_date) {
                 let date = moment(nextProps.event.start_date).format();
                 this.setState({
@@ -147,7 +147,7 @@ class Event extends Component {
         let calendar = []
         let calendars = this.state.calendars
         for (let index = 0; index < calendars.length; index++) {
-            if (calendars[index].id == id) {
+            if (calendars[index].id === id) {
                 calendar = calendars[index]
             }
         }

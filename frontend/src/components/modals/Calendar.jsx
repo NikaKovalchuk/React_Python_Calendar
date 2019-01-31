@@ -23,7 +23,7 @@ class Calendar extends Component {
 
 
     componentWillReceiveProps(nextProps, nextContext) {
-        if (nextProps.calendar != undefined && nextProps.calendar.id != undefined) {
+        if (nextProps.calendar !== undefined && nextProps.calendar.id !== undefined) {
             this.setState({
                 name: nextProps.calendar.name,
                 access: nextProps.calendar.access,
@@ -75,7 +75,7 @@ class Calendar extends Component {
             access: this.state.access,
             color: this.state.color,
         }
-        if (this.state.name == ""){
+        if (this.state.name === ""){
              this.setState({
                 isOpenError: true,
                 errorMessage: "Please fill in all fields"

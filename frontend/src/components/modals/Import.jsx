@@ -28,7 +28,7 @@ class Import extends Component {
     }
 
     onOk = () => {
-        if (this.state.chosenCalendars.length == 0) {
+        if (this.state.chosenCalendars.length === 0) {
             this.setState({
                 isOpenError: true,
                 errorMessage: "Select one or more calendars to add"
@@ -83,12 +83,12 @@ class Import extends Component {
         let add = true
         let chosenCalendars = this.state.chosenCalendars
         for (let index = 0; index < this.state.chosenCalendars.length; index++) {
-            if (calendar == this.state.chosenCalendars[index]) {
+            if (calendar === this.state.chosenCalendars[index]) {
                 add = false
                 chosenCalendars.splice(index, 1)
             }
         }
-        if (add == true) {
+        if (add === true) {
             chosenCalendars.push(calendar)
         }
         this.setState({
@@ -102,11 +102,11 @@ class Import extends Component {
             let calendar = this.state.calendars[index]
             let calendarClass = "variant";
             for (let index = 0; index < this.state.chosenCalendars.length; index++) {
-                if (calendar == this.state.chosenCalendars[index]) {
+                if (calendar === this.state.chosenCalendars[index]) {
                     calendarClass += " chosen";
                 }
             }
-            if ((calendar.name.indexOf(this.state.search) + 1) || this.state.search == "") {
+            if ((calendar.name.indexOf(this.state.search) + 1) || this.state.search === "") {
                 result.push(<div className={calendarClass} key={calendar.id}
                                  onClick={() => this.onClickCalendar(calendar)}>{calendar.name} </div>)
             }

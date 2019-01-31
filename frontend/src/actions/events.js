@@ -135,7 +135,7 @@ export const loadCalendars = (importCalendar=false) => {
             headers["Authorization"] = `Token ${token}`;
         }
         let params = ""
-        if (importCalendar == true ){
+        if (importCalendar === true ){
             params = "?import=true"
         }
 

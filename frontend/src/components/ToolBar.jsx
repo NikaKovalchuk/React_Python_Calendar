@@ -1,34 +1,19 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {auth, events} from "../actions";
+import {auth} from "../actions";
 
 class ToolBar extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            user: {},
-        };
-    }
-
-    componentDidMount() {
-        this.props.loadUser().then(response => {
-            if (this.props.user) {
-                this.setState({user: this.props.user});
-            }
-        });
-    }
 
     render() {
         let list;
-        if (this.props.user) {
+        if (this.props.user.isAuthenticated) {
             list = <div className={'wide'}>
                 <ul className="navbar-nav navbar-left">
 
                 </ul>
                 <ul className="navbar-nav navbar-right">
                     <li className="nav-item active">
-                        <a className="nav-link" onClick={this.props.logout}> LOG OUT </a>
+                        <a className="nav-link" onClick={this.props.logout} href="/login"> LOG OUT </a>
                     </li>
                 </ul>
             </div>
@@ -48,19 +33,12 @@ class ToolBar extends Component {
 
 const mapStateToProps = state => {
     return {
-        events: state.events,
-        user: state.auth.user,
+        events: state.events
     }
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        addEvent: (text) => {
-            return dispatch(events.addEvent(text));
-        },
-        loadUser: (id) => {
-            return dispatch(auth.loadUser(id));
-        },
         logout: () => dispatch(auth.logout()),
     }
 };

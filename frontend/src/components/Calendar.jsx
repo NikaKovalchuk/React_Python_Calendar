@@ -1,57 +1,39 @@
 import React from "react";
 import dateFns from "date-fns";
 import '../css/calendar.css'
+import moment from "moment";
 
-class Calendar extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            currentDate: this.props.currentDate,
-            selectedDate: this.props.selectedDate,
-            viewDate: this.props.selectedDate,
-        };
-    }
-
-    componentWillReceiveProps(props) {
-        if (props.selectedDate) {
-            if (props.selectedDate !== this.state.selectedDate) {
-                this.setState({
-                    selectedDate: props.selectedDate,
-                    viewDate: props.selectedDate
-                });
-            }
-        }
-    }
-
-    renderHeader() {
+class ControlPanel extends React.Component {
+    render() {
         const dateFormat = "MMM YYYY";
 
         return (
             <div className="header row flex-middle">
-                <div className="col col-start" onClick={() => {
-                    this.setState({viewDate: dateFns.subMonths(this.state.viewDate, 1)})
-                }}>
+                <div className="col col-start"
+                     onClick={() => this.props.changeViewDate(dateFns.subMonths(this.props.viewDate, 1))}>
                     <div className={"icon"}> Prev</div>
                 </div>
                 <div className="col col-center">
             <span>
-              {dateFns.format(this.state.viewDate, dateFormat)}
+              {dateFns.format(this.props.viewDate, dateFormat)}
             </span>
                 </div>
-                <div className="col col-end" onClick={() => {
-                    this.setState({viewDate: dateFns.addMonths(this.state.viewDate, 1)})
-                }}>
+                <div className="col col-end"
+                     onClick={() => this.props.changeViewDate(dateFns.addMonths(this.props.viewDate, 1))}>
                     <div className="icon">Next</div>
                 </div>
             </div>
         );
-    }
 
-    renderDays() {
+    }
+}
+
+
+class NamesOfDays extends React.Component {
+    render() {
         const dateFormat = "dd";
         const days = [];
-        let startDate = dateFns.startOfWeek(this.state.viewDate);
+        let startDate = dateFns.startOfWeek(this.props.viewDate);
 
         for (let i = 0; i < 7; i++) {
             days.push(
@@ -62,10 +44,11 @@ class Calendar extends React.Component {
         }
         return <div className="days row">{days}</div>;
     }
+}
 
-    renderCells() {
-        const {currentDate, viewDate} = this.state;
-        const monthStart = dateFns.startOfMonth(viewDate);
+class Days extends React.Component {
+    render() {
+        const monthStart = dateFns.startOfMonth(this.props.viewDate);
         const startDate = dateFns.startOfWeek(monthStart);
         const endDate = dateFns.endOfWeek(dateFns.endOfMonth(monthStart));
         const dateFormat = "D";
@@ -83,10 +66,10 @@ class Calendar extends React.Component {
                 days.push(
                     <div
                         className={`col cell ${!dateFns.isSameMonth(day, monthStart) ? "disabled" :
-                            dateFns.isSameDay(day, currentDate) ? "today" :
-                                dateFns.isSameDay(day, this.state.selectedDate) ? "selected" : ""}`}
+                            dateFns.isSameDay(day, this.props.selectedDate) ? "selected" : ""}
+                            ${dateFns.isSameDay(day, moment().startOf('day')) ? "today" : ""}`}
                         key={day}
-                        onClick={() => this.onDateClick(dateFns.parse(cloneDay))}>
+                        onClick={() => this.props.onDateClick(cloneDay)}>
                         <span className="number">{formattedDate}</span>
                     </div>
                 );
@@ -102,18 +85,46 @@ class Calendar extends React.Component {
 
         return <div className="body">{rows}</div>;
     }
+}
+
+class Calendar extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            selectedDate: this.props.selectedDate,
+            viewDate: this.props.selectedDate,
+        };
+    }
+
+    componentWillReceiveProps(props) {
+        if (props.selectedDate) {
+            if (props.selectedDate !== this.state.selectedDate) {
+                this.setState({
+                    selectedDate: props.selectedDate,
+                    viewDate: props.selectedDate
+                });
+            }
+        }
+    }
 
     onDateClick = day => {
         this.setState({selectedDate: day});
         this.props.changeDate(day);
     };
 
+    changeViewDate = date => {
+        this.setState({
+            viewDate: date
+        })
+    }
+
     render() {
         return (
             <div className={'calendar'}>
-                {this.renderHeader()}
-                {this.renderDays()}
-                {this.renderCells()}
+                <ControlPanel viewDate={this.state.viewDate} changeViewDate={this.changeViewDate}/>
+                <NamesOfDays viewDate={this.state.viewDate}/>
+                <Days viewDate={this.state.viewDate} selectedDate={this.state.selectedDate} onDateClick={this.onDateClick}/>
             </div>
         );
     }

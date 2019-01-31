@@ -50,6 +50,6 @@ class NewEventSerializer(serializers.HyperlinkedModelSerializer):
 
     def create(self, validated_data):
         validated_data['user'] = self.context['request'].user
-        calendar = Calendar.objects.get(id=self.context['data']['calendar']['id'])
+        calendar = Calendar.objects.get(id=int(self.context['data']['calendar']['id']))
         validated_data['calendar'] = calendar
         return Event.objects.create(**validated_data)

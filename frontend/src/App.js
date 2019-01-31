@@ -33,8 +33,8 @@ class RootContainerComponent extends Component {
     render() {
         let {PrivateRoute} = this;
         return (
-            <Provider store={store}>
-                <ToolBar/>
+            <div>
+                <ToolBar user={this.props.auth}/>
                 <BrowserRouter>
                     <div id={"content"}>
                         <Switch>
@@ -46,7 +46,7 @@ class RootContainerComponent extends Component {
                         </Switch>
                     </div>
                 </BrowserRouter>
-            </Provider>
+            </div>
         );
     }
 }
