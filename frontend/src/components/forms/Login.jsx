@@ -70,14 +70,9 @@ class Login extends Component {
 const mapStateToProps = state => {
     let errors = [];
     let removeErrors = false
-    if (state.auth.errors) {
-        errors = Object.keys(state.auth.errors).map(field => {
-            if (state.auth.errors[field] !== "Authentication credentials were not provided." && state.auth.errors[field] !== "Invalid token.") {
-                return {field, message: state.auth.errors[field]};
-            } else {
-                removeErrors = true
-                return {}
-            }
+    if (state.auth.loginErrors) {
+        errors = Object.keys(state.auth.loginErrors).map(field => {
+           return {field, message: state.auth.loginErrors[field]};
         });
     }
     if (removeErrors === true) {

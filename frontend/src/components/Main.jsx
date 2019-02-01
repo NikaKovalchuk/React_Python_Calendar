@@ -43,12 +43,8 @@ class Main extends Component {
 const mapStateToProps = state => {
     return {
         auth: state.auth,
-        events: state.events,
+        events: state.events
     }
 };
 
-const mapDispatchToProps = dispatch => {
-    return {}
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Main);
+export default connect(mapStateToProps, null)(Main);

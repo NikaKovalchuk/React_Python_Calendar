@@ -21,11 +21,14 @@ export default function auth(state = initialState, action) {
             return {...state, ...action.data, isAuthenticated: true, errors: null};
 
         case 'AUTHENTICATION_ERROR':
-        case 'LOGIN_FAILED':
-        case 'REGISTRATION_FAILED':
         case 'LOGOUT':
             localStorage.removeItem("token");
             return {...state, errors: action.data,  user: null, isAuthenticated: false};
+
+        case 'LOGIN_FAILED':
+        case 'REGISTRATION_FAILED':
+            localStorage.removeItem("token");
+            return {...state, loginErrors: action.data,  user: null, isAuthenticated: false};
 
         default:
             return state;

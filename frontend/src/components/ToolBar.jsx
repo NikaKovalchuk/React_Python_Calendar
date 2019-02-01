@@ -6,7 +6,7 @@ class ToolBar extends Component {
 
     render() {
         let list;
-        if (this.props.user.isAuthenticated) {
+        if (this.props.isAuthenticated) {
             list = <div className={'wide'}>
                 <ul className="navbar-nav navbar-left">
 
@@ -31,16 +31,10 @@ class ToolBar extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        events: state.events
-    }
-};
-
 const mapDispatchToProps = dispatch => {
     return {
         logout: () => dispatch(auth.logout()),
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ToolBar);
+export default connect(null, mapDispatchToProps)(ToolBar);
