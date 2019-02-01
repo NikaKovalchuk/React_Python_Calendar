@@ -1,6 +1,6 @@
 import React from "react";
 import '../css/calendars.css'
-import {events} from "../actions";
+import {calendars} from "../actions";
 import {connect} from "react-redux";
 import Calendar from "./modals/Calendar";
 import Import from "./modals/Import";
@@ -67,8 +67,8 @@ class CalendarsList extends React.Component {
 
     loadCalendars() {
         this.props.loadCalendars().then(response => {
-            this.setState({calendars: this.props.events});
-            this.props.changeCalendars(this.props.events)
+            this.setState({calendars: this.props.calendars});
+            this.props.changeCalendars(this.props.calendars)
         });
     }
 
@@ -152,22 +152,23 @@ const mapStateToProps = state => {
     return {
         events: state.events,
         auth: state.auth,
+        calendars: state.calendars
     }
 };
 
 const mapDispatchToProps = dispatch => {
     return {
         loadCalendars: () => {
-            return dispatch(events.loadCalendars());
+            return dispatch(calendars.loadCalendars());
         },
         importCalendars: (calendarsId) => {
-            return dispatch(events.importCalendars(calendarsId));
+            return dispatch(calendars.importCalendars(calendarsId));
         },
-        updateCalendar: (id, calendar) => {
-            return dispatch(events.updateCalendar(id, calendar));
+        updateCalendar: (id, obj) => {
+            return dispatch(calendars.updateCalendar(id, obj));
         },
-        addCalendar: (calendar) => {
-            return dispatch(events.addCalendar(calendar));
+        addCalendar: (obj) => {
+            return dispatch(calendars.addCalendar(obj));
         },
 
     }

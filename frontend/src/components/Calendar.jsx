@@ -1,5 +1,4 @@
 import React from "react";
-import dateFns from "date-fns";
 import '../css/calendar.css'
 import moment from "moment";
 
@@ -10,16 +9,16 @@ class ControlPanel extends React.Component {
         return (
             <div className="header row flex-middle">
                 <div className="col col-start"
-                     onClick={() => this.props.changeViewDate(dateFns.subMonths(this.props.viewDate, 1))}>
+                     onClick={() => this.props.changeViewDate(moment(this.props.viewDate).add(-1, 'month'))}>
                     <div className={"icon"}> Prev</div>
                 </div>
                 <div className="col col-center">
             <span>
-              {dateFns.format(this.props.viewDate, dateFormat)}
+              {moment(this.props.viewDate).format(dateFormat)}
             </span>
                 </div>
                 <div className="col col-end"
-                     onClick={() => this.props.changeViewDate(dateFns.addMonths(this.props.viewDate, 1))}>
+                     onClick={() => this.props.changeViewDate(moment(this.props.viewDate).add(1, 'month'))}>
                     <div className="icon">Next</div>
                 </div>
             </div>
@@ -33,12 +32,12 @@ class NamesOfDays extends React.Component {
     render() {
         const dateFormat = "dd";
         const days = [];
-        let startDate = dateFns.startOfWeek(this.props.viewDate);
+        let startDate = moment(this.props.viewDate).startOf('week');
 
         for (let i = 0; i < 7; i++) {
             days.push(
                 <div className="col col-center" key={i}>
-                    {dateFns.format(dateFns.addDays(startDate, i), dateFormat)}
+                    {moment(startDate).add(i, 'day').format(dateFormat)}
                 </div>
             );
         }
@@ -48,9 +47,9 @@ class NamesOfDays extends React.Component {
 
 class Days extends React.Component {
     render() {
-        const monthStart = dateFns.startOfMonth(this.props.viewDate);
-        const startDate = dateFns.startOfWeek(monthStart);
-        const endDate = dateFns.endOfWeek(dateFns.endOfMonth(monthStart));
+        const monthStart = moment(this.props.viewDate).startOf('month');
+        const startDate =  moment(monthStart).startOf('week');
+        const endDate = moment(monthStart).endOf('month');
         const dateFormat = "D";
         const rows = [];
 
@@ -62,18 +61,18 @@ class Days extends React.Component {
             for (let i = 0; i < 7; i++) {
                 const cloneDay = day;
 
-                formattedDate = dateFns.format(day, dateFormat);
+                formattedDate = moment(day).format(dateFormat);
                 days.push(
                     <div
-                        className={`col cell ${!dateFns.isSameMonth(day, monthStart) ? "disabled" :
-                            dateFns.isSameDay(day, this.props.selectedDate) ? "selected" : ""}
-                            ${dateFns.isSameDay(day, moment().startOf('day')) ? "today" : ""}`}
+                        className={`col cell ${! moment(day).isSame(monthStart, 'month') ? "disabled" :
+                            moment(day).isSame( this.props.selectedDate, 'day') ? "selected" : ""}
+                            ${ moment(day).isSame( moment().startOf('day'), 'day') ? "today" : ""}`}
                         key={day}
                         onClick={() => this.props.onDateClick(cloneDay)}>
                         <span className="number">{formattedDate}</span>
                     </div>
                 );
-                day = dateFns.addDays(day, 1);
+                day = moment(day).add(1, 'day');
             }
             rows.push(
                 <div className="row" key={day}>

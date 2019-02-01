@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {events} from "../actions";
-import dateFns from "date-fns";
 import "../css/schedule.css"
 import EventModal from "./modals/Event";
 import Info from "./modals/Info";
@@ -53,30 +52,30 @@ class MonthEvent extends Component {
         const eventHeight = 25;
         const eventWidth = cellWidth - 2 * eventMargin;
 
-        const today = this.props.today
-        const beginOfToday = dateFns.startOfDay(today);
-        const endOfToday = dateFns.endOfDay(today);
-        const beginOfWeek = dateFns.startOfWeek(today);
-        const endOfWeek = dateFns.endOfWeek(today);
+        const today = this.props.today;
+        const beginOfToday = moment(today).startOf('day');
+        const endOfToday = moment(today).endOf('day');
+        const beginOfWeek = moment(today).startOf('week');
+        const endOfWeek = moment(today).endOf('week');
         const result = [];
 
         let eventsForToday = [];
         let events = this.props.events
         for (let index = 0; index < events.length; index++) {
             let event = events[index];
-            let finishDate = new Date(event.finish_date);
-            let startDate = new Date(event.start_date);
+            let finishDate = moment(event.finish_date);
+            let startDate = moment(event.start_date);
             let numberOfDays = 0;
             let currentClass = defaultClass;
 
             if (finishDate < endOfWeek && finishDate > beginOfWeek && startDate > beginOfWeek && startDate < endOfWeek) {
-                numberOfDays = finishDate.getDay() - startDate.getDay()
+                numberOfDays = finishDate.date() - startDate.date()
             } else if (startDate > beginOfWeek && startDate < endOfWeek) {
-                numberOfDays = endOfWeek.getDay() - startDate.getDay()
+                numberOfDays = endOfWeek.date() - startDate.date()
             } else if (finishDate < endOfWeek && finishDate > beginOfWeek) {
-                numberOfDays = finishDate.getDay() - beginOfWeek.getDay()
+                numberOfDays = finishDate.date() - beginOfWeek.date()
             } else {
-                numberOfDays = endOfWeek.getDay() - beginOfWeek.getDay()
+                numberOfDays = endOfWeek.date() - beginOfWeek.date()
             }
 
             let width = eventWidth + numberOfDays * cellWidth;
@@ -143,13 +142,13 @@ class MonthEvent extends Component {
     }
 }
 
-class Events extends Component{
+class Events extends Component {
     render() {
         const day = this.props.day;
         const hour = this.props.hour;
         let result = [];
-        let startOfDay = dateFns.startOfDay(day);
-        let endOfDay = dateFns.endOfDay(day);
+        let startOfDay = moment(day).startOf('day');
+        let endOfDay = moment(day).endOf('day');
 
         const eventHeight = 20;
         const betweenDaysHeight = 10;
@@ -164,19 +163,19 @@ class Events extends Component{
 
         for (let index = 0; index < events.length; index++) {
             let event = events[index];
-            let startDate = new Date(event.start_date);
-            let finishDate = new Date(event.finish_date);
+            let startDate = moment(event.start_date);
+            let finishDate = moment(event.finish_date);
             let add = false;
             let eventStyle = [];
             let height = eventHeight;
             if (startDate <= endOfDay && finishDate >= startOfDay) {
                 let currentClass = className;
                 if (startDate >= startOfDay) {
-                    if (startDate.getHours() === hour.getHours()) {
+                    if (startDate.hour() === hour.hour()) {
                         add = true
                     }
                     if (finishDate <= endOfDay) {
-                        height = height + (finishDate.getHours() - hour) * (eventHeight + betweenDaysHeight)
+                        height = height + (finishDate.hour() - hour) * (eventHeight + betweenDaysHeight)
                     } else {
                         height = height + (dayLength - hour) * (eventHeight + betweenDaysHeight) + eventMargin;
                         currentClass += classBegin
@@ -184,11 +183,11 @@ class Events extends Component{
                 }
 
                 if (startDate < startOfDay) {
-                    if (startOfDay.getHours() === hour.getHours()) {
+                    if (startOfDay.hour() === hour.hour()) {
                         add = true
                     }
                     if (finishDate <= endOfDay) {
-                        height = height + (finishDate.getHours() - hour) * (eventHeight + betweenDaysHeight) + eventMargin;
+                        height = height + (finishDate.hour() - hour) * (eventHeight + betweenDaysHeight) + eventMargin;
                         currentClass += classEnd
                     } else
                         height = height + (dayLength - hour) * (eventHeight + betweenDaysHeight) + eventMargin * 2;
@@ -213,10 +212,10 @@ class Events extends Component{
 class Month extends Component {
     render() {
         const selectedDate = this.props.selectedDate;
-        const monthStart = dateFns.startOfMonth(selectedDate);
-        const monthEnd = dateFns.endOfMonth(monthStart);
-        const startDate = dateFns.startOfWeek(monthStart);
-        const endDate = dateFns.endOfWeek(monthEnd);
+        const monthStart = moment(selectedDate).startOf('month');
+        const monthEnd = moment(monthStart).endOf('month');
+        const startDate = moment(monthStart).startOf('week')
+        const endDate = moment(monthEnd).endOf('week');
 
         let month = [];
         let week = [];
@@ -230,15 +229,15 @@ class Month extends Component {
                          onClick={() => this.props.onDateClick(cloneDay, null)}
                          key={day}>
                         <div className="number"
-                             onClick={(e) => this.props.viewDay(e, cloneDay)}>{dateFns.format(day, "D")}</div>
+                             onClick={(e) => this.props.viewDay(e, cloneDay)}>{moment(day).format("D")}</div>
                         <MonthEvent today={cloneDay}
                                     events={this.props.events}
                                     onEventClick={this.props.onEventClick}
-                                    viewDay = {this.props.viewDay}
+                                    viewDay={this.props.viewDay}
                         />
                     </div>
                 );
-                day = dateFns.addDays(day, 1);
+                day = moment(day).add(1, 'day');
             }
             month.push(<div className="row" key={day + "row"}> {week} </div>);
             week = [];
@@ -250,9 +249,9 @@ class Month extends Component {
 class Week extends Component {
     render() {
         const selectedDate = this.props.selectedDate;
-        const weekStart = dateFns.startOfWeek(selectedDate);
-        const dayStart = dateFns.startOfDay(selectedDate);
-        const dayEnd = dateFns.endOfDay(selectedDate);
+        const weekStart = moment(selectedDate).startOf('week')
+        const dayStart = moment(selectedDate).startOf('day')
+        const dayEnd = moment(selectedDate).endOf('day')
         const hours = [];
 
         let week = [];
@@ -263,10 +262,10 @@ class Week extends Component {
         for (let i = 0; i < 7; i++) {
             week.push(
                 <div className="week-view-day-title" key={day + '-week-view-day-title'}>
-                    <span>{dateFns.format(day, "D")}</span>
+                    <span>{moment(day).format("D")}</span>
                 </div>
             );
-            day = dateFns.addDays(day, 1);
+            day = moment(day).add(1, 'day')
         }
         hours.push(<div className="row" key={day}> {week} </div>);
         week = [];
@@ -275,28 +274,28 @@ class Week extends Component {
             let day = weekStart;
             week.push(
                 <div className="day-view-time" key={hour + "-day-view-time"}>
-                    <span>{dateFns.format(hour, "hh:mm A")}</span>
+                    <span>{moment(hour).format("hh:mm A")}</span>
                 </div>
             );
 
             for (let i = 0; i < 7; i++) {
                 const cloneHour = hour;
-                const cloneday = day;
+                const cloneDay = day;
                 week.push(
                     <div className="week-view-day" key={day + '-week-view-day'}
-                         onClick={() => this.onDateClick(cloneday, cloneHour)}>
-                         <Events events={this.props.events}
-                                 day = {cloneday}
-                                 hour = {cloneHour}
-                                 onEventClick = {this.props.onEventClick}
-                         />
+                         onClick={() => this.onDateClick(cloneDay, cloneHour)}>
+                        <Events events={this.props.events}
+                                day={cloneDay}
+                                hour={cloneHour}
+                                onEventClick={this.props.onEventClick}
+                        />
                     </div>
                 );
-                day = dateFns.addDays(day, 1);
+                day = moment(day).add(1, 'day');
             }
             hours.push(<div className="row" key={day + ' ' + hour}> {week} </div>);
             week = [];
-            hour = dateFns.addHours(hour, 1)
+            hour = moment(hour).add(1, 'hour');
         }
         return <div className="table">{hours}</div>;
     }
@@ -304,33 +303,33 @@ class Week extends Component {
 
 class Day extends Component {
     render() {
-       const selectedDate = this.props.selectedDate;
-        const dayStart = dateFns.startOfDay(selectedDate);
-        const dayEnd = dateFns.endOfDay(selectedDate);
+        const selectedDate = this.props.selectedDate;
+        const dayStart = moment(selectedDate).startOf('day')
+        const dayEnd = moment(selectedDate).endOf('day');
         const day = selectedDate;
         const hours = [];
 
         let hour = dayStart;
-        hours.push(<div className="day-title" key={day}><span>{dateFns.format(day, "D")}</span></div>);
+        hours.push(<div className="day-title" key={day}><span>{moment(day).format("D")}</span></div>);
 
         while (hour <= dayEnd) {
             const cloneHour = hour;
             hours.push(
                 <div className="row" key={'row' + hour}>
                     <div className={'day-view-time'} key={'day-view-time'}>
-                        <span>{dateFns.format(hour, "hh:mm A")}</span>
+                        <span>{moment(hour).format("hh:mm A")}</span>
                     </div>
                     <div className={'day-view-data'} key={'day-view-data'}
                          onClick={() => this.props.onDateClick(day, cloneHour)}>
                         <Events events={this.props.events}
-                                 day = {day}
-                                 hour = {cloneHour}
-                                 onEventClick = {this.props.onEventClick}
-                         />
+                                day={day}
+                                hour={cloneHour}
+                                onEventClick={this.props.onEventClick}
+                        />
                     </div>
                 </div>
             );
-            hour = dateFns.addHours(hour, 1)
+            hour = moment(hour).add( 1, 'hour')
         }
 
         return <div className="table">{hours}</div>;
@@ -342,29 +341,29 @@ class ScheduleTable extends Component {
         let table;
         if (this.props.view === viewType.day) {
             table = <Day selectedDate={this.props.selectedDate}
-                          onEventClick={this.props.onEventClick}
-                          viewDay={this.viewDay}
-                          view={this.props.view}
-                         events = {this.props.events}
-                         onDateClick = {this.props.onDateClick}
+                         onEventClick={this.props.onEventClick}
+                         viewDay={this.props.viewDay}
+                         view={this.props.view}
+                         events={this.props.events}
+                         onDateClick={this.props.onDateClick}
             />
         }
         if (this.props.view === viewType.week) {
             table = <Week selectedDate={this.props.selectedDate}
                           onEventClick={this.props.onEventClick}
-                          viewDay={this.viewDay}
+                          viewDay={this.props.viewDay}
                           view={this.props.view}
-                          events = {this.props.events}
-                          onDateClick = {this.props.onDateClick}
+                          events={this.props.events}
+                          onDateClick={this.props.onDateClick}
             />
         }
         if (this.props.view === viewType.month) {
             table = <Month selectedDate={this.props.selectedDate}
                            onEventClick={this.props.onEventClick}
-                           viewDay={this.viewDay}
+                           viewDay={this.props.viewDay}
                            view={this.props.view}
-                           events = {this.props.events}
-                           onDateClick = {this.props.onDateClick}
+                           events={this.props.events}
+                           onDateClick={this.props.onDateClick}
             />
         }
 
@@ -392,8 +391,8 @@ class Schedule extends Component {
                 id: null,
                 title: "",
                 text: "",
-                startDate: new Date().toISOString(),
-                finishDate: new Date(new Date().setHours(new Date().getHours() + 1)).toISOString(),
+                startDate: moment().toISOString(),
+                finishDate: moment().hour(moment().hour() + 1).toISOString(),
                 repeat: 0,
                 notice: false,
                 notification: 0,
@@ -418,7 +417,7 @@ class Schedule extends Component {
         let calendars = []
         if (props.selectedDate) {
             if (props.selectedDate !== this.state.selectedDate) {
-                if (new Date(props.selectedDate).getMonth() !== new Date(this.state.selectedDate).getMonth()) {
+                if (moment(props.selectedDate).month() !== moment(this.state.selectedDate).month()) {
                     update = true
                 }
                 this.setState({selectedDate: props.selectedDate});
@@ -448,8 +447,8 @@ class Schedule extends Component {
     }
 
     updateEvents(date) {
-        const startDate = dateFns.startOfWeek(dateFns.startOfMonth(date)).toISOString();
-        const finishDate = dateFns.endOfWeek(dateFns.endOfMonth(date)).toISOString();
+        const startDate = moment(date).startOf('month').startOf('week').toISOString();
+        const finishDate =  moment(date).endOf('month').endOf('week');
 
         this.props.loadEvents(startDate, finishDate, this.state.calendarsId).then(response => {
             this.setState({events: this.props.events});
@@ -515,7 +514,7 @@ class Schedule extends Component {
 
     onDateClick = (day, hour) => {
         if (hour != null) {
-            day = new Date(day.setHours(hour.getHours()))
+            day = moment(day.setHours(hour.getHours()))
         }
         this.setState({
             event: {},
@@ -547,8 +546,8 @@ class Schedule extends Component {
 
                 <ScheduleTable view={this.state.view}
                                selectedDate={this.props.selectedDate}
-                               events = {this.props.events}
-                               viewDay = {this.props.viewDay}
+                               events={this.props.events}
+                               viewDay={this.viewDay}
                                onDateClick={this.onDateClick}
                                onEventClick={this.onEventClick}
                 />
@@ -560,7 +559,7 @@ class Schedule extends Component {
                 <Info show={this.state.isOpenNotification} onOk={this.dismissNotification}
                       header={"Notification about event \"" + this.state.notificationEvent.title + "\""}>
                     Event "{this.state.notificationEvent.title}" starts
-                    in {new Date(this.state.notificationEvent.start_date).toLocaleString()}
+                    in {moment(this.state.notificationEvent.start_date).toLocaleString()}
                 </Info>
 
             </div>

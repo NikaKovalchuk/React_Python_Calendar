@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import "../../css/form.css"
-import {events} from "../../actions";
+import {calendars} from "../../actions";
 import {connect} from "react-redux";
 import Info from "./Info"
 
@@ -169,13 +169,14 @@ class Calendar extends Component {
 const mapStateToProps = state => {
     return {
         events: state.events,
+        calendars:state.calendars
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
         deleteCalendar: (id) => {
-            return dispatch(events.deleteCalendar(id));
+            return dispatch(calendars.deleteCalendar(id));
         },
     }
 }

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import "../../css/form.css"
-import {events} from "../../actions";
+import {calendars} from "../../actions";
 import {connect} from "react-redux";
 import Info from "./Info";
 
@@ -164,14 +164,14 @@ class Import extends Component {
 
 const mapStateToProps = state => {
     return {
-        events: state.events,
+        calendars: state.calendars,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
         loadCalendars: () => {
-            return dispatch(events.loadCalendars(true));
+            return dispatch(calendars.loadCalendars(true));
         },
     }
 }

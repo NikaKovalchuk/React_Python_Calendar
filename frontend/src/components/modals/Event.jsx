@@ -15,8 +15,8 @@ class Event extends Component {
             title: "",
             text: "",
             id: this.props.id,
-            start_date: new Date(),
-            finish_date: new Date(),
+            start_date: moment(),
+            finish_date: moment(),
             repeat: 0,
             notification: 0,
             notice: false,
@@ -38,12 +38,12 @@ class Event extends Component {
 
         if (nextProps.date != null) {
             /* Convert date to ISOformat to use it in datetime-local component*/
-            let date = moment(new Date(nextProps.date)).format();
+            let date = moment(nextProps.date).format();
             this.setState({
                 start_date: date.replace(searchValue, '')
             })
 
-            date = new Date(date)
+            date = moment(date)
             date = moment(new Date(date.setHours(date.getHours() + 1))).format();
             this.setState({
                 finish_date: date.replace(searchValue, ''),
