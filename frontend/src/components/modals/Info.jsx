@@ -40,10 +40,11 @@ class Info extends React.Component {
 }
 
 Info.propTypes = {
-    onCancel: PropTypes.func,
-    onOk : PropTypes.func,
     show : PropTypes.bool,
-    header : PropTypes.string
+    header : PropTypes.string,
+
+    onCancel: PropTypes.func,
+    onOk : PropTypes.func
 };
 
 export default Info;

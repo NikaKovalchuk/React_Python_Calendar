@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
 import Calendar from "./Calendar"
 import CalendarsList from "./CalendarsList"
 import Schedule from "./Schedule"

@@ -172,11 +172,12 @@ const mapDispatchToProps = dispatch => {
 }
 
 Import.propTypes = {
-    onCancel: PropTypes.func,
-    onOk : PropTypes.func,
     show : PropTypes.bool,
+    events: PropTypes.arrayOf(PropTypes.object),
+
+    onCancel: PropTypes.func,
     loadCalendars : PropTypes.func,
-    events: PropTypes.arrayOf(PropTypes.object)
+    onOk : PropTypes.func
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Import);

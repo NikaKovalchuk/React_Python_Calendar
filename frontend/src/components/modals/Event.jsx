@@ -48,8 +48,8 @@ class Event extends Component {
             date = date.hours(date.hours() + 1).format();
             this.setState({
                 finish_date: date.replace(searchValue, ''),
-                calendar: nextProps.calendars[0],
-                calendarId: nextProps.calendars[0].id,
+                calendar: nextProps.calendars? nextProps.calendars[0] : undefined,
+                calendarId: nextProps.calendars[0]? nextProps.calendars[0].id : undefined,
                 id: nextProps.event.id,
                 title: nextProps.event.title,
                 text: nextProps.event.text,
@@ -324,12 +324,14 @@ const mapDispatchToProps = dispatch => {
 }
 
 Event.propTypes = {
-    onCancel: PropTypes.func,
-    onOk : PropTypes.func,
     date : PropTypes.object,
-    show : PropTypes.bool,
     event : PropTypes.object,
-    calendar: PropTypes.arrayOf( PropTypes.object)
+    calendar: PropTypes.arrayOf( PropTypes.object),
+
+    show : PropTypes.bool,
+
+    onOk : PropTypes.func,
+    onCancel: PropTypes.func
 };
 
 

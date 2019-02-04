@@ -37,7 +37,6 @@ ToolBar.propTypes = {
     isAuthenticated: PropTypes.bool
 };
 
-
 const mapDispatchToProps = dispatch => {
     return {
         logout: () => dispatch(auth.logout()),

@@ -176,10 +176,11 @@ const mapDispatchToProps = dispatch => {
 }
 
 Calendar.propTypes = {
-    onCancel: PropTypes.func,
-    onOk : PropTypes.func,
     show : PropTypes.bool,
-    calendar: PropTypes.object
+    calendar: PropTypes.object,
+
+    onCancel: PropTypes.func,
+    onOk : PropTypes.func
 };
 
 export default connect(null, mapDispatchToProps)(Calendar);

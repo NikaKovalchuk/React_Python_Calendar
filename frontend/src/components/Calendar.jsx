@@ -28,6 +28,12 @@ class ControlPanel extends React.Component {
     }
 }
 
+ControlPanel.propTypes = {
+    viewDate: PropTypes.object,
+
+    changeDate: PropTypes.func
+};
+
 
 class NamesOfDays extends React.Component {
     render() {
@@ -49,7 +55,7 @@ class NamesOfDays extends React.Component {
 class Days extends React.Component {
     render() {
         const monthStart = moment(this.props.viewDate).startOf('month');
-        const startDate =  moment(monthStart).startOf('week');
+        const startDate = moment(monthStart).startOf('week');
         const endDate = moment(monthStart).endOf('month');
         const dateFormat = "D";
         const rows = [];
@@ -65,9 +71,9 @@ class Days extends React.Component {
                 formattedDate = moment(day).format(dateFormat);
                 days.push(
                     <div
-                        className={`col cell ${! moment(day).isSame(monthStart, 'month') ? "disabled" :
-                            moment(day).isSame( this.props.selectedDate, 'day') ? "selected" : ""}
-                            ${ moment(day).isSame( moment().startOf('day'), 'day') ? "today" : ""}`}
+                        className={`col cell ${!moment(day).isSame(monthStart, 'month') ? "disabled" :
+                            moment(day).isSame(this.props.selectedDate, 'day') ? "selected" : ""}
+                            ${moment(day).isSame(moment().startOf('day'), 'day') ? "today" : ""}`}
                         key={day}
                         onClick={() => this.props.onDateClick(cloneDay)}>
                         <span className="number">{formattedDate}</span>
@@ -86,6 +92,14 @@ class Days extends React.Component {
         return <div className="body">{rows}</div>;
     }
 }
+
+Days.propTypes = {
+    selectedDate: PropTypes.object,
+
+    changeDate: PropTypes.func,
+    onDateClick: PropTypes.func
+};
+
 
 class Calendar extends React.Component {
     constructor(props) {
@@ -124,7 +138,8 @@ class Calendar extends React.Component {
             <div className={'calendar'}>
                 <ControlPanel viewDate={this.state.viewDate} changeViewDate={this.changeViewDate}/>
                 <NamesOfDays/>
-                <Days viewDate={this.state.viewDate} selectedDate={this.state.selectedDate} onDateClick={this.onDateClick}/>
+                <Days viewDate={this.state.viewDate} selectedDate={this.state.selectedDate}
+                      onDateClick={this.onDateClick}/>
             </div>
         );
     }
@@ -132,19 +147,9 @@ class Calendar extends React.Component {
 
 
 Calendar.propTypes = {
-    selectedDate:PropTypes.object,
-    changeDate: PropTypes.func
-};
+    selectedDate: PropTypes.object,
 
-ControlPanel.propTypes = {
-    viewDate:PropTypes.object,
     changeDate: PropTypes.func
-};
-
-Days.propTypes = {
-    selectedDate:PropTypes.object,
-    changeDate: PropTypes.func,
-    onDateClick: PropTypes.func
 };
 
 export default Calendar;

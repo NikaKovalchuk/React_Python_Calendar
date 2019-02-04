@@ -5,6 +5,7 @@ import "../css/schedule.css"
 import EventModal from "./modals/Event";
 import Info from "./modals/Info";
 import moment from "moment";
+import PropTypes from "prop-types";
 
 const viewType = {day: 0, week: 1, month: 2};
 
@@ -38,6 +39,11 @@ class ControlPanel extends Component {
         )
     }
 }
+
+ControlPanel.propTypes = {
+    changeDate: PropTypes.func,
+    changeView: PropTypes.func,
+};
 
 class MonthEvent extends Component {
     render() {
@@ -142,6 +148,13 @@ class MonthEvent extends Component {
     }
 }
 
+MonthEvent.propTypes = {
+    today: PropTypes.object,
+    events: PropTypes.arrayOf(PropTypes.object),
+
+    onEventClick: PropTypes.func
+};
+
 class Events extends Component {
     render() {
         const day = this.props.day;
@@ -209,6 +222,14 @@ class Events extends Component {
     }
 }
 
+Events.propTypes = {
+    day: PropTypes.object,
+    hour: PropTypes.object,
+    events: PropTypes.arrayOf(PropTypes.object),
+
+    onEventClick: PropTypes.func
+};
+
 class Month extends Component {
     render() {
         const selectedDate = this.props.selectedDate;
@@ -245,6 +266,15 @@ class Month extends Component {
         return <div className="table">{month}</div>;
     }
 }
+
+Month.propTypes = {
+    selectedDate: PropTypes.object,
+    events: PropTypes.arrayOf(PropTypes.object),
+
+    onDateClick: PropTypes.func,
+    onEventClick: PropTypes.func,
+    viewDay: PropTypes.func
+};
 
 class Week extends Component {
     render() {
@@ -301,6 +331,14 @@ class Week extends Component {
     }
 }
 
+Week.propTypes = {
+    selectedDate: PropTypes.object,
+    events: PropTypes.arrayOf(PropTypes.object),
+
+    onDateClick: PropTypes.func,
+    onEventClick: PropTypes.func
+};
+
 class Day extends Component {
     render() {
         const selectedDate = this.props.selectedDate;
@@ -335,6 +373,14 @@ class Day extends Component {
         return <div className="table">{hours}</div>;
     }
 }
+
+Day.propTypes = {
+    selectedDate: PropTypes.object,
+    events: PropTypes.arrayOf(PropTypes.object),
+
+    onDateClick: PropTypes.func,
+    onEventClick: PropTypes.func
+};
 
 class ScheduleTable extends Component {
     render() {
@@ -373,6 +419,15 @@ class ScheduleTable extends Component {
     }
 }
 
+ScheduleTable.propTypes = {
+    view: PropTypes.number,
+    selectedDate: PropTypes.object,
+    events: PropTypes.arrayOf(PropTypes.object),
+
+    onDateClick: PropTypes.func,
+    onEventClick: PropTypes.func,
+    viewDay: PropTypes.func,
+};
 
 class Schedule extends Component {
 
@@ -395,7 +450,7 @@ class Schedule extends Component {
                 repeat: 0,
                 notice: false,
                 notification: 0,
-                calendar: this.props.calendars[0],
+                calendar: this.props.calendars ? this.props.calendars[0] : undefined,
             },
 
             event: {},
@@ -404,6 +459,7 @@ class Schedule extends Component {
             events: {},
             isOpen: false,
             isOpenNotification: false,
+            isOpenNoCalendars: false
         };
     }
 
@@ -495,8 +551,17 @@ class Schedule extends Component {
         if (this.state.isOpen === true) {
             this.setState({event: this.state.emptyEvent,});
             this.updateEvents(this.state.selectedDate)
+        } else {
+            if (this.state.calendars.length == 0) {
+                this.toggleNoCalendarsModal()
+                return
+            }
         }
         this.setState({isOpen: !this.state.isOpen});
+    };
+
+    toggleNoCalendarsModal = () => {
+        this.setState({isOpenNoCalendars: !this.state.isOpenNoCalendars});
     };
 
     complete = (event) => {
@@ -561,6 +626,11 @@ class Schedule extends Component {
                     in {moment(this.state.notificationEvent.start_date).toLocaleString()}
                 </Info>
 
+                <Info show={this.state.isOpenNoCalendars} onOk={this.toggleNoCalendarsModal}
+                      header={"Notification about calendars "}>
+                    Please add at least one calendar to add new event.
+                </Info>
+
             </div>
         )
     }
@@ -587,6 +657,16 @@ const mapDispatchToProps = dispatch => {
             return dispatch(events.updateEvent(id, model));
         },
     }
+};
+
+Schedule.propTypes = {
+    selectedDate: PropTypes.object,
+    events: PropTypes.arrayOf(PropTypes.object),
+    calendars: PropTypes.arrayOf(PropTypes.object),
+
+    changeDate: PropTypes.func,
+    toggleModalImport: PropTypes.func,
+    changeCalendars: PropTypes.func
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Schedule);

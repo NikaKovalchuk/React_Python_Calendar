@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate
 from rest_framework import serializers
 
 from .models import User
+from api.event.models import Calendar
 
 
 class CreateUserSerializer(serializers.ModelSerializer):
@@ -12,6 +13,8 @@ class CreateUserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = User.objects.create_user(validated_data['username'], None, validated_data['password'])
+        calendar = Calendar.objects.create(name="Default", user=user, color="#000000")
+        calendar.save()
         return user
 
 

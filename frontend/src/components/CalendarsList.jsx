@@ -23,6 +23,11 @@ class ControlPanel extends React.Component {
     }
 }
 
+ControlPanel.propTypes = {
+    toggleModalImport:PropTypes.func,
+    toggleModal: PropTypes.func,
+};
+
 class Calendars extends React.Component {
     render() {
         let result = []
@@ -48,6 +53,13 @@ class Calendars extends React.Component {
     }
 
 }
+
+Calendars.propTypes = {
+    calendars : PropTypes.arrayOf(PropTypes.object),
+
+    changeShow:PropTypes.func,
+    toggleModal: PropTypes.func
+};
 
 class CalendarsList extends React.Component {
     constructor(props) {
@@ -148,7 +160,6 @@ class CalendarsList extends React.Component {
     }
 }
 
-
 const mapStateToProps = state => {
     return {
         calendars: state.calendars
@@ -174,12 +185,12 @@ const mapDispatchToProps = dispatch => {
 };
 
 CalendarsList.propTypes = {
+    calendars : PropTypes.arrayOf(PropTypes.object),
+
     changeShow:PropTypes.func,
     toggleModal: PropTypes.func,
     toggleModalImport: PropTypes.func,
-    changeCalendars : PropTypes.func,
-
-    calendars : PropTypes.arrayOf(PropTypes.object)
+    changeCalendars : PropTypes.func
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CalendarsList);
