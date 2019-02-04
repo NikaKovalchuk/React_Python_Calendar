@@ -1,96 +1,81 @@
-export const login = (username, password) => {
-    return (dispatch, getState) => {
-        let headers = {"Content-Type": "application/json"};
-        let body = JSON.stringify({username, password});
+const API_BASE = 'http://localhost:8000/api/';
+const API_ENDPOINT_TYPE = 'user/'
+const API_URL = API_BASE + API_ENDPOINT_TYPE
 
-        return fetch("http://localhost:8000/api/user/login/", {headers, body, method: "POST"})
-            .then(res => {
-                if (res.status < 500) {
-                    return res.json().then(data => {
-                        return {status: res.status, data};
-                    })
-                } else {
-                    throw res;
-                }
-            })
-            .then(res => {
-                if (res.status === 200) {
-                    dispatch({type: 'LOGIN_SUCCESSFUL', data: res.data});
-                    return res.data;
-                } else if (res.status === 403 || res.status === 401) {
-                    dispatch({type: "AUTHENTICATION_ERROR", data: res.data});
-                    throw res.data;
-                } else {
-                    dispatch({type: "LOGIN_FAILED", data: res.data});
-                    throw res.data;
-                }
-            })
-    }
+const API_ENDPOINTS = {
+    REGISTER: API_URL + 'signup/',
+    LOGIN: API_URL + 'login/',
+    CURRENT: API_URL + 'current/',
 }
 
-export const register = (username, password) => {
-    return (dispatch, getState) => {
-        let headers = {"Content-Type": "application/json"};
-        let body = JSON.stringify({username, password});
+const post = (url, body, dispatch, getState) => {
+    let headers = {"Content-Type": "application/json"};
+    body = JSON.stringify(body)
 
-        return fetch("http://localhost:8000/api/user/signup/", {headers, body, method: "POST"})
-            .then(res => {
-                if (res.status < 500) {
-                    return res.json().then(data => {
-                        return {status: res.status, data};
-                    })
-                } else {
-                    throw res;
-                }
-            })
-            .then(res => {
-                if (res.status === 200) {
-                    dispatch({type: 'REGISTRATION_SUCCESSFUL', data: res.data});
-                    return res.data;
-                } else if (res.status === 403 || res.status === 401) {
-                    dispatch({type: "AUTHENTICATION_ERROR", data: res.data});
-                    throw res.data;
-                } else {
-                    dispatch({type: "REGISTRATION_FAILED", data: res.data});
-                    throw res.data;
-                }
-            })
-    }
+    return fetch(url, {headers, body, method: 'POST'}).then(res => {
+        if (res.status == 500) {
+            dispatch({type: 'SERVER_ERROR', data: res.data});
+            return res.data;
+        }
+        return res.json().then(data => {
+            return {status: res.status, data};
+        })
+    })
 }
+
+const get = (url, dispatch, getState) => {
+    let headers = {"Content-Type": "application/json"};
+    return fetch(url, {headers, method: 'GET'}).then(res => {
+        if (res.status == 500) {
+            dispatch({type: 'SERVER_ERROR', data: res.data});
+            return res.data;
+        }
+        return res.json().then(data => {
+            return {status: res.status, data};
+        })
+    })
+}
+
+
+export const login = (username, password) => (dispatch, getState) => post(API_ENDPOINTS.LOGIN, {
+    username,
+    password
+}, dispatch, getState).then(res => {
+    if (res.status == 200) {
+        dispatch({type: 'LOGIN_SUCCESSFUL', data: res.data});
+        return res.data;
+    } else {
+        dispatch({type: 'LOGIN_FAILED', data: res.data});
+        return res.data;
+    }
+})
+
+export const register = (username, password) => (dispatch, getState) => post(API_ENDPOINTS.REGISTER, {
+    username,
+    password
+}, dispatch, getState).then(res => {
+    if (res.status == 200) {
+        dispatch({type: 'REGISTRATION_SUCCESSFUL', data: res.data});
+        return res.data;
+    } else {
+        dispatch({type: 'REGISTRATION_FAILED', data: res.data});
+        return res.data;
+    }
+})
+
+export const loadUser = () => (dispatch, getState) => get(API_ENDPOINTS.CURRENT, dispatch, getState).then(res => {
+    if (res.status == 200) {
+        dispatch({type: 'USER_LOADED', data: res.data});
+        return res.data;
+    } else {
+        dispatch({type: 'AUTHENTICATION_ERROR', data: res.data});
+        return res.data;
+    }
+})
+
 
 export const logout = () => {
     return (dispatch) => {
         dispatch({type: 'LOGOUT'});
-    }
-}
-
-export const loadUser = () => {
-    return (dispatch, getState) => {
-        const token = getState().auth.token;
-
-        let headers = {"Content-Type": "application/json",};
-
-        if (token) {
-            headers["Authorization"] = `Token ${token}`;
-        }
-        return fetch("http://localhost:8000/api/user/current/", {headers,})
-            .then(res => {
-                if (res.status < 500) {
-                    return res.json().then(data => {
-                        return {status: res.status, data};
-                    })
-                } else {
-                    throw res;
-                }
-            })
-            .then(res => {
-                if (res.status === 200) {
-                    dispatch({type: 'USER_LOADED', user: res.data});
-                    return res.data;
-                } else if (res.status >= 400 && res.status < 500) {
-                    dispatch({type: "AUTHENTICATION_ERROR", data: res.data});
-                    throw res.data;
-                }
-            })
     }
 }

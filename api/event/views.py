@@ -171,10 +171,10 @@ class EventDetail(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, pk):
+    def post(self, request, pk):
         event = self.get_object(pk, request)
         event.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_200_OK)
 
 
 class CalendarList(APIView):
@@ -200,7 +200,7 @@ class CalendarList(APIView):
         serializer = NewCalendarSerializer(data=request.data, context=serializer_context)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return CalendarList.get(CalendarList, request)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -218,14 +218,6 @@ class CalendarDetail(APIView):
         except Event.DoesNotExist:
             raise Http404()
 
-    def get(self, request, pk):
-        calendar = self.get_object(pk, request)
-        if calendar:
-            serializer = CalendarSerializer(calendar)
-            return Response(serializer.data)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
     def put(self, request, pk):
         calendar = self.get_object(pk, request)
         if not request.data:
@@ -233,13 +225,13 @@ class CalendarDetail(APIView):
         serializer = CalendarSerializer(calendar, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
+            return CalendarList.get(CalendarList, request)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, pk):
+    def post(self, request, pk):
         calendar = self.get_object(pk, request)
         calendar.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return CalendarList.get(CalendarList, request)
 
 
 class ImportCalendar(APIView):
@@ -268,4 +260,4 @@ class ImportCalendar(APIView):
                 new_event.notice = False
                 new_event.calendar = new_calendar
                 new_event.save()
-        return Response(status=status.HTTP_200_OK)
+        return CalendarList.get(CalendarList, request)

@@ -188,9 +188,9 @@ class Events extends Component {
                         add = true
                     }
                     if (finishDate <= endOfDay) {
-                        height = height + (finishDate.hour() - hour) * (eventHeight + betweenDaysHeight)
+                        height = height + (finishDate.hour() - hour.hour()) * (eventHeight + betweenDaysHeight)
                     } else {
-                        height = height + (dayLength - hour) * (eventHeight + betweenDaysHeight) + eventMargin;
+                        height = height + (dayLength - hour.hour()) * (eventHeight + betweenDaysHeight) + eventMargin;
                         currentClass += classBegin
                     }
                 }
@@ -200,10 +200,10 @@ class Events extends Component {
                         add = true
                     }
                     if (finishDate <= endOfDay) {
-                        height = height + (finishDate.hour() - hour) * (eventHeight + betweenDaysHeight) + eventMargin;
+                        height = height + (finishDate.hour() - hour.hour()) * (eventHeight + betweenDaysHeight) + eventMargin;
                         currentClass += classEnd
                     } else
-                        height = height + (dayLength - hour) * (eventHeight + betweenDaysHeight) + eventMargin * 2;
+                        height = height + (dayLength - hour.hour()) * (eventHeight + betweenDaysHeight) + eventMargin * 2;
                     currentClass += classMiddle
                 }
 

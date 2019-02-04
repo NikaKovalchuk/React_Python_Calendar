@@ -1,100 +1,134 @@
-export const addCalendar = (body) => {
-    return (dispatch, getState) => {
-        let headers = {"Content-Type": "application/json"};
-        let {token} = getState().auth;
-        if (token) {
-            headers["Authorization"] = `Token ${token}`;
-        }
-        body = JSON.stringify(body)
+const API_BASE = 'http://localhost:8000/api/';
+const API_ENDPOINT_TYPE = 'event/calendar/'
+const API_URL = API_BASE + API_ENDPOINT_TYPE
 
-        return fetch("http://localhost:8000/api/event/calendar/", {headers, method: "POST", body})
-            .then(res => res.json())
-            .then(calendar => {
-                return dispatch({
-                    type: 'ADD_CALENDAR'
-                })
-            })
-    }
+const API_ENDPOINTS = {
+    ADD_CALENDAR: API_URL,
+    LOAD_CALENDAR: API_URL,
+    UPDATE_CALENDAR: API_URL,
+    DELETE_CALENDAR: API_URL,
+    IMPORT_CALENDAR: API_URL + 'import/'
 }
 
-export const loadCalendars = (importCalendar=false) => {
-    return (dispatch, getState) => {
-        let headers = {"Content-Type": "application/json"};
-        let {token} = getState().auth;
-        if (token) {
-            headers["Authorization"] = `Token ${token}`;
-        }
-        let params = ""
-        if (importCalendar === true ){
-            params = "?import=true"
-        }
+const post = (url, body, dispatch, getState) => {
+    let headers = {"Content-Type": "application/json"};
+    body = JSON.stringify(body)
+    let {token} = getState().auth;
+    if (token) {
+        headers["Authorization"] = `Token ${token}`;
+    }
 
-        return fetch("http://localhost:8000/api/event/calendar/" + params, {
-            headers,
-            method: "GET",
+    return fetch(url, {headers, body, method: 'POST'}).then(res => {
+        if (res.status == 500) {
+            dispatch({type: 'SERVER_ERROR', data: res.data});
+            return res.data;
+        }
+        return res.json().then(data => {
+            return {status: res.status, data};
         })
-            .then(res => res.json())
-            .then(calendars => {
-                return dispatch({
-                    type: 'LOAD_CALENDARS',
-                    calendars
-                })
-            })
-    }
+    })
 }
 
-export const updateCalendar = (index, calendar) => {
-    return (dispatch, getState) => {
-        let body = JSON.stringify(calendar)
-        let headers = {"Content-Type": "application/json"};
-        let {token} = getState().auth;
-        if (token) {
-            headers["Authorization"] = `Token ${token}`;
+const get = (url, dispatch, getState) => {
+    let headers = {"Content-Type": "application/json"};
+    let {token} = getState().auth;
+    if (token) {
+        headers["Authorization"] = `Token ${token}`;
+    }
+    return fetch(url, {headers, method: 'GET'}).then(res => {
+        if (res.status == 500) {
+            dispatch({type: 'SERVER_ERROR', data: res.data});
+            return res.data;
+        }
+        return res.json().then(data => {
+            return {status: res.status, data};
+        })
+    })
+}
+
+
+const put = (url, body, dispatch, getState) => {
+    let headers = {"Content-Type": "application/json"};
+    body = JSON.stringify(body)
+    let {token} = getState().auth;
+    if (token) {
+        headers["Authorization"] = `Token ${token}`;
+    }
+    return fetch(url, {headers, body, method: 'PUT'}).then(res => {
+        if (res.status == 500) {
+            dispatch({type: 'SERVER_ERROR', data: res.data});
+            return res.data;
+        }
+        return res.json().then(data => {
+            return {status: res.status, data};
+        })
+    })
+}
+
+
+export const addCalendar = (body) => (dispatch, getState) => post(API_ENDPOINTS.ADD_CALENDAR, body, dispatch, getState).then(res => {
+    if (res.status == 200) {
+        dispatch({type: 'ADD_CALENDAR_SUCCESSFUL', data: res.data});
+        return res.data;
+    }
+})
+
+
+export const loadCalendars = (importCalendar = false) => (dispatch, getState) => {
+    let params = ""
+    if (importCalendar === true) {
+        params = "?import=true"
+    }
+    return get(API_ENDPOINTS.LOAD_CALENDAR + params, dispatch, getState).then(res => {
+        if (res.status == 200) {
+            dispatch({type: 'LOAD_CALENDARS_SUCCESSFUL', data: res.data});
+            return res.data;
+        } else {
+            dispatch({type: 'CALENDAR_ERROR', data: res.data});
+            return res.data;
         }
 
-        return fetch("http://localhost:8000/api/event/calendar/" + index + "/", {headers, method: "PUT", body})
-            .then(res => res.json())
-            .then(calendar => {
-                return dispatch({
-                    type: 'UPDATE_CALENDAR',
-                    calendar
-                })
-            })
-    }
+    })
 }
 
-export const deleteCalendar = (id) => {
-    return (dispatch, getState) => {
-        let headers = {"Content-Type": "application/json"};
-        let {token} = getState().auth;
-        if (token) {
-            headers["Authorization"] = `Token ${token}`;
+
+export const updateCalendar = (index, body) => (dispatch, getState) => {
+    let params = index + "/"
+    return put(API_ENDPOINTS.UPDATE_CALENDAR + params, body, dispatch, getState).then(res => {
+        if (res.status == 200) {
+            dispatch({type: 'UPDATE_CALENDAR_SUCCESSFUL', data: res.data});
+            return res.data;
+        } else {
+            dispatch({type: 'CALENDAR_ERROR', data: res.data});
+            return res.data;
         }
-
-        return fetch("http://localhost:8000/api/event/calendar/" + id + "/", {headers, method: "DELETE",})
-            .then(res => {
-                return dispatch({
-                    type: 'DELETE_CALENDAR'
-                })
-            })
-    }
+    })
 }
 
-export const importCalendars = (calendarsId) => {
-    return (dispatch, getState) => {
-        let headers = {"Content-Type": "application/json"};
-        let {token} = getState().auth;
-        if (token) {
-            headers["Authorization"] = `Token ${token}`;
+
+export const deleteCalendar = (id) => (dispatch, getState) => {
+    let params = id + "/"
+    return post(API_ENDPOINTS.DELETE_CALENDAR + params, {delete: true}, dispatch, getState).then(res => {
+        if (res.status == 200) {
+            dispatch({type: 'DELETE_CALENDAR_SUCCESSFUL', data: res.data});
+            return res.data;
+        } else {
+            dispatch({type: 'CALENDAR_ERROR', data: res.data});
+            return res.data;
         }
-        let params = "?id=" + calendarsId
-
-        return fetch("http://localhost:8000/api/event/calendar/import/" + params, {headers, method: "GET",})
-            .then(res => {
-                return dispatch({
-                    type: 'IMPORT_CALENDAR'
-                })
-            })
-    }
+    })
 }
 
+
+export const importCalendars = (calendarsId) => (dispatch, getState) => {
+    let params = "?id=" + calendarsId
+    return get(API_ENDPOINTS.IMPORT_CALENDAR + params, dispatch, getState).then(res => {
+        if (res.status == 200) {
+            dispatch({type: 'IMPORT_CALENDAR_SUCCESSFUL', data: res.data});
+            return res.data;
+        } else {
+            dispatch({type: 'CALENDAR_ERROR', data: res.data});
+            return res.data;
+        }
+    })
+}

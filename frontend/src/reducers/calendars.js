@@ -3,20 +3,26 @@ const initialState = [];
 export default function calendars(state = initialState, action) {
 
     switch (action.type) {
-        case 'ADD_CALENDAR':
-            return [...state];
+        case 'CALENDAR_ERROR':
+            return {...state, errors: action.data};
 
-        case 'UPDATE_CALENDAR':
-            return [...state];
+        case 'SERVER_ERROR':
+            return {...state, errors: action.data};
 
-        case 'IMPORT_CALENDAR':
-            return [...state];
+        case 'ADD_CALENDAR_SUCCESSFUL':
+            return [...action.data];
 
-        case 'DELETE_CALENDAR':
-            return [...state];
+        case 'UPDATE_CALENDAR_SUCCESSFUL':
+            return [...action.data];
 
-        case 'LOAD_CALENDARS':
-            return [...action.calendars];
+        case 'IMPORT_CALENDAR_SUCCESSFUL':
+            return [...action.data];
+
+        case 'DELETE_CALENDAR_SUCCESSFUL':
+            return [...action.data];
+
+        case 'LOAD_CALENDARS_SUCCESSFUL':
+            return [...action.data];
 
 
         default:

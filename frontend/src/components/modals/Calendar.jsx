@@ -81,11 +81,12 @@ class Calendar extends Component {
                 isOpenError: true,
                 errorMessage: "Please fill in all fields"
             })
-        }else  this.props.onOk(calendar)
+        }else this.props.onOk(calendar)
     };
 
     delete = () => {
         this.props.deleteCalendar(this.state.id).then(response => {
+            this.props.updateCalendars(this.props.calendars)
             this.props.onCancel()
         })
     };
@@ -187,7 +188,8 @@ Calendar.propTypes = {
     calendar: PropTypes.object,
 
     onCancel: PropTypes.func,
-    onOk : PropTypes.func
+    onOk : PropTypes.func,
+    updateCalendars : PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Calendar);
