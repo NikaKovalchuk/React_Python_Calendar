@@ -3,6 +3,7 @@ import "../../css/form.css"
 import {calendars} from "../../actions";
 import {connect} from "react-redux";
 import Info from "./Info";
+import PropTypes from "prop-types";
 
 class Import extends Component {
 
@@ -72,12 +73,6 @@ class Import extends Component {
         }
         return true
     }
-
-    delete = () => {
-        this.props.deleteCalendar(this.state.id).then(response => {
-            this.props.onCancel()
-        })
-    };
 
     onClickCalendar(calendar) {
         let add = true
@@ -175,5 +170,13 @@ const mapDispatchToProps = dispatch => {
         },
     }
 }
+
+Import.propTypes = {
+    onCancel: PropTypes.func,
+    onOk : PropTypes.func,
+    show : PropTypes.bool,
+    loadCalendars : PropTypes.func,
+    events: PropTypes.arrayOf(PropTypes.object)
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Import);

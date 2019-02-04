@@ -1,5 +1,6 @@
 import React from 'react';
 import "../../css/modal.css"
+import PropTypes from "prop-types";
 
 class Info extends React.Component {
 
@@ -37,5 +38,12 @@ class Info extends React.Component {
         );
     }
 }
+
+Info.propTypes = {
+    onCancel: PropTypes.func,
+    onOk : PropTypes.func,
+    show : PropTypes.bool,
+    header : PropTypes.string
+};
 
 export default Info;

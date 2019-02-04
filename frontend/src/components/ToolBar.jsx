@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {auth} from "../actions";
+import PropTypes from 'prop-types';
 
 class ToolBar extends Component {
 
@@ -31,6 +32,12 @@ class ToolBar extends Component {
     }
 }
 
+
+ToolBar.propTypes = {
+    isAuthenticated: PropTypes.bool
+};
+
+
 const mapDispatchToProps = dispatch => {
     return {
         logout: () => dispatch(auth.logout()),
@@ -38,3 +45,4 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default connect(null, mapDispatchToProps)(ToolBar);
+

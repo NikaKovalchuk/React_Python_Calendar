@@ -34,7 +34,7 @@ class RootContainerComponent extends Component {
         let {PrivateRoute} = this;
         return (
             <div>
-                <ToolBar user={this.props.auth.isAuthenticated}/>
+                <ToolBar isAuthenticated={this.props.auth.isAuthenticated}/>
                 <BrowserRouter>
                     <div id={"content"}>
                         <Switch>

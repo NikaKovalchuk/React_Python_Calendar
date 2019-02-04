@@ -329,7 +329,7 @@ class Day extends Component {
                     </div>
                 </div>
             );
-            hour = moment(hour).add( 1, 'hour')
+            hour = moment(hour).add(1, 'hour')
         }
 
         return <div className="table">{hours}</div>;
@@ -381,13 +381,12 @@ class Schedule extends Component {
 
         this.state = {
             view: viewType.month,
-            currentDate: this.props.currentDate,
             selectedDate: this.props.selectedDate,
             clickedDate: null,
             id: null,
             calendars: this.props.calendars,
             calendarsId: [],
-            newEvent: {
+            emptyEvent: {
                 id: null,
                 title: "",
                 text: "",
@@ -448,7 +447,7 @@ class Schedule extends Component {
 
     updateEvents(date) {
         const startDate = moment(date).startOf('month').startOf('week').toISOString();
-        const finishDate =  moment(date).endOf('month').endOf('week');
+        const finishDate = moment(date).endOf('month').endOf('week');
 
         this.props.loadEvents(startDate, finishDate, this.state.calendarsId).then(response => {
             this.setState({events: this.props.events});
@@ -494,7 +493,7 @@ class Schedule extends Component {
 
     toggleModal = () => {
         if (this.state.isOpen === true) {
-            this.setState({event: this.state.newEvent,});
+            this.setState({event: this.state.emptyEvent,});
             this.updateEvents(this.state.selectedDate)
         }
         this.setState({isOpen: !this.state.isOpen});

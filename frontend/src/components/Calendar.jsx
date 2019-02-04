@@ -1,6 +1,7 @@
 import React from "react";
 import '../css/calendar.css'
 import moment from "moment";
+import PropTypes from "prop-types";
 
 class ControlPanel extends React.Component {
     render() {
@@ -32,7 +33,7 @@ class NamesOfDays extends React.Component {
     render() {
         const dateFormat = "dd";
         const days = [];
-        let startDate = moment(this.props.viewDate).startOf('week');
+        let startDate = moment().startOf('week');
 
         for (let i = 0; i < 7; i++) {
             days.push(
@@ -122,11 +123,28 @@ class Calendar extends React.Component {
         return (
             <div className={'calendar'}>
                 <ControlPanel viewDate={this.state.viewDate} changeViewDate={this.changeViewDate}/>
-                <NamesOfDays viewDate={this.state.viewDate}/>
+                <NamesOfDays/>
                 <Days viewDate={this.state.viewDate} selectedDate={this.state.selectedDate} onDateClick={this.onDateClick}/>
             </div>
         );
     }
 }
+
+
+Calendar.propTypes = {
+    selectedDate:PropTypes.object,
+    changeDate: PropTypes.func
+};
+
+ControlPanel.propTypes = {
+    viewDate:PropTypes.object,
+    changeDate: PropTypes.func
+};
+
+Days.propTypes = {
+    selectedDate:PropTypes.object,
+    changeDate: PropTypes.func,
+    onDateClick: PropTypes.func
+};
 
 export default Calendar;

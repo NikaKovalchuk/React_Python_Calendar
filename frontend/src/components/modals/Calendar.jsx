@@ -3,6 +3,7 @@ import "../../css/form.css"
 import {calendars} from "../../actions";
 import {connect} from "react-redux";
 import Info from "./Info"
+import PropTypes from "prop-types";
 
 class Calendar extends Component {
 
@@ -166,13 +167,6 @@ class Calendar extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        events: state.events,
-        calendars:state.calendars
-    }
-}
-
 const mapDispatchToProps = dispatch => {
     return {
         deleteCalendar: (id) => {
@@ -181,4 +175,11 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Calendar);
+Calendar.propTypes = {
+    onCancel: PropTypes.func,
+    onOk : PropTypes.func,
+    show : PropTypes.bool,
+    calendar: PropTypes.object
+};
+
+export default connect(null, mapDispatchToProps)(Calendar);

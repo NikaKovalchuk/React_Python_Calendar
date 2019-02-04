@@ -29,22 +29,15 @@ class Main extends Component {
             <div className={"main-content"}>
                 <div className={'side-bar'}>
                     <Calendar selectedDate={this.state.selectedDate} changeDate={this.changeDate}/>
-                    <CalendarsList calendars={this.state.calendars} changeCalendars={this.changeCalendars} user={this.props.auth} />
+                    <CalendarsList calendars={this.state.calendars} changeCalendars={this.changeCalendars} />
                 </div>
                 <div className={'scheduler'}>
                     <Schedule selectedDate={this.state.selectedDate} calendars={this.state.calendars}
-                              changeDate={this.changeDate}  user={this.props.auth} />
+                              changeDate={this.changeDate} />
                 </div>
             </div>
         )
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        auth: state.auth,
-        events: state.events
-    }
-};
-
-export default connect(mapStateToProps, null)(Main);
+export default Main;

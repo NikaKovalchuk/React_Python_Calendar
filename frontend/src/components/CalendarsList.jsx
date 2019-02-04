@@ -4,6 +4,7 @@ import {calendars} from "../actions";
 import {connect} from "react-redux";
 import Calendar from "./modals/Calendar";
 import Import from "./modals/Import";
+import PropTypes from "prop-types";
 
 class ControlPanel extends React.Component {
     render() {
@@ -150,8 +151,6 @@ class CalendarsList extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        events: state.events,
-        auth: state.auth,
         calendars: state.calendars
     }
 };
@@ -172,6 +171,15 @@ const mapDispatchToProps = dispatch => {
         },
 
     }
+};
+
+CalendarsList.propTypes = {
+    changeShow:PropTypes.func,
+    toggleModal: PropTypes.func,
+    toggleModalImport: PropTypes.func,
+    changeCalendars : PropTypes.func,
+
+    calendars : PropTypes.arrayOf(PropTypes.object)
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CalendarsList);

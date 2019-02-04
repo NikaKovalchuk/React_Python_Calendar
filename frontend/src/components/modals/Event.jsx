@@ -4,6 +4,7 @@ import {events} from "../../actions";
 import {connect} from "react-redux";
 import Info from "./Info"
 import moment from "moment";
+import PropTypes from "prop-types";
 
 
 class Event extends Component {
@@ -44,7 +45,7 @@ class Event extends Component {
             })
 
             date = moment(date)
-            date = moment(new Date(date.setHours(date.getHours() + 1))).format();
+            date = date.hours(date.hours() + 1).format();
             this.setState({
                 finish_date: date.replace(searchValue, ''),
                 calendar: nextProps.calendars[0],
@@ -321,5 +322,15 @@ const mapDispatchToProps = dispatch => {
         },
     }
 }
+
+Event.propTypes = {
+    onCancel: PropTypes.func,
+    onOk : PropTypes.func,
+    date : PropTypes.object,
+    show : PropTypes.bool,
+    event : PropTypes.object,
+    calendar: PropTypes.arrayOf( PropTypes.object)
+};
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(Event);
