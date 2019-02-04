@@ -153,7 +153,7 @@ class CalendarsList extends React.Component {
 
 
                 <Import show={this.state.isOpenImport} onCancel={this.toggleModalImport}
-                        onOk={this.completeImport}></Import>
+                        onOk={this.completeImport} ></Import>
 
             </div>
         );

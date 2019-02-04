@@ -9,6 +9,9 @@ const initialState = {
 export default function auth(state = initialState, action) {
 
     switch (action.type) {
+        case 'SERVER_ERROR':
+            return {...state, errors: action.data};
+
         case 'REGISTRATION_SUCCESSFUL':
             localStorage.setItem("token", action.data.token);
             return {...state, ...action.data, isAuthenticated: true, errors: null};

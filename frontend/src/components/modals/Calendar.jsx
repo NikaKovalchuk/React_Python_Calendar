@@ -175,6 +175,13 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
+const mapStateToProps = state => {
+    return {
+        events: state.events,
+        calendars:state.calendars
+    }
+}
+
 Calendar.propTypes = {
     show : PropTypes.bool,
     calendar: PropTypes.object,
@@ -183,4 +190,4 @@ Calendar.propTypes = {
     onOk : PropTypes.func
 };
 
-export default connect(null, mapDispatchToProps)(Calendar);
+export default connect(mapStateToProps, mapDispatchToProps)(Calendar);

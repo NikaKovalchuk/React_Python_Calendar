@@ -13,7 +13,7 @@ class Import extends Component {
         this.state = {
             search: "",
             isOpen: false,
-            calendars: {},
+            calendars: [],
             chosenCalendars: [],
             isOpenError: false,
             errorMessage: null,
@@ -23,7 +23,7 @@ class Import extends Component {
     componentDidMount(nextProps, nextContext) {
         this.props.loadCalendars().then(response => {
             this.setState({
-                calendars: this.props.events,
+                calendars: this.props.calendars,
             });
         });
     }
@@ -173,8 +173,7 @@ const mapDispatchToProps = dispatch => {
 
 Import.propTypes = {
     show : PropTypes.bool,
-    events: PropTypes.arrayOf(PropTypes.object),
-
+    calendars: PropTypes.arrayOf(PropTypes.object),
     onCancel: PropTypes.func,
     loadCalendars : PropTypes.func,
     onOk : PropTypes.func

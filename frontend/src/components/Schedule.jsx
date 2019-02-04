@@ -455,8 +455,8 @@ class Schedule extends Component {
 
             event: {},
             notificationEvent: {},
-            notifications: {},
-            events: {},
+            notifications: [],
+            events: [],
             isOpen: false,
             isOpenNotification: false,
             isOpenNoCalendars: false
@@ -552,7 +552,7 @@ class Schedule extends Component {
             this.setState({event: this.state.emptyEvent,});
             this.updateEvents(this.state.selectedDate)
         } else {
-            if (this.state.calendars.length == 0) {
+            if (this.state.calendars.length === 0) {
                 this.toggleNoCalendarsModal()
                 return
             }
@@ -639,6 +639,7 @@ class Schedule extends Component {
 const mapStateToProps = state => {
     return {
         events: state.events,
+        calendars : state.calendars,
     }
 };
 

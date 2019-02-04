@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Calendar from "./Calendar"
 import CalendarsList from "./CalendarsList"
 import Schedule from "./Schedule"
+import {connect} from 'react-redux';
 import "../css/main.css"
 
 class Main extends Component {
@@ -9,7 +10,7 @@ class Main extends Component {
         super(props);
 
         this.state = {
-            calendars: {},
+            calendars: [],
             selectedDate: new Date(new Date().setHours(0, 0, 0)),
         };
     };
@@ -39,4 +40,11 @@ class Main extends Component {
     }
 }
 
-export default Main;
+const mapStateToProps = state => {
+    return {
+        auth: state.auth,
+        events: state.events
+    }
+};
+
+export default connect(mapStateToProps, null)(Main);

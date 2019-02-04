@@ -22,7 +22,7 @@ class Event extends Component {
             notification: 0,
             notice: false,
 
-            calendars: {},
+            calendars: [],
             calendar: {},
             calendarId: undefined,
 
@@ -48,8 +48,8 @@ class Event extends Component {
             date = date.hours(date.hours() + 1).format();
             this.setState({
                 finish_date: date.replace(searchValue, ''),
-                calendar: nextProps.calendars? nextProps.calendars[0] : undefined,
-                calendarId: nextProps.calendars[0]? nextProps.calendars[0].id : undefined,
+                calendar: nextProps.calendars ? nextProps.calendars[0] : undefined,
+                calendarId: nextProps.calendars[0] ? nextProps.calendars[0].id : undefined,
                 id: nextProps.event.id,
                 title: nextProps.event.title,
                 text: nextProps.event.text,
@@ -58,7 +58,7 @@ class Event extends Component {
             })
         }
 
-        if (nextProps.event.id!==undefined) {
+        if (nextProps.event.id !== undefined) {
             if (nextProps.event.start_date) {
                 let date = moment(nextProps.event.start_date).format();
                 this.setState({
@@ -145,17 +145,15 @@ class Event extends Component {
     }
 
     changeCalendar(id) {
-        let calendar = []
         let calendars = this.state.calendars
         for (let index = 0; index < calendars.length; index++) {
-            if (calendars[index].id === id) {
-                calendar = calendars[index]
+            if (calendars[index].id === +id) {
+                this.setState({
+                    calendar: calendars[index],
+                    calendarId: calendars[index].id
+                })
             }
         }
-        this.setState({
-            calendar: calendar,
-            calendarId: calendar.id
-        })
     }
 
     onOk = () => {
@@ -324,13 +322,13 @@ const mapDispatchToProps = dispatch => {
 }
 
 Event.propTypes = {
-    date : PropTypes.object,
-    event : PropTypes.object,
-    calendar: PropTypes.arrayOf( PropTypes.object),
+    date: PropTypes.object,
+    event: PropTypes.object,
+    calendar: PropTypes.arrayOf(PropTypes.object),
 
-    show : PropTypes.bool,
+    show: PropTypes.bool,
 
-    onOk : PropTypes.func,
+    onOk: PropTypes.func,
     onCancel: PropTypes.func
 };
 
