@@ -25,6 +25,10 @@ const post = (url, body, dispatch, getState) => {
 
 const get = (url, dispatch, getState) => {
     let headers = {"Content-Type": "application/json"};
+    const token = getState().auth.token;
+    if (token) {
+        headers["Authorization"] = `Token ${token}`;
+    }
     return fetch(url, {headers, method: 'GET'}).then(res => {
         if (res.status == 500) {
             dispatch({type: 'SERVER_ERROR', data: res.data});
