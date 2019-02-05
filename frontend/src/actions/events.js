@@ -10,7 +10,7 @@ const API_ENDPOINTS = {
     LOAD_NOTIFICATIONS: API_URL,
 }
 
-const post = (url, body, dispatch, getState,  convertDate = false) => {
+const post = (url, body, dispatch, getState, convertDate = false) => {
     let headers = {"Content-Type": "application/json"};
     if (convertDate) {
         body.start_date = new Date(body.start_date).toISOString()
@@ -50,9 +50,9 @@ const get = (url, dispatch, getState) => {
     })
 }
 
-const put = (url, body, dispatch, getState,  convertDate = false) => {
+const put = (url, body, dispatch, getState, convertDate = false) => {
     let headers = {"Content-Type": "application/json"};
-     if (convertDate) {
+    if (convertDate) {
         body.start_date = new Date(body.start_date).toISOString()
         body.finish_date = new Date(body.finish_date).toISOString()
     }
@@ -62,6 +62,23 @@ const put = (url, body, dispatch, getState,  convertDate = false) => {
         headers["Authorization"] = `Token ${token}`;
     }
     return fetch(url, {headers, body, method: 'PUT'}).then(res => {
+        if (res.status === 500) {
+            dispatch({type: 'SERVER_ERROR', data: res.data});
+            return res.data;
+        }
+        return res.json().then(data => {
+            return {status: res.status, data};
+        })
+    })
+}
+
+const del = (url, dispatch, getState) => {
+    let headers = {"Content-Type": "application/json"};
+    let {token} = getState().auth;
+    if (token) {
+        headers["Authorization"] = `Token ${token}`;
+    }
+    return fetch(url, {headers, method: 'DELETE'}).then(res => {
         if (res.status === 500) {
             dispatch({type: 'SERVER_ERROR', data: res.data});
             return res.data;
@@ -86,7 +103,7 @@ export const updateEvent = (index, body) => (dispatch, getState) => {
         if (res.status === 200) {
             dispatch({type: 'UPDATE_EVENT', data: res.data});
             return res.data;
-        }else {
+        } else {
             dispatch({type: 'EVENT_ERROR', data: res.data});
             return res.data;
         }
@@ -96,11 +113,11 @@ export const updateEvent = (index, body) => (dispatch, getState) => {
 
 export const deleteEvent = (id) => (dispatch, getState) => {
     let params = id + "/"
-    return post(API_ENDPOINTS.DELETE_EVENT + params, {delete: true}, dispatch, getState).then(res => {
+    return del(API_ENDPOINTS.DELETE_EVENT + params, dispatch, getState).then(res => {
         if (res.status === 200) {
             dispatch({type: 'DELETE_EVENT', data: res.data});
             return res.data;
-        }else {
+        } else {
             dispatch({type: 'EVENT_ERROR', data: res.data});
             return res.data;
         }
@@ -115,7 +132,7 @@ export const loadEvents = (startDate, finishDate, calendars) => (dispatch, getSt
         if (res.status === 200) {
             dispatch({type: 'LOAD_EVENTS', data: res.data});
             return res.data;
-        }else {
+        } else {
             dispatch({type: 'EVENT_ERROR', data: res.data});
             return res.data;
         }
@@ -132,7 +149,7 @@ export const loadNotifications = (startDate, finishDate, calendars) => (dispatch
         if (res.status === 200) {
             dispatch({type: 'LOAD_NOTIFICATIONS', data: res.data});
             return res.data;
-        }else {
+        } else {
             dispatch({type: 'NOTIFICATION_ERROR', data: res.data});
             return res.data;
         }

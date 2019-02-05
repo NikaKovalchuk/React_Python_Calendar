@@ -65,6 +65,23 @@ const put = (url, body, dispatch, getState) => {
     })
 }
 
+const del = (url, dispatch, getState) => {
+    let headers = {"Content-Type": "application/json"};
+    let {token} = getState().auth;
+    if (token) {
+        headers["Authorization"] = `Token ${token}`;
+    }
+    return fetch(url, {headers, method: 'DELETE'}).then(res => {
+        if (res.status === 500) {
+            dispatch({type: 'SERVER_ERROR', data: res.data});
+            return res.data;
+        }
+        return res.json().then(data => {
+            return {status: res.status, data};
+        })
+    })
+}
+
 
 export const addCalendar = (body) => (dispatch, getState) => post(API_ENDPOINTS.ADD_CALENDAR, body, dispatch, getState).then(res => {
     if (res.status === 200) {
@@ -108,7 +125,7 @@ export const updateCalendar = (index, body) => (dispatch, getState) => {
 
 export const deleteCalendar = (id) => (dispatch, getState) => {
     let params = id + "/"
-    return post(API_ENDPOINTS.DELETE_CALENDAR + params, {delete: true}, dispatch, getState).then(res => {
+    return del(API_ENDPOINTS.DELETE_CALENDAR + params, dispatch, getState).then(res => {
         if (res.status === 200) {
             dispatch({type: 'DELETE_CALENDAR_SUCCESSFUL', data: res.data});
             return res.data;

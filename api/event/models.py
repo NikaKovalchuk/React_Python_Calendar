@@ -28,11 +28,6 @@ class Calendar(models.Model):
     def get_user(self):
         return self.user
 
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None, *args, **kwargs):
-        self.update_date = timezone.now()
-        super(Calendar, self).save(*args, **kwargs)
-
     def delete(self, using=None, keep_parents=False):
         self.archived = True
         self.archived_date = timezone.now()
@@ -40,20 +35,17 @@ class Calendar(models.Model):
         self.save()
 
     def copy(self, user):
-        copied_calendar_id = self.id
-        calendar = self
-        calendar.pk = None
-        calendar.user = user
-        calendar.public = False
-        calendar.save()
-        events = Event.objects.filter(calendar_id=copied_calendar_id)
+        events = Event.objects.filter(calendar_id=self.id)
+        self.pk = None
+        self.user = user
+        self.public = False
+        self.save()
         for event in events:
-            new_event = event
-            new_event.pk = None
-            new_event.user = user
-            new_event.notice = False
-            new_event.calendar = calendar
-            new_event.save()
+            event.pk = None
+            event.user = user
+            event.notice = False
+            event.calendar = self
+            event.save()
 
 
 class Event(models.Model):
@@ -80,11 +72,6 @@ class Event(models.Model):
 
     def __str__(self):
         return self.title
-
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None, *args, **kwargs):
-        self.update_date = timezone.now()
-        super(Event, self).save(*args, **kwargs)
 
     def delete(self, using=None, keep_parents=False):
         self.archived = True

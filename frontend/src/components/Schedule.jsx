@@ -463,13 +463,9 @@ class Schedule extends Component {
         };
     }
 
-    componentDidMount() {
-        this.updateEvents(this.state.selectedDate)
-    }
-
     componentWillReceiveProps(props) {
         let update = false;
-        let calendars = []
+        let calendarsId = []
         if (props.selectedDate) {
             if (props.selectedDate !== this.state.selectedDate) {
                 if (moment(props.selectedDate).month() !== moment(this.state.selectedDate).month()) {
@@ -480,35 +476,39 @@ class Schedule extends Component {
         }
         if (props.calendars) {
             if (props.calendars !== this.state.calendars) {
-                update = true
                 this.setState({
                     calendars: this.props.calendars
                 })
                 for (let index = 0; index < props.calendars.length; index++) {
                     let calendar = props.calendars[index]
                     if (calendar.show === true) {
-                        calendars.push(calendar.id)
+                        calendarsId.push(calendar.id)
                     }
                 }
-                this.setState({
-                    calendarsId: calendars
-                })
+                update = true
             }
         }
-
         if (update) {
-            this.updateEvents(props.selectedDate)
+            this.updateEvents(props.selectedDate, calendarsId)
         }
     }
 
-    updateEvents(date) {
+    updateEvents(date, calendarsId=null) {
+        if (calendarsId === null){
+            calendarsId = this.state.calendarsId
+        }
+        else{
+            this.setState({
+                calendarsId:calendarsId
+            })
+        }
         const startDate = moment(date).startOf('month').startOf('week').toISOString();
         const finishDate = moment(date).endOf('month').endOf('week');
 
-        this.props.loadEvents(startDate, finishDate, this.state.calendarsId).then(response => {
+        this.props.loadEvents(startDate, finishDate, calendarsId).then(response => {
             this.setState({events: this.props.events});
         });
-        this.props.loadNotifications(startDate, finishDate, this.state.calendarsId).then(response => {
+        this.props.loadNotifications(startDate, finishDate, calendarsId).then(response => {
             this.setState({notifications: this.props.events});
             if (this.props.events !== []) {
                 let event = this.props.events[this.props.events.length - 1];
