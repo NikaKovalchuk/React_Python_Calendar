@@ -13,10 +13,10 @@ class Calendar extends Component {
         this.state = {
             name: "",
             id: undefined,
-            access: 1,
+            public: false,
             color: this.getRandomColor(),
             isOpen: false,
-            accessOptions: [{0: 'Public'}, {1: 'Private'}], // TODO : move it somewhere
+            accessOptions: [{true: 'Public'}, {false: 'Private'}],
             isOpenError: false,
             errorMessage: null,
         };
@@ -27,14 +27,14 @@ class Calendar extends Component {
         if (nextProps.calendar !== undefined && nextProps.calendar.id !== undefined) {
             this.setState({
                 name: nextProps.calendar.name,
-                access: nextProps.calendar.access,
+                public: nextProps.calendar.public,
                 color: nextProps.calendar.color,
                 id: nextProps.calendar.id,
             })
         } else {
             this.setState({
                 name: "",
-                access: 1,
+                public: false,
                 color: this.getRandomColor(),
                 id: undefined,
             })
@@ -62,9 +62,9 @@ class Calendar extends Component {
                     {o.value}</option>
             );
         });
-        return <select className="input" value={this.state.access}
+        return <select className="input" value={this.state.public}
                        onChange={(e) => {
-                           this.setState({access: e.target.value})
+                           this.setState({public: e.target.value})
                        }}
         >{options}</select>
     }
@@ -73,7 +73,7 @@ class Calendar extends Component {
         let calendar = {
             id: this.state.id,
             name: this.state.name,
-            access: this.state.access,
+            public: this.state.public,
             color: this.state.color,
         }
         if (this.state.name === ""){

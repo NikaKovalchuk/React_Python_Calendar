@@ -7,7 +7,7 @@ from .models import Event, Calendar
 class NewCalendarSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Calendar
-        fields = ('name', 'color', 'access', 'show')
+        fields = ('name', 'color', 'public', 'show')
 
     def create(self, validated_data):
         validated_data['user'] = self.context['request'].user
@@ -17,7 +17,7 @@ class NewCalendarSerializer(serializers.HyperlinkedModelSerializer):
 class CalendarSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Calendar
-        fields = ('id', 'name', 'color', 'access', 'show')
+        fields = ('id', 'name', 'color', 'public', 'show')
 
 
 class EventSerializer(serializers.HyperlinkedModelSerializer):

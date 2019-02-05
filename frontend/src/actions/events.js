@@ -23,7 +23,7 @@ const post = (url, body, dispatch, getState,  convertDate = false) => {
     }
 
     return fetch(url, {headers, body, method: 'POST'}).then(res => {
-        if (res.status == 500) {
+        if (res.status === 500) {
             dispatch({type: 'SERVER_ERROR', data: res.data});
             return res.data;
         }
@@ -40,7 +40,7 @@ const get = (url, dispatch, getState) => {
         headers["Authorization"] = `Token ${token}`;
     }
     return fetch(url, {headers, method: 'GET'}).then(res => {
-        if (res.status == 500) {
+        if (res.status === 500) {
             dispatch({type: 'SERVER_ERROR', data: res.data});
             return res.data;
         }
@@ -62,7 +62,7 @@ const put = (url, body, dispatch, getState,  convertDate = false) => {
         headers["Authorization"] = `Token ${token}`;
     }
     return fetch(url, {headers, body, method: 'PUT'}).then(res => {
-        if (res.status == 500) {
+        if (res.status === 500) {
             dispatch({type: 'SERVER_ERROR', data: res.data});
             return res.data;
         }
@@ -73,7 +73,7 @@ const put = (url, body, dispatch, getState,  convertDate = false) => {
 }
 
 export const addEvent = (body) => (dispatch, getState) => post(API_ENDPOINTS.ADD_EVENT, body, dispatch, getState, true).then(res => {
-    if (res.status == 200) {
+    if (res.status === 200) {
         dispatch({type: 'ADD_EVENT', data: res.data});
         return res.data;
     }
@@ -83,7 +83,7 @@ export const addEvent = (body) => (dispatch, getState) => post(API_ENDPOINTS.ADD
 export const updateEvent = (index, body) => (dispatch, getState) => {
     let params = index + "/"
     return put(API_ENDPOINTS.UPDATE_EVENT + params, body, dispatch, getState).then(res => {
-        if (res.status == 200) {
+        if (res.status === 200) {
             dispatch({type: 'UPDATE_EVENT', data: res.data});
             return res.data;
         }else {
@@ -97,7 +97,7 @@ export const updateEvent = (index, body) => (dispatch, getState) => {
 export const deleteEvent = (id) => (dispatch, getState) => {
     let params = id + "/"
     return post(API_ENDPOINTS.DELETE_EVENT + params, {delete: true}, dispatch, getState).then(res => {
-        if (res.status == 200) {
+        if (res.status === 200) {
             dispatch({type: 'DELETE_EVENT', data: res.data});
             return res.data;
         }else {
@@ -112,7 +112,7 @@ export const loadEvents = (startDate, finishDate, calendars) => (dispatch, getSt
     finishDate = new Date(finishDate).toISOString()
     let params = "?startDate=" + startDate + "&finishDate=" + finishDate + "&calendar=" + calendars
     return get(API_ENDPOINTS.LOAD_EVENTS + params, dispatch, getState).then(res => {
-        if (res.status == 200) {
+        if (res.status === 200) {
             dispatch({type: 'LOAD_EVENTS', data: res.data});
             return res.data;
         }else {
@@ -129,7 +129,7 @@ export const loadNotifications = (startDate, finishDate, calendars) => (dispatch
     finishDate = new Date(finishDate).toISOString()
     let params = "?notification=true&startDate=" + startDate + "&finishDate=" + finishDate + "&calendar=" + calendars
     return get(API_ENDPOINTS.LOAD_NOTIFICATIONS + params, dispatch, getState).then(res => {
-        if (res.status == 200) {
+        if (res.status === 200) {
             dispatch({type: 'LOAD_NOTIFICATIONS', data: res.data});
             return res.data;
         }else {

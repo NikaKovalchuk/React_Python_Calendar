@@ -37,8 +37,6 @@ REST_FRAMEWORK = {
     ),
 }
 
-IMPORT_EXPORT_USE_TRANSACTIONS = True
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -50,8 +48,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'corsheaders',
-
-    'import_export',
     'rest_framework',
     'rest_framework.authtoken',
     'webpack_loader',
@@ -163,8 +159,6 @@ JWT_AUTH = {
 
 STATIC_URL = '/static/'
 
-ADMIN_USER_ID = 1
-
 WEBPACK_LOADER = {
     'DEFAULT': {
         'BUNDLE_DIR_NAME': 'bundles/',
@@ -176,4 +170,5 @@ CORS_ORIGIN_WHITELIST = (
     'localhost:3000',
     '127.0.0.1:3000',
     '0.0.0.0:3000',
+    '192.168.32.52:3000',
 )

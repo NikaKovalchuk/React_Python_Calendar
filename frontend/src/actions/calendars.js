@@ -19,7 +19,7 @@ const post = (url, body, dispatch, getState) => {
     }
 
     return fetch(url, {headers, body, method: 'POST'}).then(res => {
-        if (res.status == 500) {
+        if (res.status === 500) {
             dispatch({type: 'SERVER_ERROR', data: res.data});
             return res.data;
         }
@@ -36,7 +36,7 @@ const get = (url, dispatch, getState) => {
         headers["Authorization"] = `Token ${token}`;
     }
     return fetch(url, {headers, method: 'GET'}).then(res => {
-        if (res.status == 500) {
+        if (res.status === 500) {
             dispatch({type: 'SERVER_ERROR', data: res.data});
             return res.data;
         }
@@ -55,7 +55,7 @@ const put = (url, body, dispatch, getState) => {
         headers["Authorization"] = `Token ${token}`;
     }
     return fetch(url, {headers, body, method: 'PUT'}).then(res => {
-        if (res.status == 500) {
+        if (res.status === 500) {
             dispatch({type: 'SERVER_ERROR', data: res.data});
             return res.data;
         }
@@ -67,7 +67,7 @@ const put = (url, body, dispatch, getState) => {
 
 
 export const addCalendar = (body) => (dispatch, getState) => post(API_ENDPOINTS.ADD_CALENDAR, body, dispatch, getState).then(res => {
-    if (res.status == 200) {
+    if (res.status === 200) {
         dispatch({type: 'ADD_CALENDAR_SUCCESSFUL', data: res.data});
         return res.data;
     }
@@ -80,7 +80,7 @@ export const loadCalendars = (importCalendar = false) => (dispatch, getState) =>
         params = "?import=true"
     }
     return get(API_ENDPOINTS.LOAD_CALENDAR + params, dispatch, getState).then(res => {
-        if (res.status == 200) {
+        if (res.status === 200) {
             dispatch({type: 'LOAD_CALENDARS_SUCCESSFUL', data: res.data});
             return res.data;
         } else {
@@ -95,7 +95,7 @@ export const loadCalendars = (importCalendar = false) => (dispatch, getState) =>
 export const updateCalendar = (index, body) => (dispatch, getState) => {
     let params = index + "/"
     return put(API_ENDPOINTS.UPDATE_CALENDAR + params, body, dispatch, getState).then(res => {
-        if (res.status == 200) {
+        if (res.status === 200) {
             dispatch({type: 'UPDATE_CALENDAR_SUCCESSFUL', data: res.data});
             return res.data;
         } else {
@@ -109,7 +109,7 @@ export const updateCalendar = (index, body) => (dispatch, getState) => {
 export const deleteCalendar = (id) => (dispatch, getState) => {
     let params = id + "/"
     return post(API_ENDPOINTS.DELETE_CALENDAR + params, {delete: true}, dispatch, getState).then(res => {
-        if (res.status == 200) {
+        if (res.status === 200) {
             dispatch({type: 'DELETE_CALENDAR_SUCCESSFUL', data: res.data});
             return res.data;
         } else {
@@ -123,7 +123,7 @@ export const deleteCalendar = (id) => (dispatch, getState) => {
 export const importCalendars = (calendarsId) => (dispatch, getState) => {
     let params = "?id=" + calendarsId
     return get(API_ENDPOINTS.IMPORT_CALENDAR + params, dispatch, getState).then(res => {
-        if (res.status == 200) {
+        if (res.status === 200) {
             dispatch({type: 'IMPORT_CALENDAR_SUCCESSFUL', data: res.data});
             return res.data;
         } else {

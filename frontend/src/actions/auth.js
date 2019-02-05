@@ -13,7 +13,7 @@ const post = (url, body, dispatch, getState) => {
     body = JSON.stringify(body)
 
     return fetch(url, {headers, body, method: 'POST'}).then(res => {
-        if (res.status == 500) {
+        if (res.status === 500) {
             dispatch({type: 'SERVER_ERROR', data: res.data});
             return res.data;
         }
@@ -30,7 +30,7 @@ const get = (url, dispatch, getState) => {
         headers["Authorization"] = `Token ${token}`;
     }
     return fetch(url, {headers, method: 'GET'}).then(res => {
-        if (res.status == 500) {
+        if (res.status === 500) {
             dispatch({type: 'SERVER_ERROR', data: res.data});
             return res.data;
         }
@@ -45,7 +45,7 @@ export const login = (username, password) => (dispatch, getState) => post(API_EN
     username,
     password
 }, dispatch, getState).then(res => {
-    if (res.status == 200) {
+    if (res.status === 200) {
         dispatch({type: 'LOGIN_SUCCESSFUL', data: res.data});
         return res.data;
     } else {
@@ -58,7 +58,7 @@ export const register = (username, password) => (dispatch, getState) => post(API
     username,
     password
 }, dispatch, getState).then(res => {
-    if (res.status == 200) {
+    if (res.status === 200) {
         dispatch({type: 'REGISTRATION_SUCCESSFUL', data: res.data});
         return res.data;
     } else {
@@ -68,7 +68,7 @@ export const register = (username, password) => (dispatch, getState) => post(API
 })
 
 export const loadUser = () => (dispatch, getState) => get(API_ENDPOINTS.CURRENT, dispatch, getState).then(res => {
-    if (res.status == 200) {
+    if (res.status === 200) {
         dispatch({type: 'USER_LOADED', data: res.data});
         return res.data;
     } else {

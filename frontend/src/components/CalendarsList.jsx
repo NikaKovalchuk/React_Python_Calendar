@@ -70,8 +70,7 @@ class CalendarsList extends React.Component {
             calendars: this.props.calendars,
             isOpen: false,
             isOpenImport: false,
-            calendar: {},
-            accessOptions: [{0: 'Public'}, {1: 'Private'}],
+            calendar: {}
         }
     }
 
