@@ -21,6 +21,7 @@ urlpatterns = [
 
     url(r'api/user/', include('api.user.urls')),
     url(r'api/event/', include('api.event.urls')),
+    url(r'api/calendar/', include('api.event_calendar.urls')),
 
     url(r'admin/', admin.site.urls),
 

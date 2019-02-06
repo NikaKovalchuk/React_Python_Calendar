@@ -31,7 +31,7 @@ class LoginAPI(generics.GenericAPIView):
         })
 
 
-class CurrentUser(generics.RetrieveAPIView):
+class CurrentUserAPI(generics.RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticated, ]
     serializer_class = UserSerializer
 

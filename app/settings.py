@@ -55,6 +55,7 @@ INSTALLED_APPS = [
 
     'api.event',
     'api.user',
+    'api.event_calendar',
 ]
 
 AUTH_USER_MODEL = 'user.User'

@@ -6,5 +6,6 @@ venv
 node_modules/
 api/event/migrations
 api/user/migrations
+api/event_calendar/migrations
 *.png
 *.json

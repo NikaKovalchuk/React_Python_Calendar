@@ -9,10 +9,42 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import Event, Calendar
-from .serializers import EventSerializer, NewEventSerializer, CalendarSerializer, NewCalendarSerializer
+from .serializers import EventSerializer, NewEventSerializer
 
 
-class EventList(APIView):
+class ElementAPI(APIView):
+    permission_classes = [permissions.IsAuthenticated, ]
+
+    def get_object(self, pk, user):
+        try:
+            return Event.objects.get(user=user, archived=False, pk=pk)
+        except Event.DoesNotExist:
+            raise Http404()
+
+    def get(self, request, pk):
+        event = self.get_object(pk, request.user.id)
+        serializer = EventSerializer(event)
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        event = self.get_object(pk, request.user.id)
+        calendar = Calendar.objects.get(id=request.data['calendar']['id'])
+
+        serializer_context = {'request': request}
+        serializer = EventSerializer(event, data=request.data, context=serializer_context)
+        if serializer.is_valid():
+            serializer.validated_data['calendar'] = calendar
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        event = self.get_object(pk, request.user.id)
+        event.delete()
+        return Response(status=status.HTTP_200_OK)
+
+
+class ListAPI(APIView):
     permission_classes = [permissions.IsAuthenticated, ]
     repeat = {'no': 0, 'day': 1, 'week': 2, 'month': 3, 'year': 4}
     notifications = {'no': 0, 'day': 1, 'hour': 2, 'half-hour': 3, 'ten-minutes': 4}
@@ -21,7 +53,11 @@ class EventList(APIView):
         notification = False
         start_date = dateutil.parser.parse(request.query_params['startDate'])
         finish_date = dateutil.parser.parse(request.query_params['finishDate'])
-        calendar = request.query_params['calendar'].split(',')
+        calendar = request.query_params['calendar']
+        if calendar is not '':
+            calendar = calendar.split(',')
+        else:
+            calendar = []
         if 'notification' in request.query_params:
             notification = True
 
@@ -35,8 +71,8 @@ class EventList(APIView):
                      archived=False, repeat=self.repeat['no'], calendar_id__in=calendar)
 
         events = list(events)
-        events = self.repeatedEvents(start_date=start_date, finish_date=finish_date, events=events, user=request.user,
-                                     calendar=calendar)
+        events = self.repeated_events(start_date=start_date, finish_date=finish_date, events=events, user=request.user,
+                                      calendar=calendar)
         if notification:
             events = self.notification(events=events)
         events = sorted(events, key=lambda x: x.start_date)
@@ -48,10 +84,10 @@ class EventList(APIView):
         serializer = NewEventSerializer(data=request.data, context=serializer_context)
         if serializer.is_valid():
             serializer.save()
-            return self.get(self, request)
+            return Response(serializer.errors, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def repeatedEvents(self, start_date, finish_date, events, user, calendar):
+    def repeated_events(self, start_date, finish_date, events, user, calendar):
         extra = Event.objects.filter(
             user=user.id,
             archived=False,
@@ -103,91 +139,3 @@ class EventList(APIView):
                         if diff.seconds < 60 * 10:
                             result.append(event)
         return result
-
-
-class EventDetail(APIView):
-    permission_classes = [permissions.IsAuthenticated, ]
-
-    def get_object(self, pk, user):
-        try:
-            return Event.objects.get(user=user, archived=False, pk=pk)
-        except Event.DoesNotExist:
-            raise Http404()
-
-    def get(self, request, pk):
-        event = self.get_object(pk, request.user.id)
-        serializer = EventSerializer(event)
-        return Response(serializer.data)
-
-    def put(self, request, pk):
-        event = self.get_object(pk, request.user.id)
-        calendar = Calendar.objects.get(id=request.data['calendar']['id'])
-
-        serializer_context = {'request': request}
-        serializer = EventSerializer(event, data=request.data, context=serializer_context)
-        if serializer.is_valid():
-            serializer.validated_data['calendar'] = calendar
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, pk):
-        event = self.get_object(pk, request.user.id)
-        event.delete()
-        return Response(status=status.HTTP_200_OK)
-
-
-class CalendarList(APIView):
-    permission_classes = [permissions.IsAuthenticated, ]
-
-    def get(self, request):
-        calendars = Calendar.objects.filter(user=request.user, archived=False)
-        if 'import' in request.query_params:
-            calendars = Calendar.objects.filter(archived=False, public=True).exclude(user=request.user)
-        serializer = CalendarSerializer(calendars, many=True)
-        return Response(serializer.data)
-
-    def post(self, request):
-        serializer_context = {'request': request, }
-        serializer = NewCalendarSerializer(data=request.data, context=serializer_context)
-        if serializer.is_valid():
-            serializer.save()
-            return CalendarList.get(CalendarList, request)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class CalendarDetail(APIView):
-    permission_classes = [permissions.IsAuthenticated, ]
-
-    def get_object(self, pk, user):
-        try:
-            return Calendar.objects.get(user=user, archived=False, pk=pk)
-        except Event.DoesNotExist:
-            raise Http404()
-
-    def put(self, request, pk):
-        calendar = self.get_object(pk, request.user.id)
-        serializer = CalendarSerializer(calendar, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return CalendarList.get(CalendarList, request)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, pk):
-        calendar = self.get_object(pk, request.user.id)
-        calendar.delete()
-        return CalendarList.get(CalendarList, request)
-
-
-class ImportCalendar(APIView):
-    permission_classes = [permissions.IsAuthenticated, ]
-
-    def get(self, request):
-        if 'id' in request.query_params:
-            calendars = request.query_params['id'].split(',')
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        calendars = Calendar.objects.filter(id__in=calendars)
-        for calendar in calendars:
-            calendar.copy(request.user)
-        return CalendarList.get(CalendarList, request)
