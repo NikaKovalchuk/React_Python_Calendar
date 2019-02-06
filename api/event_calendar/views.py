@@ -11,19 +11,21 @@ from .serializers import CalendarSerializer, NewCalendarSerializer
 class ListAPI(APIView):
     permission_classes = [permissions.IsAuthenticated, ]
 
-    def get(self, request):
+    def get(self, request, httpStatus=None):
         calendars = Calendar.objects.filter(user=request.user, archived=False)
         if 'import' in request.query_params:
             calendars = Calendar.objects.filter(archived=False, public=True).exclude(user=request.user)
         serializer = CalendarSerializer(calendars, many=True)
-        return Response(serializer.data)
+        if not httpStatus:
+            httpStatus = status.HTTP_200_OK
+        return Response(serializer.data, httpStatus)
 
     def post(self, request):
         serializer_context = {'request': request, }
         serializer = NewCalendarSerializer(data=request.data, context=serializer_context)
         if serializer.is_valid():
             serializer.save()
-            return ListAPI.get(ListAPI, request)
+            return ListAPI.get(ListAPI, request, status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -47,18 +49,15 @@ class ElementAPI(APIView):
     def delete(self, request, pk):
         calendar = self.get_object(pk, request.user.id)
         calendar.delete()
-        return ListAPI.get(ListAPI,request)
+        return ListAPI.get(ListAPI, request)
 
 
 class ImportAPI(APIView):
     permission_classes = [permissions.IsAuthenticated, ]
 
     def get(self, request):
-        if 'id' in request.query_params:
-            calendars = request.query_params['id'].split(',')
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        calendars = request.query_params['id'].split(',')
         calendars = Calendar.objects.filter(id__in=calendars)
         for calendar in calendars:
             calendar.copy(request.user)
-        return ListAPI.get(ListAPI,request)
+        return ListAPI.get(ListAPI, request)

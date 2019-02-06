@@ -489,26 +489,19 @@ class Schedule extends Component {
             }
         }
         if (update) {
+            this.setState({
+                calendars: props.calendars,
+                calendarsId: calendarsId
+            })
             this.updateEvents(props.selectedDate, calendarsId)
         }
     }
 
-    updateEvents(date, calendarsId=null) {
-        if (calendarsId === null){
-            calendarsId = this.state.calendarsId
-        }
-        else{
-            this.setState({
-                calendarsId:calendarsId
-            })
-        }
-        const startDate = moment(date).startOf('month').startOf('week').toISOString();
-        const finishDate = moment(date).endOf('month').endOf('week');
-
-        this.props.loadEvents(startDate, finishDate, calendarsId).then(response => {
+    updateEvents(date, calendarsId) {
+        this.props.loadEvents(date, calendarsId).then(response => {
             this.setState({events: this.props.events});
         });
-        this.props.loadNotifications(startDate, finishDate, calendarsId).then(response => {
+        this.props.loadNotifications(date, calendarsId).then(response => {
             this.setState({notifications: this.props.events});
             if (this.props.events !== []) {
                 let event = this.props.events[this.props.events.length - 1];
@@ -550,7 +543,7 @@ class Schedule extends Component {
     toggleModal = () => {
         if (this.state.isOpen === true) {
             this.setState({event: this.state.emptyEvent,});
-            this.updateEvents(this.state.selectedDate)
+            this.updateEvents(this.state.selectedDate, this.state.calendarsId)
         } else {
             if (this.state.calendars.length === 0) {
                 this.toggleNoCalendarsModal()
@@ -645,11 +638,11 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        loadEvents: (startDate, finishDate, calendars) => {
-            return dispatch(events.loadEvents(startDate, finishDate, calendars));
+        loadEvents: (date, calendars) => {
+            return dispatch(events.loadEvents(date, calendars));
         },
-        loadNotifications: (startDate, finishDate, calendars) => {
-            return dispatch(events.loadNotifications(startDate, finishDate, calendars));
+        loadNotifications: (date, calendars) => {
+            return dispatch(events.loadNotifications(date, calendars));
         },
         addEvent: (model) => {
             return dispatch(events.addEvent(model));

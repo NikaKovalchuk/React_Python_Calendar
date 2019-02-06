@@ -1,3 +1,5 @@
+import moment from "moment";
+
 const API_BASE = 'http://localhost:8000/api/';
 const API_ENDPOINT_TYPE = 'event/'
 const API_URL = API_BASE + API_ENDPOINT_TYPE
@@ -27,9 +29,7 @@ const post = (url, body, dispatch, getState, convertDate = false) => {
             dispatch({type: 'SERVER_ERROR', data: res.data});
             return res.data;
         }
-        return res.json().then(data => {
-            return {status: res.status, data};
-        })
+        return res
     })
 }
 
@@ -66,9 +66,7 @@ const put = (url, body, dispatch, getState, convertDate = false) => {
             dispatch({type: 'SERVER_ERROR', data: res.data});
             return res.data;
         }
-        return res.json().then(data => {
-            return {status: res.status, data};
-        })
+        return res
     })
 }
 
@@ -83,9 +81,7 @@ const del = (url, dispatch, getState) => {
             dispatch({type: 'SERVER_ERROR', data: res.data});
             return res.data;
         }
-        return res.json().then(data => {
-            return {status: res.status, data};
-        })
+        return res
     })
 }
 
@@ -124,10 +120,13 @@ export const deleteEvent = (id) => (dispatch, getState) => {
     })
 }
 
-export const loadEvents = (startDate, finishDate, calendars) => (dispatch, getState) => {
-    startDate = new Date(startDate).toISOString()
-    finishDate = new Date(finishDate).toISOString()
-    let params = "?startDate=" + startDate + "&finishDate=" + finishDate + "&calendar=" + calendars
+export const loadEvents = (date, calendars) => (dispatch, getState) => {
+    var startDate = moment(date).startOf('month').startOf('week').toISOString();
+    var finishDate = moment(date).endOf('month').endOf('week').toISOString()
+    let params = "?startDate=" + startDate + "&finishDate=" + finishDate
+    if (calendars.length !== 0) {
+        params += "&calendar=" + calendars
+    }
     return get(API_ENDPOINTS.LOAD_EVENTS + params, dispatch, getState).then(res => {
         if (res.status === 200) {
             dispatch({type: 'LOAD_EVENTS', data: res.data});
@@ -141,10 +140,13 @@ export const loadEvents = (startDate, finishDate, calendars) => (dispatch, getSt
 }
 
 
-export const loadNotifications = (startDate, finishDate, calendars) => (dispatch, getState) => {
-    startDate = new Date(startDate).toISOString()
-    finishDate = new Date(finishDate).toISOString()
-    let params = "?notification=true&startDate=" + startDate + "&finishDate=" + finishDate + "&calendar=" + calendars
+export const loadNotifications = (date, calendars) => (dispatch, getState) => {
+    var startDate = moment(date).startOf('month').startOf('week').toISOString();
+    var finishDate = moment(date).endOf('month').endOf('week').toISOString()
+    let params = "?notification=true&startDate=" + startDate + "&finishDate=" + finishDate
+    if (calendars.length !== 0) {
+        params += "&calendar=" + calendars
+    }
     return get(API_ENDPOINTS.LOAD_NOTIFICATIONS + params, dispatch, getState).then(res => {
         if (res.status === 200) {
             dispatch({type: 'LOAD_NOTIFICATIONS', data: res.data});

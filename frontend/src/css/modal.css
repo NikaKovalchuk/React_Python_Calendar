@@ -49,12 +49,12 @@
     overflow-y: auto;
 }
 
-.variant {
-    width: 100%;
-    border-bottom: 2px solid var(--border-color);
-    overflow: hidden;
-    text-align: left;
-    padding-left: 10px;
+.variant.no {
+    padding-left: 0;
+}
+
+.variant.no:hover  {
+   background: none;
 }
 
 .variant:hover {

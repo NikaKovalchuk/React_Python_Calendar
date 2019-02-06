@@ -21,11 +21,6 @@ class ElementAPI(APIView):
         except Event.DoesNotExist:
             raise Http404()
 
-    def get(self, request, pk):
-        event = self.get_object(pk, request.user.id)
-        serializer = EventSerializer(event)
-        return Response(serializer.data)
-
     def put(self, request, pk):
         event = self.get_object(pk, request.user.id)
         calendar = Calendar.objects.get(id=request.data['calendar']['id'])
@@ -35,7 +30,7 @@ class ElementAPI(APIView):
         if serializer.is_valid():
             serializer.validated_data['calendar'] = calendar
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
@@ -51,13 +46,12 @@ class ListAPI(APIView):
 
     def get(self, request):
         notification = False
+        calendar = []
         start_date = dateutil.parser.parse(request.query_params['startDate'])
         finish_date = dateutil.parser.parse(request.query_params['finishDate'])
-        calendar = request.query_params['calendar']
-        if calendar is not '':
+        if 'calendar' in request.query_params:
+            calendar = request.query_params['calendar']
             calendar = calendar.split(',')
-        else:
-            calendar = []
         if 'notification' in request.query_params:
             notification = True
 
@@ -84,7 +78,7 @@ class ListAPI(APIView):
         serializer = NewEventSerializer(data=request.data, context=serializer_context)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.errors, status=status.HTTP_201_CREATED)
+            return Response(status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def repeated_events(self, start_date, finish_date, events, user, calendar):

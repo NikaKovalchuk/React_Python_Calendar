@@ -84,7 +84,7 @@ const del = (url, dispatch, getState) => {
 
 
 export const addCalendar = (body) => (dispatch, getState) => post(API_ENDPOINTS.ADD_CALENDAR, body, dispatch, getState).then(res => {
-    if (res.status === 200) {
+    if (res.status === 200 ||res.status === 201 ) {
         dispatch({type: 'ADD_CALENDAR_SUCCESSFUL', data: res.data});
         return res.data;
     }

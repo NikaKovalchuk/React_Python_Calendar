@@ -17,7 +17,7 @@ export default function auth(state = initialState, action) {
             return {...state, ...action.data, isAuthenticated: true, errors: null};
 
         case 'USER_LOADED':
-            return {...state, isAuthenticated: true, user: action.user};
+            return {...state, isAuthenticated: true, user: action.data};
 
         case 'LOGIN_SUCCESSFUL':
             localStorage.setItem("token", action.data.token);

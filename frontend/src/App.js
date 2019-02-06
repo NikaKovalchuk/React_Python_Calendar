@@ -11,8 +11,9 @@ import Register from "./components/forms/Registration"
 import NotFound from "./components/NotFound"
 import {applyMiddleware, createStore} from "redux";
 import thunk from "redux-thunk";
+import {composeWithDevTools} from 'redux-devtools-extension';
 
-let store = createStore(app, applyMiddleware(thunk));
+const store = createStore(app, composeWithDevTools(applyMiddleware(thunk)));
 
 class RootContainerComponent extends Component {
     componentDidMount() {

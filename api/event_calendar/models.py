@@ -17,7 +17,7 @@ class Calendar(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
-        ordering = ('-update_date', 'name')
+        ordering = ('name',)
 
     def __unicode__(self):
         return self.name
