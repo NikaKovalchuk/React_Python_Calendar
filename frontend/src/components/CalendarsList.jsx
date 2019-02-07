@@ -81,8 +81,8 @@ class CalendarsList extends React.Component {
 
     loadCalendars() {
         this.props.loadCalendars().then(response => {
-            this.setState({calendars: this.props.calendars});
-            this.props.changeCalendars(this.props.calendars)
+            this.setState({calendars: this.props.calendars.data});
+            this.props.changeCalendars(this.props.calendars.data)
         });
     }
 
@@ -122,7 +122,7 @@ class CalendarsList extends React.Component {
     completeImport = (calendarsId) => {
         this.props.importCalendars(calendarsId).then(response => {
             this.setState({
-                calendars: this.props.calendars
+                calendars: this.props.calendars.data
             })
             this.toggleModalImport()
         });
@@ -133,7 +133,7 @@ class CalendarsList extends React.Component {
         calendar.show = !calendar.show
         this.props.updateCalendar(calendar.id, calendar).then(response => {
             this.setState({
-                calendars: this.props.calendars
+                calendars: this.props.calendars.data
             })
         });
     }
@@ -142,14 +142,14 @@ class CalendarsList extends React.Component {
         if (calendar.id) {
             this.props.updateCalendar(calendar.id, calendar).then(response => {
                 this.setState({
-                    calendars: this.props.calendars,
+                    calendars: this.props.calendars.data,
                     isOpen: !this.state.isOpen
                 })
             });
         } else {
             this.props.addCalendar(calendar).then(response => {
                 this.setState({
-                    calendars: this.props.calendars,
+                    calendars: this.props.calendars.data,
                     isOpen: !this.state.isOpen
                 })
             });
@@ -202,7 +202,7 @@ const mapDispatchToProps = dispatch => {
 };
 
 CalendarsList.propTypes = {
-    calendars: PropTypes.array,
+    calendars: PropTypes.arrayOf(PropTypes.object),
     changeShow: PropTypes.func,
     changeCalendars: PropTypes.func
 };

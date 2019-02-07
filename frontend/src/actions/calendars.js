@@ -46,7 +46,6 @@ const get = (url, dispatch, getState) => {
     })
 }
 
-
 const put = (url, body, dispatch, getState) => {
     let headers = {"Content-Type": "application/json"};
     body = JSON.stringify(body)
@@ -84,8 +83,8 @@ const del = (url, dispatch, getState) => {
 
 
 export const addCalendar = (body) => (dispatch, getState) => post(API_ENDPOINTS.ADD_CALENDAR, body, dispatch, getState).then(res => {
-    if (res.status === 200 ||res.status === 201 ) {
-        dispatch({type: 'ADD_CALENDAR_SUCCESSFUL', data: res.data});
+    if (res.status === 200 || res.status === 201) {
+        dispatch({type: 'ADD_CALENDAR_SUCCESSFUL', calendars: res.data});
         return res.data;
     }
 })
@@ -98,10 +97,14 @@ export const loadCalendars = (importCalendar = false) => (dispatch, getState) =>
     }
     return get(API_ENDPOINTS.LOAD_CALENDAR + params, dispatch, getState).then(res => {
         if (res.status === 200) {
-            dispatch({type: 'LOAD_CALENDARS_SUCCESSFUL', data: res.data});
+            if (importCalendar === true) {
+                dispatch({type: 'LOAD_IMPORT_CALENDARS_SUCCESSFUL', import: res.data});
+            } else {
+                dispatch({type: 'LOAD_CALENDARS_SUCCESSFUL', calendars: res.data});
+            }
             return res.data;
         } else {
-            dispatch({type: 'CALENDAR_ERROR', data: res.data});
+            dispatch({type: 'CALENDAR_ERROR', calendars: res.data});
             return res.data;
         }
 
@@ -113,10 +116,10 @@ export const updateCalendar = (index, body) => (dispatch, getState) => {
     let params = index + "/"
     return put(API_ENDPOINTS.UPDATE_CALENDAR + params, body, dispatch, getState).then(res => {
         if (res.status === 200) {
-            dispatch({type: 'UPDATE_CALENDAR_SUCCESSFUL', data: res.data});
+            dispatch({type: 'UPDATE_CALENDAR_SUCCESSFUL', calendars: res.data});
             return res.data;
         } else {
-            dispatch({type: 'CALENDAR_ERROR', data: res.data});
+            dispatch({type: 'CALENDAR_ERROR', calendars: res.data});
             return res.data;
         }
     })
@@ -127,10 +130,10 @@ export const deleteCalendar = (id) => (dispatch, getState) => {
     let params = id + "/"
     return del(API_ENDPOINTS.DELETE_CALENDAR + params, dispatch, getState).then(res => {
         if (res.status === 200) {
-            dispatch({type: 'DELETE_CALENDAR_SUCCESSFUL', data: res.data});
+            dispatch({type: 'DELETE_CALENDAR_SUCCESSFUL', calendars: res.data});
             return res.data;
         } else {
-            dispatch({type: 'CALENDAR_ERROR', data: res.data});
+            dispatch({type: 'CALENDAR_ERROR', calendars: res.data});
             return res.data;
         }
     })
@@ -141,10 +144,10 @@ export const importCalendars = (calendarsId) => (dispatch, getState) => {
     let params = "?id=" + calendarsId
     return get(API_ENDPOINTS.IMPORT_CALENDAR + params, dispatch, getState).then(res => {
         if (res.status === 200) {
-            dispatch({type: 'IMPORT_CALENDAR_SUCCESSFUL', data: res.data});
+            dispatch({type: 'IMPORT_CALENDAR_SUCCESSFUL', calendars: res.data});
             return res.data;
         } else {
-            dispatch({type: 'CALENDAR_ERROR', data: res.data});
+            dispatch({type: 'CALENDAR_ERROR', calendars: res.data});
             return res.data;
         }
     })

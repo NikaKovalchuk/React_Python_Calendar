@@ -16,22 +16,16 @@ export default function events(state = initialState, action) {
             return [...state];
 
         case 'UPDATE_EVENT':
-            return [...state];
+            return { state : state};  //TODO: fix optimization
 
         case 'DELETE_EVENT':
-            return [...state];
-
-        case 'FETCH_EVENTS':
-            return [...state, ...action.data];
-
-        case 'LOAD_EVENT':
-            return [...state, action.data];
+           return { state : state}; 
 
         case 'LOAD_EVENTS':
-            return [...action.data];
+            return {...state, data: action.data};
 
         case 'LOAD_NOTIFICATIONS':
-            return [...action.data];
+            return {...state, notifications: action.notifications};
 
         default:
             return state;

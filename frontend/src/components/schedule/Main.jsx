@@ -56,7 +56,7 @@ class ScheduleTable extends Component {
                          onEventClick={this.props.onEventClick}
                          viewDay={this.props.viewDay}
                          view={this.props.view}
-                         events={this.props.events}
+                         events={this.props.events.data}
                          onDateClick={this.props.onDateClick}
             />
         }
@@ -65,7 +65,7 @@ class ScheduleTable extends Component {
                           onEventClick={this.props.onEventClick}
                           viewDay={this.props.viewDay}
                           view={this.props.view}
-                          events={this.props.events}
+                          events={this.props.events.data}
                           onDateClick={this.props.onDateClick}
             />
         }
@@ -74,7 +74,7 @@ class ScheduleTable extends Component {
                            onEventClick={this.props.onEventClick}
                            viewDay={this.props.viewDay}
                            view={this.props.view}
-                           events={this.props.events}
+                           events={this.props.events.data}
                            onDateClick={this.props.onDateClick}
             />
         }
@@ -139,13 +139,13 @@ class Main extends Component {
                 this.setState({selectedDate: props.selectedDate});
             }
         }
-        if (props.calendars) {
-            if (props.calendars !== this.state.calendars) {
+        if (props.calendars.data) {
+            if (props.calendars.data !== this.state.calendars) {
                 this.setState({
-                    calendars: this.props.calendars
+                    calendars: this.props.calendars.data
                 })
-                for (let index = 0; index < props.calendars.length; index++) {
-                    let calendar = props.calendars[index]
+                for (let index = 0; index < props.calendars.data.length; index++) {
+                    let calendar = props.calendars.data[index]
                     if (calendar.show === true) {
                         calendarsId.push(calendar.id)
                     }
@@ -155,7 +155,7 @@ class Main extends Component {
         }
         if (update) {
             this.setState({
-                calendars: props.calendars,
+                calendars: props.calendars.data,
                 calendarsId: calendarsId
             })
             this.updateEvents(props.selectedDate, calendarsId)
@@ -164,12 +164,12 @@ class Main extends Component {
 
     updateEvents(date, calendarsId) {
         this.props.loadEvents(date, calendarsId).then(response => {
-            this.setState({events: this.props.events});
+            this.setState({events: this.props.events.data});
         });
         this.props.loadNotifications(date, calendarsId).then(response => {
-            this.setState({notifications: this.props.events});
-            if (this.props.events !== []) {
-                let event = this.props.events[this.props.events.length - 1];
+            this.setState({notifications: this.props.events.notifications});
+            if (this.props.events.notifications !== []) {
+                let event = this.props.events.notifications[this.props.events.notifications.length - 1];
                 if (event) {
                     this.setState({
                         isOpenNotification: true,

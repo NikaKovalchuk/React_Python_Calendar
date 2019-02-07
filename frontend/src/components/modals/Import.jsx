@@ -23,7 +23,7 @@ class Import extends Component {
     componentDidMount(nextProps, nextContext) {
         this.props.loadCalendars().then(response => {
             this.setState({
-                calendars: this.props.calendars,
+                calendars: this.props.calendars.import,
             });
         });
     }

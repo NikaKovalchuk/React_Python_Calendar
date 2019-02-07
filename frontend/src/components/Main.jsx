@@ -1,14 +1,13 @@
 import React, {Component} from 'react';
 import Calendar from "./Calendar"
 import CalendarsList from "./CalendarsList"
-import Schedule from "./Schedule/Main"
+import Schedule from "./schedule/Main"
 import {connect} from 'react-redux';
 import "../css/main.css"
 
 class Main extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
             calendars: [],
             selectedDate: new Date(new Date().setHours(0, 0, 0)),

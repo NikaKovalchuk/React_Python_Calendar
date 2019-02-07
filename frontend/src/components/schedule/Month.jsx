@@ -44,7 +44,6 @@ class Month extends Component {
 Month.propTypes = {
     selectedDate: PropTypes.object,
     events: PropTypes.arrayOf(PropTypes.object),
-
     onDateClick: PropTypes.func,
     onEventClick: PropTypes.func,
     viewDay: PropTypes.func

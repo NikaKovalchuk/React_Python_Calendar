@@ -86,7 +86,7 @@ class Calendar extends Component {
 
     delete = () => {
         this.props.deleteCalendar(this.state.id).then(response => {
-            this.props.updateCalendars(this.props.calendars)
+            this.props.updateCalendars(this.props.calendars.data)
             this.props.onCancel()
         })
     };

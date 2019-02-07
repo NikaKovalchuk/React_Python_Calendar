@@ -87,7 +87,7 @@ const del = (url, dispatch, getState) => {
 
 export const addEvent = (body) => (dispatch, getState) => post(API_ENDPOINTS.ADD_EVENT, body, dispatch, getState, true).then(res => {
     if (res.status === 200) {
-        dispatch({type: 'ADD_EVENT', data: res.data});
+        dispatch({type: 'ADD_EVENT'});
         return res.data;
     }
 })
@@ -97,7 +97,7 @@ export const updateEvent = (index, body) => (dispatch, getState) => {
     let params = index + "/"
     return put(API_ENDPOINTS.UPDATE_EVENT + params, body, dispatch, getState, true).then(res => {
         if (res.status === 200) {
-            dispatch({type: 'UPDATE_EVENT', data: res.data});
+            dispatch({type: 'UPDATE_EVENT'});
             return res.data;
         } else {
             dispatch({type: 'EVENT_ERROR', data: res.data});
@@ -111,7 +111,7 @@ export const deleteEvent = (id) => (dispatch, getState) => {
     let params = id + "/"
     return del(API_ENDPOINTS.DELETE_EVENT + params, dispatch, getState).then(res => {
         if (res.status === 200) {
-            dispatch({type: 'DELETE_EVENT', data: res.data});
+            dispatch({type: 'DELETE_EVENT'});
             return res.data;
         } else {
             dispatch({type: 'EVENT_ERROR', data: res.data});
@@ -149,7 +149,7 @@ export const loadNotifications = (date, calendars) => (dispatch, getState) => {
     }
     return get(API_ENDPOINTS.LOAD_NOTIFICATIONS + params, dispatch, getState).then(res => {
         if (res.status === 200) {
-            dispatch({type: 'LOAD_NOTIFICATIONS', data: res.data});
+            dispatch({type: 'LOAD_NOTIFICATIONS', notifications: res.data});
             return res.data;
         } else {
             dispatch({type: 'NOTIFICATION_ERROR', data: res.data});
