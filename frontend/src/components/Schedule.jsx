@@ -75,13 +75,13 @@ class MonthEvent extends Component {
             let currentClass = defaultClass;
 
             if (finishDate < endOfWeek && finishDate > beginOfWeek && startDate > beginOfWeek && startDate < endOfWeek) {
-                numberOfDays = finishDate.date() - startDate.date()
+                numberOfDays = finishDate.day() - startDate.day()
             } else if (startDate > beginOfWeek && startDate < endOfWeek) {
-                numberOfDays = endOfWeek.date() - startDate.date()
+                numberOfDays = endOfWeek.day() - startDate.day()
             } else if (finishDate < endOfWeek && finishDate > beginOfWeek) {
-                numberOfDays = finishDate.date() - beginOfWeek.date()
+                numberOfDays = finishDate.day() - beginOfWeek.day()
             } else {
-                numberOfDays = endOfWeek.date() - beginOfWeek.date()
+                numberOfDays = endOfWeek.day() - beginOfWeek.day()
             }
 
             let width = eventWidth + numberOfDays * cellWidth;

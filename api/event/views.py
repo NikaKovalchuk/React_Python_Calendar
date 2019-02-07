@@ -3,6 +3,7 @@ import datetime
 from datetime import datetime, timedelta, date
 
 import dateutil.parser
+from django.db.models import Q
 from django.http import Http404
 from rest_framework import status, permissions
 from rest_framework.response import Response
@@ -46,27 +47,23 @@ class ListAPI(APIView):
 
     def get(self, request):
         notification = False
-        calendar = []
+        calendars_id = []
         start_date = dateutil.parser.parse(request.query_params['startDate'])
         finish_date = dateutil.parser.parse(request.query_params['finishDate'])
         if 'calendar' in request.query_params:
-            calendar = request.query_params['calendar']
-            calendar = calendar.split(',')
+            calendars_id = request.query_params['calendar']
+            calendars_id = calendars_id.split(',')
         if 'notification' in request.query_params:
             notification = True
 
-        events = Event.objects.filter(start_date__gte=start_date, finish_date__lte=finish_date, user=request.user.id,
-                                      archived=False, repeat=self.repeat['no'], calendar_id__in=calendar) | \
-                 Event.objects.filter(
-                     start_date__lte=start_date, finish_date__lte=finish_date, user=request.user.id,
-                     archived=False, repeat=self.repeat['no'], calendar_id__in=calendar) | \
-                 Event.objects.filter(
-                     start_date__gte=start_date, finish_date__gte=finish_date, user=request.user.id,
-                     archived=False, repeat=self.repeat['no'], calendar_id__in=calendar)
+        events = Event.objects.filter(user=request.user.id, archived=False,
+                                      repeat=self.repeat['no'], calendar_id__in=calendars_id)
+        events = list(events.filter(Q(start_date__gte=start_date, finish_date__lte=finish_date) |
+                                    Q(start_date__lte=start_date, finish_date__gte=start_date) |
+                                    Q(start_date__lte=finish_date, finish_date__gte=finish_date)))
 
-        events = list(events)
-        events = self.repeated_events(start_date=start_date, finish_date=finish_date, events=events, user=request.user,
-                                      calendar=calendar)
+        events = self.repeated_events(start_date=start_date, finish_date=finish_date, events=events,
+                                      user=request.user, calendars_id=calendars_id)
         if notification:
             events = self.notification(events=events)
         events = sorted(events, key=lambda x: x.start_date)
@@ -81,12 +78,12 @@ class ListAPI(APIView):
             return Response(status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def repeated_events(self, start_date, finish_date, events, user, calendar):
+    def repeated_events(self, start_date, finish_date, events, user, calendars_id):
         extra = Event.objects.filter(
             user=user.id,
             archived=False,
             repeat__isnull=False,
-            calendar_id__in=calendar
+            calendar_id__in=calendars_id
         )
 
         for event in extra:
