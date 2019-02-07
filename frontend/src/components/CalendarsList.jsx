@@ -28,6 +28,7 @@ ControlPanel.propTypes = {
     toggleModal: PropTypes.func,
 };
 
+
 class Calendars extends React.Component {
     render() {
         let result = []

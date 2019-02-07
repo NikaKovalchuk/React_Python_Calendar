@@ -30,7 +30,6 @@ class ControlPanel extends React.Component {
 
 ControlPanel.propTypes = {
     viewDate: PropTypes.object,
-
     changeDate: PropTypes.func
 };
 

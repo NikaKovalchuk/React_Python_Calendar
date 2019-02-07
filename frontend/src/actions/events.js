@@ -15,8 +15,8 @@ const API_ENDPOINTS = {
 const post = (url, body, dispatch, getState, convertDate = false) => {
     let headers = {"Content-Type": "application/json"};
     if (convertDate) {
-        body.start_date = new Date(body.start_date).toISOString()
-        body.finish_date = new Date(body.finish_date).toISOString()
+        body.start_date = moment(body.start_date).toISOString()
+        body.finish_date = moment(body.finish_date).toISOString()
     }
     body = JSON.stringify(body)
     let {token} = getState().auth;
@@ -53,8 +53,8 @@ const get = (url, dispatch, getState) => {
 const put = (url, body, dispatch, getState, convertDate = false) => {
     let headers = {"Content-Type": "application/json"};
     if (convertDate) {
-        body.start_date = new Date(body.start_date).toISOString()
-        body.finish_date = new Date(body.finish_date).toISOString()
+        body.start_date = moment(body.start_date).toISOString()
+        body.finish_date = moment(body.finish_date).toISOString()
     }
     body = JSON.stringify(body)
     let {token} = getState().auth;
@@ -95,7 +95,7 @@ export const addEvent = (body) => (dispatch, getState) => post(API_ENDPOINTS.ADD
 
 export const updateEvent = (index, body) => (dispatch, getState) => {
     let params = index + "/"
-    return put(API_ENDPOINTS.UPDATE_EVENT + params, body, dispatch, getState).then(res => {
+    return put(API_ENDPOINTS.UPDATE_EVENT + params, body, dispatch, getState, true).then(res => {
         if (res.status === 200) {
             dispatch({type: 'UPDATE_EVENT', data: res.data});
             return res.data;
