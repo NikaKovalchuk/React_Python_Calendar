@@ -59,7 +59,7 @@ class MonthEvent extends Component {
                             buttonStyle = {marginTop: margin + '%',}
                         }
                         result.push(<div className={"more-events"} style={buttonStyle}
-                                         onClick={(e) => this.props.viewDay(e, today)}
+                                         onClick={(e) => {this.props.viewDay(e, today)}}
                                          key={"more"}> View all events </div>)
                     } else {
                         if (finishDate > endOfWeek) {
@@ -110,7 +110,7 @@ class MonthEvent extends Component {
 
 MonthEvent.propTypes = {
     today: PropTypes.object,
-    events: PropTypes.arrayOf(PropTypes.object),
+    events: PropTypes.any,
 
     onEventClick: PropTypes.func
 };

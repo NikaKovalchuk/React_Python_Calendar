@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 
 class Day extends Component {
     render() {
+        console.log(this.props)
         const selectedDate = this.props.selectedDate;
         const dayStart = moment(selectedDate).startOf('day')
         const dayEnd = moment(selectedDate).endOf('day');
@@ -41,7 +42,7 @@ class Day extends Component {
 
 Day.propTypes = {
     selectedDate: PropTypes.object,
-    events: PropTypes.arrayOf(PropTypes.object),
+    events: PropTypes.any,
 
     onDateClick: PropTypes.func,
     onEventClick: PropTypes.func

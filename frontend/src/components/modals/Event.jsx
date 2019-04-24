@@ -180,6 +180,7 @@ class Event extends Component {
             error = "Finish Date must be greater than  Start date"
         }
         if (event.title === "" || event.title === undefined || event.text === "" || event.text === undefined) {
+            console.log(event)
             error = "Please fill in all fields."
         }
         if (error !== null) {

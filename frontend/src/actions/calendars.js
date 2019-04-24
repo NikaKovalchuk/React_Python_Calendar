@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:8000/api/';
+const API_BASE = 'http://192.168.32.52:8000/api/';
 const API_ENDPOINT_TYPE = 'calendar/'
 const API_URL = API_BASE + API_ENDPOINT_TYPE
 

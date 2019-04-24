@@ -88,7 +88,7 @@ class ScheduleTable extends Component {
 ScheduleTable.propTypes = {
     view: PropTypes.number,
     selectedDate: PropTypes.object,
-    events: PropTypes.arrayOf(PropTypes.object),
+    events: PropTypes.any,
 
     onDateClick: PropTypes.func,
     onEventClick: PropTypes.func,
@@ -181,8 +181,9 @@ class Main extends Component {
     }
 
     viewDay = (e, day) => {
+        let date = day._d
         this.setState({
-            selectedDate: day,
+            selectedDate: date,
             view: viewType.day
         });
         e.stopPropagation();
@@ -320,8 +321,8 @@ const mapDispatchToProps = dispatch => {
 
 Main.propTypes = {
     selectedDate: PropTypes.object,
-    events: PropTypes.arrayOf(PropTypes.object),
-    calendars: PropTypes.arrayOf(PropTypes.object),
+    events: PropTypes.any,
+    calendars: PropTypes.any,
 
     changeDate: PropTypes.func,
     toggleModalImport: PropTypes.func,

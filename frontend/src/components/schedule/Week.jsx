@@ -61,7 +61,7 @@ class Week extends Component {
 
 Week.propTypes = {
     selectedDate: PropTypes.object,
-    events: PropTypes.arrayOf(PropTypes.object),
+    events: PropTypes.any,
 
     onDateClick: PropTypes.func,
     onEventClick: PropTypes.func

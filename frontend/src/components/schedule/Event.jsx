@@ -73,7 +73,7 @@ class Event extends Component {
 Event.propTypes = {
     day: PropTypes.object,
     hour: PropTypes.object,
-    events: PropTypes.arrayOf(PropTypes.object),
+    events: PropTypes.any,
 
     onEventClick: PropTypes.func
 };

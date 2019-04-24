@@ -24,7 +24,7 @@ SECRET_KEY = 'e9cnan3!cy=+v(wyf_^0@@^q1b^vkqr61wg9nj03-v$9h#@ngi'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '0.0.0.0', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 ACCOUNT_LOGOUT_ON_GET = True
 
@@ -167,9 +167,4 @@ WEBPACK_LOADER = {
     }
 }
 
-CORS_ORIGIN_WHITELIST = (
-    'localhost:3000',
-    '127.0.0.1:3000',
-    '0.0.0.0:3000',
-    '192.168.32.52:3000',
-)
+CORS_ORIGIN_ALLOW_ALL = True

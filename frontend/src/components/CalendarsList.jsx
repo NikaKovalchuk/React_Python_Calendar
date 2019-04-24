@@ -57,7 +57,7 @@ class Calendars extends React.Component {
 }
 
 Calendars.propTypes = {
-    calendars: PropTypes.arrayOf(PropTypes.object),
+    calendars: PropTypes.any,
 
     changeShow: PropTypes.func,
     toggleModal: PropTypes.func
@@ -202,7 +202,7 @@ const mapDispatchToProps = dispatch => {
 };
 
 CalendarsList.propTypes = {
-    calendars: PropTypes.arrayOf(PropTypes.object),
+    calendars: PropTypes.any,
     changeShow: PropTypes.func,
     changeCalendars: PropTypes.func
 };

@@ -74,7 +74,7 @@ class Days extends React.Component {
                             moment(day).isSame(this.props.selectedDate, 'day') ? "selected" : ""}
                             ${moment(day).isSame(moment().startOf('day'), 'day') ? "today" : ""}`}
                         key={day}
-                        onClick={() => this.props.onDateClick(cloneDay)}>
+                        onClick={() => this.props.onDateClick(cloneDay._d)}>
                         <span className="number">{formattedDate}</span>
                     </div>
                 );

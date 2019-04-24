@@ -173,7 +173,7 @@ const mapDispatchToProps = dispatch => {
 
 Import.propTypes = {
     show: PropTypes.bool,
-    calendars: PropTypes.arrayOf(PropTypes.object),
+    calendars: PropTypes.any,
     onCancel: PropTypes.func,
     loadCalendars: PropTypes.func,
     onOk: PropTypes.func

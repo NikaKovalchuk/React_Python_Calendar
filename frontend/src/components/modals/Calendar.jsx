@@ -185,7 +185,7 @@ const mapStateToProps = state => {
 
 Calendar.propTypes = {
     show : PropTypes.bool,
-    calendar: PropTypes.object,
+    calendar: PropTypes.any,
 
     onCancel: PropTypes.func,
     onOk : PropTypes.func,
