@@ -5,9 +5,9 @@ import {connect, Provider} from "react-redux";
 import app from "./reducers";
 import {auth} from "./actions";
 import ToolBar from "./components/ToolBar";
-import Login from "./components/forms/Login"
+import Login from "./components/forms/auth/Login"
 import Main from "./components/Main"
-import Register from "./components/forms/Registration"
+import Register from "./components/forms/auth/Registration"
 import NotFound from "./components/NotFound"
 import {applyMiddleware, createStore} from "redux";
 import thunk from "redux-thunk";

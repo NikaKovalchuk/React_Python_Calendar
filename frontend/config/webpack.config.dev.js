@@ -22,11 +22,11 @@ const BundleTracker = require('webpack-bundle-tracker');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
-const publicPath = 'http://192.168.32.52:3000/';
+const publicPath = 'http://localhost:3000/';
 // `publicUrl` is just like `publicPath`, but we will provide it to our app
 // as %PUBLIC_URL% in `home.html` and `process.env.PUBLIC_URL` in JavaScript.
 // Omit trailing slash as %PUBLIC_PATH%/xyz looks better than %PUBLIC_PATH%xyz.
-const publicUrl = 'http://192.168.32.52:3000/';
+const publicUrl = 'http://localhost:3000/';
 // Get environment variables to inject into our app.
 const env = getClientEnvironment(publicUrl);
 
@@ -95,7 +95,7 @@ module.exports = {
     // the line below with these two lines if you prefer the stock client:
     // require.resolve('webpack-dev-server/client') + '?/',
     // require.resolve('webpack/hot/dev-server'),
-    require.resolve('webpack-dev-server/client') + '?http://192.168.32.52:3000',
+    require.resolve('webpack-dev-server/client') + '?http://localhost:3000',
     require.resolve('webpack/hot/dev-server'),
     // Finally, this is your app's code:
     paths.appIndexJs,

@@ -5,21 +5,16 @@ import PropTypes from "prop-types";
 class Info extends React.Component {
 
     render() {
-        if (!this.props.show) {
-            return null;
-        }
+        if (!this.props.show) return null;
 
-        let buttons;
-        if (this.props.onCancel) {
-            buttons = <div className={'button-group'}>
-                <button className={"btn btn-secondary"} onClick={this.props.onCancel}> CANCEL</button>
+        const buttons = this.props.onCancel ?
+            <div className={'button-group'}>
+                <button class Name={"btn btn-secondary"} onClick={this.props.onCancel}> CANCEL</button>
+                <button className={"btn btn-secondary"} onClick={this.props.onOk}> OK</button>
+            </div> :
+            <div className={'button-group'}>
                 <button className={"btn btn-secondary"} onClick={this.props.onOk}> OK</button>
             </div>
-        } else {
-            buttons = <div className={'button-group'}>
-                <button className={"btn btn-secondary"} onClick={this.props.onOk}> OK</button>
-            </div>
-        }
 
         return (
             <div className="backdrop" onClick={this.props.onCancel}>
@@ -40,11 +35,10 @@ class Info extends React.Component {
 }
 
 Info.propTypes = {
-    show : PropTypes.bool,
-    header : PropTypes.string,
-
     onCancel: PropTypes.func,
-    onOk : PropTypes.func
+    onOk : PropTypes.func,
+    header : PropTypes.string,
+    show : PropTypes.bool
 };
 
 export default Info;
