@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import Calendar from "./Calendar"
-import CalendarsList from "./CalendarsList"
+import Calendar from "./calendar"
+import CalendarsList from "./calendarsList"
 import Schedule from "./schedule/Main"
 import {connect} from 'react-redux';
 import "../css/main.css"
