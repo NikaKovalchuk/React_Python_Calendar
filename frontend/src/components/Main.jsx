@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
-import Calendar from "./calendar"
-import CalendarsList from "./calendarsList"
-import Schedule from "./schedule/Main"
+import Schedule from "./schedule"
 import {connect} from 'react-redux';
 import "../css/main.css"
+import SideBar from "./SideBar";
 
 class Main extends Component {
     state = {
@@ -17,19 +16,15 @@ class Main extends Component {
     render() {
         return (
             <div className={"main-content"}>
-                <div className={'side-bar'}>
-                    <Calendar
-                        selectedDate={this.state.selectedDate}
-                        changeDate={this.changeDate}/>
-                    <CalendarsList
-                        calendars={this.state.calendars}
-                        changeCalendars={this.changeCalendars} />
-                </div>
-                <div className={'scheduler'}>
-                    <Schedule selectedDate={this.state.selectedDate}
-                              calendars={this.state.calendars}
-                              changeDate={this.changeDate} />
-                </div>
+                <SideBar
+                    calendars={this.state.calendars}
+                    changeCalendars={this.changeCalendars}
+                    selectedDate={this.state.selectedDate}
+                    changeDate={this.changeDate} />
+                <Schedule
+                    selectedDate={this.state.selectedDate}
+                    calendars={this.state.calendars}
+                    changeDate={this.changeDate} />
             </div>
         )
     }

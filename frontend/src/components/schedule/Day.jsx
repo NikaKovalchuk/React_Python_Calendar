@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import "../../css/schedule.css"
+import "../../css/schedule.css";
 import moment from "moment";
-import Event from "./Event"
+import Event from "./Event";
 import PropTypes from "prop-types";
 
 class Day extends Component {

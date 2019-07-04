@@ -1,5 +1,5 @@
 import React from "react";
-import '../../css/calendars.css'
+import '../../css/calendars.css';
 import {calendars} from "../../actions";
 import {connect} from "react-redux";
 import Calendar from "../modals/Calendar";

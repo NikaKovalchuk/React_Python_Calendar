@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import "../../css/form.css"
+import "../../css/form.css";
 import {events} from "../../actions";
 import {connect} from "react-redux";
 import moment from "moment";
@@ -34,7 +34,7 @@ class Event extends Component {
         };
     }
 
-    componentWillReceiveProps(nextProps, nextContext) {
+    componentWillReceiveProps = (nextProps, nextContext) => {
         let searchValue = /\+[0-9]*:[0-9]*/
 
         if (nextProps.date != null) {
@@ -91,7 +91,7 @@ class Event extends Component {
         }
     }
 
-    selectNotification() {
+    selectNotification = () => {
          const options = this.state.notificationOptions.map((option) => (
             <option className="input"
                     key={Object.keys(option)[0]}
@@ -107,7 +107,7 @@ class Event extends Component {
         </select>;
     }
 
-    selectRepeat() {
+    selectRepeat = () => {
         const options = this.state.repeatOptions.map((option) => (
             <option className="input"
                     key={Object.keys(option)[0]}
@@ -123,7 +123,7 @@ class Event extends Component {
         </select>;
     }
 
-    selectCalendar() {
+    selectCalendar = () => {
         const options = this.state.calendars.map((calendar) => (
             <option className="input"
                     key={calendar.id}

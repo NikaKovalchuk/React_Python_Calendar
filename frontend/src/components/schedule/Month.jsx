@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import "../../css/schedule.css"
+import "../../css/schedule.css";
 import moment from "moment";
 import PropTypes from "prop-types";
-import MonthEvent from "./MonthEvent"
+import MonthEvent from "./MonthEvent";
 
 class Month extends Component {
     render() {

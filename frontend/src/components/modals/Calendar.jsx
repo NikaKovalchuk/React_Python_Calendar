@@ -37,14 +37,14 @@ class Calendar extends Component {
         }
     }
 
-    getRandomColor() {
+    getRandomColor = () => {
         const signs = '0123456789abcdef';
         let color = '#';
         for (let i = 0; i < 6; i++) color += signs[Math.floor(Math.random() * 16)];
         return color;
     };
 
-    selectAccess() {
+    selectAccess = () => {
         const options = this.state.accessOptions.map((option) => (
             <option className="input"
                     key={Object.keys(option)[0]}

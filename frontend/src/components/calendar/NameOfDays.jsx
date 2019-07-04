@@ -1,5 +1,5 @@
 import React from "react";
-import '../../css/calendar.css'
+import '../../css/calendar.css';
 import moment from "moment";
 
 class NameOfDays extends React.Component {

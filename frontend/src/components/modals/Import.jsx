@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import "../../css/form.css"
+import "../../css/form.css";
 import {calendars} from "../../actions";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
@@ -48,7 +48,7 @@ class Import extends Component {
         this.props.onCancel();
     };
 
-    onClickCalendar(calendar) {
+    onClickCalendar = (calendar) => {
         let chosenCalendars = this.state.chosenCalendars;
         const add = this.state.chosenCalendars.filter((chosenCalendar) => (calendar === chosenCalendar)).length === 0;
         if (add) {
@@ -128,7 +128,7 @@ const mapStateToProps = state => {
     return {
         calendars: state.calendars,
     }
-}
+};
 
 const mapDispatchToProps = dispatch => {
     return {
@@ -136,7 +136,7 @@ const mapDispatchToProps = dispatch => {
             return dispatch(calendars.loadCalendars(true));
         },
     }
-}
+};
 
 Import.propTypes = {
     show: PropTypes.bool,

@@ -3,19 +3,14 @@ import "../../css/schedule.css"
 import moment from "moment";
 import PropTypes from "prop-types";
 
+const cellWidth = 100;
+const eventsLimit = 3;
+const eventMargin = 5;
+const eventHeight = 25;
+const eventWidth = cellWidth - 2 * eventMargin;
+
 class MonthEvent extends Component {
     render() {
-        const defaultClass = "month-event";
-        const classBegin = " begin";
-        const classMiddle = " middle";
-        const classEnd = " end";
-
-        const cellWidth = 100;
-        const eventsLimit = 3;
-        const eventMargin = 5;
-        const eventHeight = 25;
-        const eventWidth = cellWidth - 2 * eventMargin;
-
         const today = this.props.today;
         const beginOfToday = moment(today).startOf('day');
         const endOfToday = moment(today).endOf('day');
@@ -31,7 +26,7 @@ class MonthEvent extends Component {
                 let finishDate = moment(event.finish_date);
                 let startDate = moment(event.start_date);
                 let numberOfDays = 0;
-                let currentClass = defaultClass;
+                let currentClass = "month-event";
 
                 if (finishDate < endOfWeek && finishDate > beginOfWeek && startDate > beginOfWeek && startDate < endOfWeek) {
                     numberOfDays = finishDate.day() - startDate.day()
@@ -63,7 +58,7 @@ class MonthEvent extends Component {
                                          key={"more"}> View all events </div>)
                     } else {
                         if (finishDate > endOfWeek) {
-                            currentClass += classBegin;
+                            currentClass += " begin";
                             width += 5
                         }
                         let eventStyle = {
@@ -87,9 +82,9 @@ class MonthEvent extends Component {
                     }
 
                 } else if (startDate < beginOfWeek && finishDate > beginOfWeek && beginOfToday <= beginOfWeek) {
-                    let classToAdd = classEnd;
+                    let classToAdd = " end";
                     if (finishDate > endOfWeek) {
-                        classToAdd = classMiddle;
+                        classToAdd = " middle";
                         width = width + eventMargin
                     }
                     currentClass += classToAdd;

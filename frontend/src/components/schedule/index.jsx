@@ -1,77 +1,15 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {events} from "../../actions";
-import "../../css/schedule.css"
+import "../../css/schedule.css";
 import EventModal from "../modals/Event";
-import Day from "./Day"
-import Week from "./Week"
-import Month from "./Month"
 import moment from "moment";
 import PropTypes from "prop-types";
 import Modal from "../modals";
+import ControlPanel from "./ControlPanel";
+import ScheduleTable from "./ScheduleTable";
 
 const viewType = {day: 0, week: 1, month: 2};
-
-class ControlPanel extends Component {
-    render() {
-        return (
-            <div>
-                <div className={'today-button'}>
-                    <div className="btn-group btn-group-toggle" data-toggle="buttons">
-                        <button type="button" className="btn btn-secondary btn-sm"
-                                onClick={() => this.props.changeDate(moment().startOf('day'))}>
-                            Today
-                        </button>
-                    </div>
-                </div>
-
-                <div className={'view-buttons'}>
-                    <div className="btn-group btn-group-toggle" data-toggle="buttons">
-                        <button type="button" className="btn btn-secondary btn-sm"
-                                onClick={() => this.props.changeView(viewType.day)}>Day
-                        </button>
-                        <button type="button" className="btn btn-secondary btn-sm"
-                                onClick={() => this.props.changeView(viewType.week)}>Week
-                        </button>
-                        <button type="button" className="btn btn-secondary btn-sm"
-                                onClick={() => this.props.changeView(viewType.month)}>Month
-                        </button>
-                    </div>
-                </div>
-            </div>
-        )
-    }
-}
-
-ControlPanel.propTypes = {
-    changeDate: PropTypes.func,
-    changeView: PropTypes.func,
-};
-
-class ScheduleTable extends Component {
-    render() {
-        const {
-            ...other
-        } = this.props;
-        let table;
-        if (this.props.view === viewType.day) table = <Day {...other}/>;
-        if (this.props.view === viewType.week) table = <Week {...other}/>;
-        if (this.props.view === viewType.month) table = <Month {...other} />;
-        return (
-            <div className={'shedule'}>{table}</div>
-        )
-    }
-}
-
-ScheduleTable.propTypes = {
-    view: PropTypes.number,
-    selectedDate: PropTypes.object,
-    events: PropTypes.any,
-
-    onDateClick: PropTypes.func,
-    onEventClick: PropTypes.func,
-    viewDay: PropTypes.func,
-};
 
 class Main extends Component {
 
@@ -229,7 +167,7 @@ class Main extends Component {
 
     render() {
         return (
-            <div className={'tall'}>
+            <div className={'scheduler'}>
                 <ControlPanel
                     changeView={this.changeView}
                     changeDate={this.props.changeDate}/>
@@ -259,7 +197,6 @@ class Main extends Component {
                     header={"Notification about calendars "}>
                     Please add at least one calendar to add new event.
                 </Modal>
-
             </div>
         )
     }

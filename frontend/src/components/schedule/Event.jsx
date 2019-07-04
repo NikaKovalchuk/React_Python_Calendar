@@ -1,7 +1,12 @@
 import React, {Component} from 'react';
-import "../../css/schedule.css"
+import "../../css/schedule.css";
 import moment from "moment";
 import PropTypes from "prop-types";
+
+const eventHeight = 20;
+const betweenDaysHeight = 10;
+const dayLength = 23;
+const eventMargin = 5;
 
 class Event extends Component {
     render() {
@@ -14,14 +19,9 @@ class Event extends Component {
 
         const startOfDay = moment(day).startOf('day');
         const endOfDay = moment(day).endOf('day');
-        const eventHeight = 20;
-        const betweenDaysHeight = 10;
-        const dayLength = 23;
-        const eventMargin = 5;
-
         const result = events.map((event) => {
-            let startDate = moment(event.start_date);
-            let finishDate = moment(event.finish_date);
+            const startDate = moment(event.start_date);
+            const finishDate = moment(event.finish_date);
             let add = false;
             let eventStyle = [];
             let height = eventHeight;
