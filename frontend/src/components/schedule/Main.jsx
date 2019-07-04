@@ -6,9 +6,9 @@ import EventModal from "../modals/Event";
 import Day from "./Day"
 import Week from "./Week"
 import Month from "./Month"
-import Info from "../modals/Info";
 import moment from "moment";
 import PropTypes from "prop-types";
+import Modal from "../modals";
 
 const viewType = {day: 0, week: 1, month: 2};
 
@@ -279,16 +279,18 @@ class Main extends Component {
                             event={this.state.event} date={this.state.clickedDate}
                             calendars={this.state.calendars}></EventModal>
 
-                <Info show={this.state.isOpenNotification} onOk={this.dismissNotification}
-                      header={"Notification about event \"" + this.state.notificationEvent.title + "\""}>
-                    Event "{this.state.notificationEvent.title}" starts
-                    in {moment(this.state.notificationEvent.start_date).toLocaleString()}
-                </Info>
-
-                <Info show={this.state.isOpenNoCalendars} onOk={this.toggleNoCalendarsModal}
-                      header={"Notification about calendars "}>
+                <Modal
+                    show={this.state.isOpenNotification}
+                    onOk={this.dismissNotification}
+                    header={"Notification about event \"" + this.state.notificationEvent.title + "\""}>
+                    Event "{this.state.notificationEvent.title}" starts in {moment(this.state.notificationEvent.start_date).toLocaleString()}
+                </Modal>
+                <Modal
+                    show={this.state.isOpenNoCalendars}
+                    onOk={this.toggleNoCalendarsModal}
+                    header={"Notification about calendars "}>
                     Please add at least one calendar to add new event.
-                </Info>
+                </Modal>
 
             </div>
         )

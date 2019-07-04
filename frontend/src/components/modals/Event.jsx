@@ -2,10 +2,10 @@ import React, {Component} from 'react';
 import "../../css/form.css"
 import {events} from "../../actions";
 import {connect} from "react-redux";
-import Info from "./Info"
 import moment from "moment";
 import PropTypes from "prop-types";
 import {modal as messages} from "../../messages";
+import Modal from "./index";
 
 class Event extends Component {
 
@@ -274,16 +274,20 @@ class Event extends Component {
                     <div className="footer">
                         {buttons}
                     </div>
-                    <Info show={this.state.isOpen} onCancel={this.toggleModal} onOk={this.delete}
-                          header={"Remove event \"" + this.state.title + "\""}>
+                    <Modal
+                        show={this.state.isOpen}
+                        onCancel={this.toggleModal}
+                        onOk={this.delete}
+                        header={"Remove event \"" + this.state.title + "\""}>
                         Are you sure you want to delete the event "{this.state.title}"?
-                    </Info>
+                    </Modal>
 
-                    <Info show={this.state.isOpenError} onOk={() => {
-                        this.setState({isOpenError: false, errorMessage: null})
-                    }} header={"Error"}>
+                    <Modal
+                        show={this.state.isOpenError}
+                        onOk={() => this.setState({isOpenError: false, errorMessage: null})}
+                        header={"Error"}>
                         {this.state.errorMessage}
-                    </Info>
+                    </Modal>
                 </div>
             </div>
         );

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import "../../css/form.css"
 import {calendars} from "../../actions";
 import {connect} from "react-redux";
-import Info from "./Info";
+import Modal from "./index";
 import {modal as messages} from "../../messages";
 import PropTypes from "prop-types";
 
@@ -123,7 +123,7 @@ class Calendar extends Component {
                                     }}></input>
                                 </div>
 
-
+F
                                 <div key={'gaccess'} className="group">
                                     <label className="label" key={'laccess'}
                                            htmlFor={'access'}> Access </label>
@@ -135,15 +135,19 @@ class Calendar extends Component {
                     <div className="footer">
                         {buttons}
                     </div>
-                    <Info show={this.state.isOpen} onCancel={this.toggleModal} onOk={this.delete}
-                          header={"Remove calendar \"" + this.state.name + "\""}>
+                    <Modal
+                        show={this.state.isOpen}
+                        onCancel={this.toggleModal}
+                        onOk={this.delete}
+                        header={"Remove calendar \"" + this.state.name + "\""}>
                         Are you sure you want to delete the calendar "{this.state.name}"?
-                    </Info>
-                    <Info show={this.state.isOpenError}
-                          onOk={() => this.setState({isOpenError: false, errorMessage: null})}
-                          header={"Error"}>
+                    </Modal>
+                    <Modal
+                        show={this.state.isOpenError}
+                        onOk={() => this.setState({isOpenError: false, errorMessage: null})}
+                        header={"Error"}>
                         {this.state.errorMessage}
-                    </Info>
+                    </Modal>
                 </div>
             </div>
         );
