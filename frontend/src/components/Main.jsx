@@ -6,32 +6,28 @@ import {connect} from 'react-redux';
 import "../css/main.css"
 
 class Main extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            calendars: [],
-            selectedDate: new Date(new Date().setHours(0, 0, 0)),
-        };
+    state = {
+        calendars: [],
+        selectedDate: new Date(new Date().setHours(0, 0, 0)),
     };
 
-
-    changeDate = (date) => {
-        this.setState({selectedDate: date});
-    };
-
-    changeCalendars = (calendars) => {
-        this.setState({calendars: calendars});
-    };
+    changeDate = (date) => this.setState({selectedDate: date});
+    changeCalendars = (calendars) => this.setState({calendars: calendars});
 
     render() {
         return (
             <div className={"main-content"}>
                 <div className={'side-bar'}>
-                    <Calendar selectedDate={this.state.selectedDate} changeDate={this.changeDate}/>
-                    <CalendarsList calendars={this.state.calendars} changeCalendars={this.changeCalendars} />
+                    <Calendar
+                        selectedDate={this.state.selectedDate}
+                        changeDate={this.changeDate}/>
+                    <CalendarsList
+                        calendars={this.state.calendars}
+                        changeCalendars={this.changeCalendars} />
                 </div>
                 <div className={'scheduler'}>
-                    <Schedule selectedDate={this.state.selectedDate} calendars={this.state.calendars}
+                    <Schedule selectedDate={this.state.selectedDate}
+                              calendars={this.state.calendars}
                               changeDate={this.changeDate} />
                 </div>
             </div>
