@@ -3,6 +3,14 @@ import '../../css/calendar.css';
 import moment from "moment";
 import PropTypes from "prop-types";
 
+/**
+ * Component for calendar table.
+ * Contains table with days.
+ *
+ * @param {object} viewDate       Shown month.
+ * @param {object} selectedDate   Selected date.
+ * @param {func} onDateClick      onClick function.
+ */
 class Days extends React.Component {
     render() {
         const {
@@ -50,7 +58,7 @@ class Days extends React.Component {
 
 Days.propTypes = {
     viewDate: PropTypes.object,
-    selectedDate: PropTypes.func,
+    selectedDate: PropTypes.object,
     onDateClick: PropTypes.func
 };
 

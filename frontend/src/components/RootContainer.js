@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {BrowserRouter, Redirect, Route, Switch} from 'react-router-dom';
-
+import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {auth} from "../actions";
 import ToolBar from "./ToolBar";
@@ -9,11 +9,11 @@ import Main from "./Main"
 import Register from "./forms/auth/Registration"
 import NotFound from "./NotFound"
 
-class RootContainerComponent extends Component {
+class RootContainer extends Component {
     componentDidMount = () => this.props.loadUser();
 
     PrivateRoute = ({component: ChildComponent, ...rest}) => {
-        const isAuthenticated = this.props;
+        const {isAuthenticated} = this.props.auth;
         return <Route {...rest} render={props => {
             return isAuthenticated ?
                 <ChildComponent {...props} /> :
@@ -24,7 +24,7 @@ class RootContainerComponent extends Component {
 
     render() {
         let {PrivateRoute} = this;
-        const isAuthenticated = this.props;
+        const {isAuthenticated} = this.props.auth;
         return (
             <div>
                 <ToolBar isAuthenticated={isAuthenticated}/>
@@ -44,9 +44,13 @@ class RootContainerComponent extends Component {
     }
 }
 
+RootContainer.propTypes = {
+    auth: PropTypes.object,
+};
+
 const mapStateToProps = state => {
     return {
-        isAuthenticated: state.auth.isAuthenticated,
+        auth: state.auth,
     }
 };
 
@@ -56,4 +60,4 @@ const mapDispatchToProps = dispatch => {
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(RootContainerComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(RootContainer);

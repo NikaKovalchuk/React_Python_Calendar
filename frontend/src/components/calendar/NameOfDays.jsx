@@ -2,6 +2,10 @@ import React from "react";
 import '../../css/calendar.css';
 import moment from "moment";
 
+/**
+ * Component for days name row.
+ *
+ */
 class NameOfDays extends React.Component {
     render() {
         const dateFormat = "dd";

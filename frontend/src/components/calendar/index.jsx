@@ -5,6 +5,13 @@ import NameOfDays from "./NameOfDays";
 import CalendarHeader from "./CalendarHeader";
 import Days from "./Days";
 
+/**
+ * Component for calendar picker.
+ * Contains table with days.
+ *
+ * @param {object} selectedDate   Selected date.
+ * @param {func} changeDate       onChange function.
+ */
 class Calendar extends React.Component {
     state = {
         selectedDate: this.props.selectedDate,
@@ -27,7 +34,7 @@ class Calendar extends React.Component {
         this.props.changeDate(day);
     };
 
-    changeViewDate = date => {
+    onChangeDate = date => {
         this.setState({
             viewDate: date
         })
@@ -38,7 +45,7 @@ class Calendar extends React.Component {
             <div className={'calendar'}>
                 <CalendarHeader
                     viewDate={this.state.viewDate}
-                    changeViewDate={this.changeViewDate}/>
+                    onChangeDate={this.onChangeDate}/>
                 <NameOfDays/>
                 <Days
                     viewDate={this.state.viewDate}

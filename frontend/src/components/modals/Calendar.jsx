@@ -12,7 +12,7 @@ class Calendar extends Component {
         name: "",
         id: undefined,
         public: false,
-        color: this.getRandomColor(),
+        color: this.getRandomColor,
         isOpen: false,
         accessOptions: [{true: 'Public'}, {false: 'Private'}],
         isOpenError: false,
@@ -31,7 +31,7 @@ class Calendar extends Component {
             this.setState({
                 name: "",
                 public: false,
-                color: this.getRandomColor(),
+                color: this.getRandomColor,
                 id: undefined,
             })
         }
