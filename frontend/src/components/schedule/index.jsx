@@ -8,15 +8,14 @@ import PropTypes from "prop-types";
 import Modal from "../modals";
 import ControlPanel from "./ControlPanel";
 import ScheduleTable from "./ScheduleTable";
-
-const viewType = {day: 0, week: 1, month: 2};
+import {viewTypes} from "./types";
 
 class Main extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            view: viewType.month,
+            view: viewTypes.month,
             selectedDate: this.props.selectedDate,
             clickedDate: null,
             id: null,
@@ -100,7 +99,7 @@ class Main extends Component {
         const date = day._d;
         this.setState({
             selectedDate: date,
-            view: viewType.day
+            view: viewTypes.day
         });
         e.stopPropagation();
     };

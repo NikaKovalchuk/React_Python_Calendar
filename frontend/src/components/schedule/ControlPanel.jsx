@@ -2,8 +2,7 @@ import React, {Component} from 'react';
 import "../../css/schedule.css";
 import moment from "moment";
 import PropTypes from "prop-types";
-
-const viewType = {day: 0, week: 1, month: 2};
+import {viewTypes} from "./types";
 
 /**
  * Schedule control panel.
@@ -29,19 +28,19 @@ class ControlPanel extends Component {
                         <button
                             type="button"
                             className="btn btn-secondary btn-sm"
-                            onClick={() => this.props.changeView(viewType.day)}>
+                            onClick={() => this.props.changeView(viewTypes.day)}>
                             Day
                         </button>
                         <button
                             type="button"
                             className="btn btn-secondary btn-sm"
-                            onClick={() => this.props.changeView(viewType.week)}>
+                            onClick={() => this.props.changeView(viewTypes.week)}>
                             Week
                         </button>
                         <button
                             type="button"
                             className="btn btn-secondary btn-sm"
-                            onClick={() => this.props.changeView(viewType.month)}>
+                            onClick={() => this.props.changeView(viewTypes.month)}>
                             Month
                         </button>
                     </div>

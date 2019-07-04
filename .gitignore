@@ -5,7 +5,7 @@ __pycache__
 venv
 node_modules/
 *.png
-*.json
+package-lock.json
 
 api/event/migrations/
 api/event_calendar/migrations/

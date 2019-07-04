@@ -4,8 +4,7 @@ import Day from "./Day"
 import Week from "./Week"
 import Month from "./Month"
 import PropTypes from "prop-types";
-
-const viewType = {day: 0, week: 1, month: 2};
+import {viewTypes} from "./types";
 
 class ScheduleTable extends Component {
     render() {
@@ -14,12 +13,12 @@ class ScheduleTable extends Component {
         } = this.props;
 
         let table;
-        if (this.props.view === viewType.day) table = <Day {...other}/>;
-        if (this.props.view === viewType.week) table = <Week {...other}/>;
-        if (this.props.view === viewType.month) table = <Month {...other} />;
+        if (this.props.view === viewTypes.day) table = <Day {...other}/>;
+        if (this.props.view === viewTypes.week) table = <Week {...other}/>;
+        if (this.props.view === viewTypes.month) table = <Month {...other} />;
 
         return (
-            <div className={'shedule'}>{table}</div>
+            <div className={'schedule'}>{table}</div>
         )
     }
 }

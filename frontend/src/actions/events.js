@@ -1,8 +1,7 @@
 import moment from "moment";
-
-const API_BASE = 'http://localhost:8000/api/';
+const config = require("../config");
 const API_ENDPOINT_TYPE = 'event/'
-const API_URL = API_BASE + API_ENDPOINT_TYPE
+const API_URL = config.API_ROOT + API_ENDPOINT_TYPE
 
 const API_ENDPOINTS = {
     ADD_EVENT: API_URL,
