@@ -36,13 +36,13 @@ const mapStateToProps = state => {
     return {
         isAuthenticated: state.auth.isAuthenticated
     };
-}
+};
 
 const mapDispatchToProps = dispatch => {
     return {
         login: (username, password) => dispatch(auth.login(username, password))
     };
-}
+};
 
 Login.propTypes = {
     login: PropTypes.func,

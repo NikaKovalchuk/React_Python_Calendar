@@ -36,13 +36,13 @@ const mapStateToProps = state => {
     return {
         isAuthenticated: state.auth.isAuthenticated
     };
-}
+};
 
 const mapDispatchToProps = dispatch => {
     return {
         register: (username, password) => dispatch(auth.register(username, password)),
     };
-}
+};
 
 Register.propTypes = {
     register: PropTypes.func,

@@ -14,7 +14,7 @@ class Info extends React.Component {
             </div> :
             <div className={'button-group'}>
                 <button className={"btn btn-secondary"} onClick={this.props.onOk}> OK</button>
-            </div>
+            </div>;
 
         return (
             <div className="backdrop" onClick={this.props.onCancel}>

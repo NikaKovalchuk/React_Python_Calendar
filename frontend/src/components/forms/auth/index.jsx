@@ -21,12 +21,12 @@ class Auth extends PureComponent {
     state = {
         username: "",
         password: "",
-    }
+    };
 
     onSubmit = (e) => {
         e.preventDefault();
         this.props.auth(this.state.username, this.state.password);
-    }
+    };
 
     render() {
 
@@ -38,9 +38,8 @@ class Auth extends PureComponent {
             redirect
         } = this.props;
 
-        if (this.props.isAuthenticated) {
-            return <Redirect to="/"/>
-        }
+        if (this.props.isAuthenticated) return <Redirect to="/"/>;
+
         return (
             <div className={'form'}>
                 <form onSubmit={this.onSubmit}>
@@ -92,6 +91,6 @@ const mapStateToProps = state => {
     return {
         errors
     };
-}
+};
 
 export default connect(mapStateToProps, null)(Auth);
