@@ -6,6 +6,16 @@ import Modal from "./index";
 import {modal as messages} from "../../messages";
 import PropTypes from "prop-types";
 
+/**
+ * Calendar modal window
+ *
+ * @param {bool} show               Show or hide modal.
+ * @param {} calendars              Actual calendar options.
+ * @param {func} onCancel           onCancel function.
+ * @param {func} onOK               onOk function.
+ * @param {func} updateCalendars    updateCalendars function.
+ *
+ */
 class Calendar extends Component {
 
     state = {
@@ -122,8 +132,6 @@ class Calendar extends Component {
                                         this.setState({color: e.target.value})
                                     }}></input>
                                 </div>
-
-F
                                 <div key={'gaccess'} className="group">
                                     <label className="label" key={'laccess'}
                                            htmlFor={'access'}> Access </label>
@@ -156,9 +164,7 @@ F
 
 const mapDispatchToProps = dispatch => {
     return {
-        deleteCalendar: (id) => {
-            return dispatch(calendars.deleteCalendar(id));
-        },
+        deleteCalendar: (id) => dispatch(calendars.deleteCalendar(id)),
     }
 }
 

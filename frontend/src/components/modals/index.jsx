@@ -9,7 +9,7 @@ import PropTypes from "prop-types";
  * @param {func} onCancel       onCancel function.
  * @param {func} onOk           onOk function.
  * @param {string} header       Modal title.
- * @param {} children     Modal text.
+ * @param {} children           Modal text.
  * @param {bool} show           If modal should be shown.
  */
 class Modal extends React.Component {

@@ -29,7 +29,6 @@ class Auth extends PureComponent {
     };
 
     render() {
-
         const {
             title,
             errors,
@@ -89,7 +88,7 @@ const mapStateToProps = state => {
         return {field, message: state.auth.loginErrors[field]};
     }) : [];
     return {
-        errors
+        errors,
     };
 };
 

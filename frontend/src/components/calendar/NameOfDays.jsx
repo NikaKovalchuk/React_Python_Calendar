@@ -4,7 +4,6 @@ import moment from "moment";
 
 /**
  * Component for days name row.
- *
  */
 class NameOfDays extends React.Component {
     render() {
@@ -14,7 +13,9 @@ class NameOfDays extends React.Component {
 
         for (let i = 0; i < 7; i++) {
             days.push(
-                <div className="col col-center" key={i}>
+                <div
+                    className="col col-center"
+                    key={i}>
                     {moment(startDate).add(i, 'day').format(dateFormat)}
                 </div>
             );

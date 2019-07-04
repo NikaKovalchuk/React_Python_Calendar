@@ -29,16 +29,12 @@ class Calendar extends React.Component {
         }
     };
 
-    onDateClick = day => {
-        this.setState({selectedDate: day});
-        this.props.changeDate(day);
+    onDateClick = selectedDate => {
+        this.setState({selectedDate});
+        this.props.changeDate(selectedDate);
     };
 
-    onChangeDate = date => {
-        this.setState({
-            viewDate: date
-        })
-    };
+    onChangeDate = viewDate => this.setState({viewDate});
 
     render() {
         return (

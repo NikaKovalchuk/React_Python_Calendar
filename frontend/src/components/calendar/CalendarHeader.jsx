@@ -7,8 +7,8 @@ import PropTypes from "prop-types";
  * Component for calendar header.
  * Contains calendar navigation buttons.
  *
- * @param {object} viewDate       onSubmit function.
- * @param {func} onChangeDate     Actual form errors.
+ * @param {object} viewDate       Current displayed date.
+ * @param {func} onChangeDate     onChangeDate function.
  */
 class CalendarHeader extends React.Component {
     render() {

@@ -7,6 +7,17 @@ import PropTypes from "prop-types";
 import {modal as messages} from "../../messages";
 import Modal from "./index";
 
+/**
+ * Event modal window
+ *
+ * @param {bool} show               Show or hide modal.
+ * @param {object} date             Selected date.
+ * @param {object} event            Current event if edit mode chosen.
+ * @param {array} calendars         Actual calendar list.
+ * @param {func} onCancel           onCancel function.
+ * @param {func} onOK               onOk function.
+ *
+ */
 class Event extends Component {
 
     constructor(props) {
@@ -58,7 +69,7 @@ class Event extends Component {
             })
         }
 
-        if (nextProps.event.id !== undefined) {
+        if (nextProps.event.id) {
             if (nextProps.event.start_date) {
                 let date = moment(nextProps.event.start_date).format();
                 this.setState({
@@ -145,7 +156,7 @@ class Event extends Component {
                     calendarId: calendar.id
                 })
             }
-            return;
+            return {};
         })
     };
 
@@ -166,30 +177,21 @@ class Event extends Component {
         }
     };
 
-    showError = (error) => {
-       this.setState({
-           isOpenError: true,
-           errorMessage: error
-       });
-    };
+    showError = (error) => this.setState({ isOpenError: true, errorMessage: error });
 
     validate = (event) => {
         if (event.start_date > event.finish_date) {
             this.showError(messages.event.error.dateOrder);
             return false;
         }
-        if (event.title === "" || event.title === undefined || event.text === "" || event.text === undefined) {
+        if (event.title === "" || !event.title || event.text === "" || !event.text) {
             this.showError(messages.event.error.fillFields);
             return false;
         }
         return true
     };
 
-    delete = () => {
-        this.props.deleteEvent(this.state.id).then(response => {
-            this.props.onCancel()
-        })
-    };
+    delete = () => this.props.deleteEvent(this.state.id).then(() => this.props.onCancel());
 
     toggleModal = () => this.setState({isOpen: !this.state.isOpen});
 
@@ -302,9 +304,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        deleteEvent: (id) => {
-            return dispatch(events.deleteEvent(id));
-        },
+        deleteEvent: (id) => dispatch(events.deleteEvent(id)),
     }
 }
 

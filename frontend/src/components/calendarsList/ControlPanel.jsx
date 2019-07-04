@@ -2,6 +2,12 @@ import React from "react";
 import '../../css/calendars.css';
 import PropTypes from "prop-types";
 
+/**
+ * Component for calendar list control panel.
+ *
+ * @param {func} toggleModalImport      Hide or show new calendar modal.
+ * @param {func} toggleModal            Hide or show calendar import modal.
+ */
 class ControlPanel extends React.Component {
     render() {
         return (

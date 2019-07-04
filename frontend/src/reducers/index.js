@@ -5,7 +5,9 @@ import calendars from "./calendars"
 
 
 const app = combineReducers({
-    events, auth, calendars
-})
+    events,
+    auth,
+    calendars,
+});
 
 export default app;

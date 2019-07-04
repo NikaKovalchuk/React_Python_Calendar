@@ -6,6 +6,16 @@ import PropTypes from "prop-types";
 import {modal as messages} from "../../messages";
 import Modal from "./index";
 
+/**
+ * Calendar import modal window
+ *
+ * @param {bool} show               Show or hide modal.
+ * @param {} calendars              Actual calendar options.
+ * @param {func} onCancel           onCancel function.
+ * @param {func} onOK               onOk function.
+ * @param {func} updateCalendars    updateCalendars function.
+ *
+ */
 class Import extends Component {
 
     initState = {
@@ -75,6 +85,7 @@ class Import extends Component {
                     {calendar.name}
                 </div>
             }
+            return {};
         });
         return result;
     };
@@ -132,9 +143,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        loadCalendars: () => {
-            return dispatch(calendars.loadCalendars(true));
-        },
+        loadCalendars: () => dispatch(calendars.loadCalendars(true)),
     }
 };
 

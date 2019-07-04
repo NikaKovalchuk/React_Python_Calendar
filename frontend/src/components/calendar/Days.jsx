@@ -3,11 +3,13 @@ import '../../css/calendar.css';
 import moment from "moment";
 import PropTypes from "prop-types";
 
+const dateFormat = "D";
+
 /**
  * Component for calendar table.
  * Contains table with days.
  *
- * @param {object} viewDate       Shown month.
+ * @param {object} viewDate       Current displayed date.
  * @param {object} selectedDate   Selected date.
  * @param {func} onDateClick      onClick function.
  */
@@ -22,15 +24,14 @@ class Days extends React.Component {
         const monthStart = moment(viewDate).startOf('month');
         const startDate = moment(monthStart).startOf('week');
         const endDate = moment(monthStart).endOf('month');
-        const dateFormat = "D";
-        const rows = [];
 
+        let rows = [];
         let days = [];
         let day = startDate;
         let formattedDate = "";
 
         while (day <= endDate) {
-            for (let i = 0; i < 7; i++) {
+            for (let i = 0; i<7; i++) {
                 const cloneDay = day;
                 formattedDate = moment(day).format(dateFormat);
                 days.push(

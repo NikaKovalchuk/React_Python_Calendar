@@ -64,8 +64,8 @@ class Event extends Component {
                             {event.title}
                         </div>);
                 }
-
             }
+            return {};
         })
         return <div>{result}</div>;
     }

@@ -8,6 +8,13 @@ import PropTypes from "prop-types";
 import ControlPanel from "./ControlPanel";
 import Calendars from "./Calendars";
 
+/**
+ * Component for calendar list.
+ *
+ * @param {object} calendars      User calendars.
+ * @param {func} changeShow       Hide or show selected calendar.
+ * @param {func} changeCalendars  Update calendar list.
+ */
 class CalendarsList extends React.Component {
     state = {
         calendars: this.props.calendars,
@@ -20,7 +27,7 @@ class CalendarsList extends React.Component {
 
     toggleModalImport = () => this.setState({isOpenImport: !this.state.isOpenImport});
 
-    updateCalendars = (calendars) => this.setState({calendars: calendars});
+    updateCalendars = (calendars) => this.setState({calendars});
 
     loadCalendars = () => {
         this.props.loadCalendars().then(() => {

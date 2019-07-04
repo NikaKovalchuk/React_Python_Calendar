@@ -5,6 +5,12 @@ import PropTypes from "prop-types";
 
 const viewType = {day: 0, week: 1, month: 2};
 
+/**
+ * Schedule control panel.
+ *
+ * @param {func} changeDate
+ * @param {func} changeView
+ */
 class ControlPanel extends Component {
     render() {
         return (
