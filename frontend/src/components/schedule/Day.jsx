@@ -6,16 +6,23 @@ import PropTypes from "prop-types";
 
 class Day extends Component {
     render() {
-        console.log(this.props)
-        const selectedDate = this.props.selectedDate;
+        const {
+            selectedDate,
+            events,
+            onDateClick,
+            onEventClick,
+        } = this.props;
+
         const dayStart = moment(selectedDate).startOf('day')
         const dayEnd = moment(selectedDate).endOf('day');
-        const day = selectedDate;
         const hours = [];
 
-        let hour = dayStart;
-        hours.push(<div className="day-title" key={day}><span>{moment(day).format("D")}</span></div>);
+        hours.push(
+            <div className="day-title" key={selectedDate}>
+                <span>{moment(selectedDate).format("D")}</span>
+            </div>);
 
+        let hour = dayStart;
         while (hour <= dayEnd) {
             const cloneHour = hour;
             hours.push(
@@ -24,11 +31,11 @@ class Day extends Component {
                         <span>{moment(hour).format("hh:mm A")}</span>
                     </div>
                     <div className={'day-view-data'} key={'day-view-data'}
-                         onClick={() => this.props.onDateClick(day, cloneHour)}>
-                        <Event events={this.props.events}
-                               day={day}
+                         onClick={() => onDateClick(selectedDate, cloneHour)}>
+                        <Event events={events}
+                               day={selectedDate}
                                hour={cloneHour}
-                               onEventClick={this.props.onEventClick}
+                               onEventClick={onEventClick}
                         />
                     </div>
                 </div>

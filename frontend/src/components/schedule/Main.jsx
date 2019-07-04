@@ -50,35 +50,13 @@ ControlPanel.propTypes = {
 
 class ScheduleTable extends Component {
     render() {
+        const {
+            ...other
+        } = this.props;
         let table;
-        if (this.props.view === viewType.day) {
-            table = <Day selectedDate={this.props.selectedDate}
-                         onEventClick={this.props.onEventClick}
-                         viewDay={this.props.viewDay}
-                         view={this.props.view}
-                         events={this.props.events.data}
-                         onDateClick={this.props.onDateClick}
-            />
-        }
-        if (this.props.view === viewType.week) {
-            table = <Week selectedDate={this.props.selectedDate}
-                          onEventClick={this.props.onEventClick}
-                          viewDay={this.props.viewDay}
-                          view={this.props.view}
-                          events={this.props.events.data}
-                          onDateClick={this.props.onDateClick}
-            />
-        }
-        if (this.props.view === viewType.month) {
-            table = <Month selectedDate={this.props.selectedDate}
-                           onEventClick={this.props.onEventClick}
-                           viewDay={this.props.viewDay}
-                           view={this.props.view}
-                           events={this.props.events.data}
-                           onDateClick={this.props.onDateClick}
-            />
-        }
-
+        if (this.props.view === viewType.day) table = <Day {...other}/>;
+        if (this.props.view === viewType.week) table = <Week {...other}/>;
+        if (this.props.view === viewType.month) table = <Month {...other} />;
         return (
             <div className={'shedule'}>{table}</div>
         )
@@ -157,16 +135,16 @@ class Main extends Component {
             this.setState({
                 calendars: props.calendars.data,
                 calendarsId: calendarsId
-            })
+            });
             this.updateEvents(props.selectedDate, calendarsId)
         }
     }
 
     updateEvents(date, calendarsId) {
-        this.props.loadEvents(date, calendarsId).then(response => {
+        this.props.loadEvents(date, calendarsId).then(() => {
             this.setState({events: this.props.events.data});
         });
-        this.props.loadNotifications(date, calendarsId).then(response => {
+        this.props.loadNotifications(date, calendarsId).then(() => {
             this.setState({notifications: this.props.events.notifications});
             if (this.props.events.notifications !== []) {
                 let event = this.props.events.notifications[this.props.events.notifications.length - 1];
@@ -181,7 +159,7 @@ class Main extends Component {
     }
 
     viewDay = (e, day) => {
-        let date = day._d
+        const date = day._d;
         this.setState({
             selectedDate: date,
             view: viewType.day
@@ -207,7 +185,7 @@ class Main extends Component {
     };
 
     toggleModal = () => {
-        if (this.state.isOpen === true) {
+        if (this.state.isOpen) {
             this.setState({event: this.state.emptyEvent,});
             this.updateEvents(this.state.selectedDate, this.state.calendarsId)
         } else {
@@ -219,26 +197,18 @@ class Main extends Component {
         this.setState({isOpen: !this.state.isOpen});
     };
 
-    toggleNoCalendarsModal = () => {
-        this.setState({isOpenNoCalendars: !this.state.isOpenNoCalendars});
-    };
+    toggleNoCalendarsModal = () => this.setState({isOpenNoCalendars: !this.state.isOpenNoCalendars});
 
     complete = (event) => {
         if (event.id) {
-            this.props.updateEvent(event.id, event).then(response => {
-                this.toggleModal()
-            });
+            this.props.updateEvent(event.id, event).then(() => this.toggleModal());
         } else {
-            this.props.addEvent(event).then(response => {
-                this.toggleModal()
-            });
+            this.props.addEvent(event).then(() => this.toggleModal());
         }
     };
 
     onDateClick = (day, hour) => {
-        if (hour != null) {
-            day = moment(day.setHours(hour.getHours()))
-        }
+        if (hour) day = moment(day.setHours(hour.getHours()));
         this.setState({
             event: {},
             clickedDate: day,
@@ -255,30 +225,28 @@ class Main extends Component {
         e.stopPropagation();
     };
 
-    changeView = (view) => {
-        this.setState({
-            view: view
-        })
-    }
+    changeView = (view) => this.setState({view: view})
 
     render() {
         return (
             <div className={'tall'}>
-
-                <ControlPanel changeView={this.changeView} changeDate={this.props.changeDate}/>
-
-                <ScheduleTable view={this.state.view}
-                               selectedDate={this.props.selectedDate}
-                               events={this.props.events}
-                               viewDay={this.viewDay}
-                               onDateClick={this.onDateClick}
-                               onEventClick={this.onEventClick}
-                />
-
-                <EventModal show={this.state.isOpen} onCancel={this.toggleModal} onOk={this.complete}
-                            event={this.state.event} date={this.state.clickedDate}
-                            calendars={this.state.calendars}></EventModal>
-
+                <ControlPanel
+                    changeView={this.changeView}
+                    changeDate={this.props.changeDate}/>
+                <ScheduleTable
+                    view={this.state.view}
+                    selectedDate={this.props.selectedDate}
+                    events={this.props.events.data}
+                    viewDay={this.viewDay}
+                    onDateClick={this.onDateClick}
+                    onEventClick={this.onEventClick}/>
+                <EventModal
+                    show={this.state.isOpen}
+                    onCancel={this.toggleModal}
+                    onOk={this.complete}
+                    event={this.state.event}
+                    date={this.state.clickedDate}
+                    calendars={this.state.calendars}/>
                 <Modal
                     show={this.state.isOpenNotification}
                     onOk={this.dismissNotification}
@@ -306,18 +274,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        loadEvents: (date, calendars) => {
-            return dispatch(events.loadEvents(date, calendars));
-        },
-        loadNotifications: (date, calendars) => {
-            return dispatch(events.loadNotifications(date, calendars));
-        },
-        addEvent: (model) => {
-            return dispatch(events.addEvent(model));
-        },
-        updateEvent: (id, model) => {
-            return dispatch(events.updateEvent(id, model));
-        },
+        loadEvents: (date, calendars) => dispatch(events.loadEvents(date, calendars)),
+        loadNotifications: (date, calendars) => dispatch(events.loadNotifications(date, calendars)),
+        addEvent: (model) => dispatch(events.addEvent(model)),
+        updateEvent: (id, model) => dispatch(events.updateEvent(id, model)),
     }
 };
 
