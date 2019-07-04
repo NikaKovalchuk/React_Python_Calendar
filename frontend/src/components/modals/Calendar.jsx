@@ -2,26 +2,22 @@ import React, {Component} from 'react';
 import "../../css/form.css"
 import {calendars} from "../../actions";
 import {connect} from "react-redux";
-import Info from "./Info"
+import Info from "./Info";
+import {modal as messages} from "../../messages";
 import PropTypes from "prop-types";
 
 class Calendar extends Component {
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            name: "",
-            id: undefined,
-            public: false,
-            color: this.getRandomColor(),
-            isOpen: false,
-            accessOptions: [{true: 'Public'}, {false: 'Private'}],
-            isOpenError: false,
-            errorMessage: null,
-        };
-    }
-
+    state = {
+        name: "",
+        id: undefined,
+        public: false,
+        color: this.getRandomColor(),
+        isOpen: false,
+        accessOptions: [{true: 'Public'}, {false: 'Private'}],
+        isOpenError: false,
+        errorMessage: null,
+    };
 
     componentWillReceiveProps(nextProps, nextContext) {
         if (nextProps.calendar !== undefined && nextProps.calendar.id !== undefined) {
@@ -42,32 +38,27 @@ class Calendar extends Component {
     }
 
     getRandomColor() {
-        var letters = '0123456789abcdef';
-        var color = '#';
-        for (var i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-        }
+        const signs = '0123456789abcdef';
+        let color = '#';
+        for (let i = 0; i < 6; i++) color += signs[Math.floor(Math.random() * 16)];
         return color;
-    }
+    };
 
     selectAccess() {
-        let options = []
-        options = this.state.accessOptions.map((o) => {
-            o.key = Object.keys(o)[0]
-            o.value = Object.values(o)[0]
-            return (
-                <option className="input"
-                        key={o.key}
-                        value={o.key}>
-                    {o.value}</option>
-            );
-        });
-        return <select className="input" value={this.state.public}
+        const options = this.state.accessOptions.map((option) => (
+            <option className="input"
+                    key={Object.keys(option)[0]}
+                    value={Object.keys(option)[0]}>
+                {Object.values(option)[0]}
+            </option>));
+        return <select className="input"
+                       value={this.state.public}
                        onChange={(e) => {
                            this.setState({public: e.target.value})
-                       }}
-        >{options}</select>
-    }
+                       }}>
+            {options}
+        </select>
+    };
 
     onOk = () => {
         let calendar = {
@@ -75,46 +66,37 @@ class Calendar extends Component {
             name: this.state.name,
             public: this.state.public,
             color: this.state.color,
-        }
+        };
         if (this.state.name === ""){
              this.setState({
                 isOpenError: true,
-                errorMessage: "Please fill in all fields"
+                errorMessage: messages.calendar.error.emptyField
             })
-        }else this.props.onOk(calendar)
+        }
+        else this.props.onOk(calendar)
     };
 
     delete = () => {
-        this.props.deleteCalendar(this.state.id).then(response => {
+        this.props.deleteCalendar(this.state.id).then(() => {
             this.props.updateCalendars(this.props.calendars.data)
             this.props.onCancel()
         })
     };
 
-    toggleModal = () => {
-        this.setState({isOpen: !this.state.isOpen});
-    }
+    toggleModal = () => this.setState({isOpen: !this.state.isOpen});
 
     render() {
-        if (!this.props.show) {
-            return null;
-        }
+        if (!this.props.show) return null;
 
-        let buttons, label;
-        if (this.state.id !== undefined) {
-            buttons = <div className={'button-group'}>
+        const buttons = this.state.id ? <div className={'button-group'}>
                 <button className={"btn btn-secondary"} onClick={this.props.onCancel}> CANCEL</button>
                 <button className={"btn btn-danger"} onClick={this.toggleModal}> DELETE</button>
                 <button className={"btn btn-secondary"} onClick={this.onOk}> OK</button>
-            </div>
-            label = <h1>Edit calendar "{this.props.calendar.name}"</h1>
-        } else {
-            buttons = <div className={'button-group'}>
+            </div> : <div className={'button-group'}>
                 <button className={"btn btn-secondary"} onClick={this.props.onCancel}> CANCEL</button>
                 <button className={"btn btn-secondary"} onClick={this.onOk}> OK</button>
-            </div>
-            label = <h1>New calendar</h1>
-        }
+            </div>;
+        const label = this.state.id ? <h1>Edit calendar "{this.props.calendar.name}"</h1> : <h1>New calendar</h1>;
 
         return (
             <div className="backdrop">
@@ -157,9 +139,9 @@ class Calendar extends Component {
                           header={"Remove calendar \"" + this.state.name + "\""}>
                         Are you sure you want to delete the calendar "{this.state.name}"?
                     </Info>
-                    <Info show={this.state.isOpenError} onOk={() => {
-                        this.setState({isOpenError: false, errorMessage: null})
-                    }} header={"Error"}>
+                    <Info show={this.state.isOpenError}
+                          onOk={() => this.setState({isOpenError: false, errorMessage: null})}
+                          header={"Error"}>
                         {this.state.errorMessage}
                     </Info>
                 </div>
@@ -179,7 +161,7 @@ const mapDispatchToProps = dispatch => {
 const mapStateToProps = state => {
     return {
         events: state.events,
-        calendars:state.calendars
+        calendars: state.calendars
     }
 }
 

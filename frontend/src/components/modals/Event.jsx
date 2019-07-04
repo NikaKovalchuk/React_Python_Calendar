@@ -5,7 +5,7 @@ import {connect} from "react-redux";
 import Info from "./Info"
 import moment from "moment";
 import PropTypes from "prop-types";
-
+import {modal as messages} from "../../messages";
 
 class Event extends Component {
 
@@ -92,73 +92,65 @@ class Event extends Component {
     }
 
     selectNotification() {
-        let options = []
-        options = this.state.notificationOptions.map((o) => {
-            o.key = Object.keys(o)[0]
-            o.value = Object.values(o)[0]
-            return (
-                <option className="input"
-                        key={o.key}
-                        value={o.key}>
-                    {o.value}</option>
-            );
-        });
-        return <select className="input" value={this.state.notification}
+         const options = this.state.notificationOptions.map((option) => (
+            <option className="input"
+                    key={Object.keys(option)[0]}
+                    value={Object.keys(option)[0]}>
+                {Object.values(option)[0]}
+            </option>));
+        return <select className="input"
+                       value={this.state.notification}
                        onChange={(e) => {
                            this.setState({notification: e.target.value})
-                       }}
-        >{options}</select>
+                       }}>
+            {options}
+        </select>;
     }
 
     selectRepeat() {
-        let options = []
-        options = this.state.repeatOptions.map((o) => {
-            o.key = Object.keys(o)[0]
-            o.value = Object.values(o)[0]
-            return (
-                <option className="input" key={o.key} value={o.key}>
-                    {o.value}</option>
-            );
-        });
-
-        return <select className="input" value={this.state.repeat}
+        const options = this.state.repeatOptions.map((option) => (
+            <option className="input"
+                    key={Object.keys(option)[0]}
+                    value={Object.keys(option)[0]}>
+                {Object.values(option)[0]}
+            </option>));
+        return <select className="input"
+                       value={this.state.repeat}
                        onChange={(e) => {
                            this.setState({repeat: e.target.value})
-                       }}>{options}</select>
+                       }}>
+            {options}
+        </select>;
     }
 
     selectCalendar() {
-        let options = []
-        let calendars = this.state.calendars
-        for (let index = 0; index < calendars.length; index++) {
-            let calendar = calendars[index]
-            options.push(
-                <option className="input" key={calendar.id} value={calendar.id}>
-                    {calendar.name}</option>
-            )
-        }
+        const options = this.state.calendars.map((calendar) => (
+            <option className="input"
+                    key={calendar.id}
+                    value={calendar.id}>
+                {calendar.name}
+            </option>));
+        return <select className="input"
+                       value={this.state.calendarId}
+                       onChange={(e) => this.changeCalendar(e.target.value)}>
+            {options}
+        </select>;
+    };
 
-        return <select className="input" value={this.state.calendarId}
-                       onChange={(e) => {
-                           this.changeCalendar(e.target.value)
-                       }}>{options}</select>
-    }
-
-    changeCalendar(id) {
-        let calendars = this.state.calendars
-        for (let index = 0; index < calendars.length; index++) {
-            if (calendars[index].id === +id) {
+    changeCalendar = (id) => {
+        this.state.calendars.map((calendar) => {
+            if (calendar.id === +id) {
                 this.setState({
-                    calendar: calendars[index],
-                    calendarId: calendars[index].id
+                    calendar: calendar,
+                    calendarId: calendar.id
                 })
             }
-        }
-    }
+            return;
+        })
+    };
 
     onOk = () => {
-
-        let event = {
+        const event = {
             id: this.state.id,
             title: this.state.title,
             text: this.state.text,
@@ -168,30 +160,30 @@ class Event extends Component {
             notification: this.state.notification,
             notice: this.state.notification !== this.state.notificationOptions['No'] ? true : false,
             calendar: this.state.calendar,
-        }
+        };
         if (this.validate(event)) {
             this.props.onOk(event)
         }
     };
 
+    showError = (error) => {
+       this.setState({
+           isOpenError: true,
+           errorMessage: error
+       });
+    };
+
     validate = (event) => {
-        let error = null
         if (event.start_date > event.finish_date) {
-            error = "Finish Date must be greater than  Start date"
+            this.showError(messages.event.error.dateOrder);
+            return false;
         }
         if (event.title === "" || event.title === undefined || event.text === "" || event.text === undefined) {
-            console.log(event)
-            error = "Please fill in all fields."
-        }
-        if (error !== null) {
-            this.setState({
-                isOpenError: true,
-                errorMessage: error
-            })
-            return false
+            this.showError(messages.event.error.fillFields);
+            return false;
         }
         return true
-    }
+    };
 
     delete = () => {
         this.props.deleteEvent(this.state.id).then(response => {
@@ -199,30 +191,20 @@ class Event extends Component {
         })
     };
 
-    toggleModal = () => {
-        this.setState({isOpen: !this.state.isOpen});
-    }
+    toggleModal = () => this.setState({isOpen: !this.state.isOpen});
 
     render() {
-        if (!this.props.show) {
-            return null;
-        }
+        if (!this.props.show) return null;
 
-        let buttons, label;
-        if (this.state.id) {
-            buttons = <div className={'button-group'}>
+        const buttons = this.state.id ? <div className={'button-group'}>
                 <button className={"btn btn-secondary"} onClick={this.props.onCancel}> CANCEL</button>
                 <button className={"btn btn-danger"} onClick={this.toggleModal}> DELETE</button>
                 <button className={"btn btn-secondary"} onClick={this.onOk}> OK</button>
-            </div>
-            label = <h1>Edit event "{this.props.event.title}"</h1>
-        } else {
-            buttons = <div className={'button-group'}>
+            </div> : <div className={'button-group'}>
                 <button className={"btn btn-secondary"} onClick={this.props.onCancel}> CANCEL</button>
                 <button className={"btn btn-secondary"} onClick={this.onOk}> OK</button>
-            </div>
-            label = <h1>New event</h1>
-        }
+            </div>;
+        const label = this.state.id ? <h1>Edit event "{this.props.event.title}"</h1> : <h1>New event</h1>;
 
         return (
             <div className="backdrop">

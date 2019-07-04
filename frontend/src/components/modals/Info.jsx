@@ -1,35 +1,29 @@
 import React from 'react';
 import "../../css/modal.css"
 import PropTypes from "prop-types";
+import Modal from "./index"
 
+/**
+ * Info modal with plain text.
+ * Contains header, body and footer with buttons panel.
+ *
+ * @param {func} onCancel       onCancel function.
+ * @param {func} onOk           onOk function.
+ * @param {string} header       Modal title.
+ * @param {} children           Modal text.
+ * @param {bool} show           If modal should be shown.
+ */
 class Info extends React.Component {
 
     render() {
-        if (!this.props.show) return null;
-
-        const buttons = this.props.onCancel ?
-            <div className={'button-group'}>
-                <button class Name={"btn btn-secondary"} onClick={this.props.onCancel}> CANCEL</button>
-                <button className={"btn btn-secondary"} onClick={this.props.onOk}> OK</button>
-            </div> :
-            <div className={'button-group'}>
-                <button className={"btn btn-secondary"} onClick={this.props.onOk}> OK</button>
-            </div>;
-
         return (
-            <div className="backdrop" onClick={this.props.onCancel}>
-                <div className="modal-window">
-                    <div className="header">
-                        {this.props.header}
-                    </div>
-                    <div className="modal-body">
-                        {this.props.children}
-                    </div>
-                    <div className="footer">
-                        {buttons}
-                    </div>
-                </div>
-            </div>
+            <Modal
+                show={this.props.show}
+                onCancel={this.props.onCancel}
+                onOk={this.props.onOk}
+                header={this.props.header}
+                children={this.props.children}
+            />
         );
     }
 }
@@ -38,7 +32,8 @@ Info.propTypes = {
     onCancel: PropTypes.func,
     onOk : PropTypes.func,
     header : PropTypes.string,
-    show : PropTypes.bool
+    show : PropTypes.bool,
+    children: PropTypes.any,
 };
 
 export default Info;

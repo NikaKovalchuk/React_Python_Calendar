@@ -2,118 +2,85 @@ import React, {Component} from 'react';
 import "../../css/form.css"
 import {calendars} from "../../actions";
 import {connect} from "react-redux";
-import Info from "./Info";
 import PropTypes from "prop-types";
+import {modal as messages} from "../../messages";
+import Modal from "./index";
 
 class Import extends Component {
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
+    initState = {
             search: "",
-            isOpen: false,
             calendars: [],
             chosenCalendars: [],
+            isOpen: false,
             isOpenError: false,
             errorMessage: null,
-        }
-    }
+        };
+
+    state = {...this.initState};
+
 
     componentDidMount(nextProps, nextContext) {
-        this.props.loadCalendars().then(response => {
+        this.props.loadCalendars().then(() => {
             this.setState({
                 calendars: this.props.calendars.import,
             });
         });
     }
 
+    cleanState = () => this.setState(this.initState);
+
     onOk = () => {
         if (this.state.chosenCalendars.length === 0) {
             this.setState({
                 isOpenError: true,
-                errorMessage: "Select one or more calendars to add"
+                errorMessage: messages.import.error.noCalendar,
             })
         } else {
-            let calendarsId = []
-            for (let index = 0; index < this.state.chosenCalendars.length; index++) {
-                calendarsId.push(this.state.chosenCalendars[index].id)
-            }
-            this.props.onOk(calendarsId)
+            const calendarsId = this.state.chosenCalendars.map((calendar) => (calendar.id));
+            this.props.onOk(calendarsId);
+            this.cleanState()
         }
-        this.setState({
-            search: "",
-            chosenCalendars: []
-        })
-
     };
 
     onCancel = () => {
-        this.setState({
-            search: "",
-            chosenCalendars: []
-        })
-        this.props.onCancel()
-    }
-
-    validate = (event) => {
-        let error = null
-        if (event.start_date > event.finish_date) {
-            error = "Finish Date must be greater than  Start date"
-        }
-        if (event.title === "" || event.title === undefined || event.text === "" || event.text === undefined) {
-            error = "Please fill in all fields."
-        }
-        if (error !== null) {
-            this.setState({
-                isOpenError: true,
-                errorMessage: error
-            })
-            return false
-        }
-        return true
-    }
+        this.cleanState();
+        this.props.onCancel();
+    };
 
     onClickCalendar(calendar) {
-        let add = true
-        let chosenCalendars = this.state.chosenCalendars
-        for (let index = 0; index < this.state.chosenCalendars.length; index++) {
-            if (calendar === this.state.chosenCalendars[index]) {
-                add = false
-                chosenCalendars.splice(index, 1)
-            }
+        let chosenCalendars = this.state.chosenCalendars;
+        const add = this.state.chosenCalendars.filter((chosenCalendar) => (calendar === chosenCalendar)).length === 0;
+        if (add) {
+            chosenCalendars.push(calendar);
         }
-        if (add === true) {
-            chosenCalendars.push(calendar)
+        else {
+            const index = chosenCalendars.indexOf(calendar);
+            chosenCalendars.splice(index, 1);
         }
         this.setState({
             chosenCalendars: chosenCalendars
-        })
-    }
+        });
+    };
 
     search = () => {
-        let result = []
-        for (let index = 0; index < this.state.calendars.length; index++) {
-            let calendar = this.state.calendars[index]
-            let calendarClass = "variant";
-            for (let index = 0; index < this.state.chosenCalendars.length; index++) {
-                if (calendar === this.state.chosenCalendars[index]) {
-                    calendarClass += " chosen";
-                }
-            }
+        const result = this.state.calendars.map((calendar) => {
+            const chosen = this.state.chosenCalendars.filter(
+                (chosenCalendar) => (calendar === chosenCalendar)).length > 0;
+            const calendarClass = chosen ? "variant chosen" :  "variant";
             if ((calendar.name.indexOf(this.state.search) + 1) || this.state.search === "") {
-                result.push(<div className={calendarClass} key={calendar.id}
-                                 onClick={() => this.onClickCalendar(calendar)}>{calendar.name} </div>)
+                return <div className={calendarClass}
+                            key={calendar.id}
+                            onClick={() => this.onClickCalendar(calendar)}>
+                    {calendar.name}
+                </div>
             }
-        }
-        return <div>{result}</div>
-    }
-
+        });
+        return result;
+    };
 
     render() {
-        if (!this.props.show) {
-            return null;
-        }
+        if (!this.props.show) return null;
 
         return (
             <div className="backdrop">
@@ -147,11 +114,11 @@ class Import extends Component {
                     </div>
                 </div>
 
-                <Info show={this.state.isOpenError} onOk={() => {
-                    this.setState({isOpenError: false, errorMessage: null})
-                }} header={"Error"}>
+                <Modal show={this.state.isOpenError}
+                       onOk={() => this.setState({isOpenError: false, errorMessage: null})}
+                       header={"Error"}>
                     {this.state.errorMessage}
-                </Info>
+                </Modal>
             </div>
         );
     }
