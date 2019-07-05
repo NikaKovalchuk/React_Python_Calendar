@@ -3,6 +3,7 @@ import "../../css/form.css";
 import {events} from "../../actions";
 import {connect} from "react-redux";
 import moment from "moment";
+import {repeatOptions, notificationOptions} from "./types";
 import PropTypes from "prop-types";
 import {modal as messages} from "../../messages";
 import Modal from "./index";
@@ -40,8 +41,6 @@ class Event extends Component {
             isOpen: false,
             isOpenError: false,
             errorMessage: null,
-            repeatOptions: [{0: 'No'}, {1: 'Day'}, {2: 'Week'}, {3: 'Month'}, {4: 'Year'}], // TODO : move it somewhere
-            notificationOptions: [{0: 'No'}, {1: 'Day'}, {2: 'Hour'}, {3: '30 minutes'}, {4: '10 minutes'}]  // TODO : move it somewhere
         };
     }
 
@@ -82,7 +81,7 @@ class Event extends Component {
                     finish_date: date.replace(searchValue, '')
                 })
             }
-            if (nextProps.event.notification !== this.state.notificationOptions['No']) {
+            if (nextProps.event.notification !== notificationOptions['No']) {
                 this.setState({notice: true})
             }
             this.setState({
@@ -103,7 +102,7 @@ class Event extends Component {
     }
 
     selectNotification = () => {
-         const options = this.state.notificationOptions.map((option) => (
+         const options = notificationOptions.map((option) => (
             <option className="input"
                     key={Object.keys(option)[0]}
                     value={Object.keys(option)[0]}>
@@ -119,7 +118,7 @@ class Event extends Component {
     }
 
     selectRepeat = () => {
-        const options = this.state.repeatOptions.map((option) => (
+        const options = repeatOptions.map((option) => (
             <option className="input"
                     key={Object.keys(option)[0]}
                     value={Object.keys(option)[0]}>
@@ -169,7 +168,7 @@ class Event extends Component {
             finish_date: this.state.finish_date,
             repeat: this.state.repeat,
             notification: this.state.notification,
-            notice: this.state.notification !== this.state.notificationOptions['No'] ? true : false,
+            notice: this.state.notification !== notificationOptions['No'] ? true : false,
             calendar: this.state.calendar,
         };
         if (this.validate(event)) {
