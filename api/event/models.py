@@ -31,9 +31,12 @@ class Event(models.Model):
         return self.title
 
     def delete(self, using=None, keep_parents=False):
-        self.archived = True
-        self.archived_date = timezone.now()
-        self.save()
+        if not self.archived:
+            self.archived = True
+            self.archived_date = timezone.now()
+            self.save()
+        else:
+            raise PermissionError
 
     def get_user(self):
         return self.user

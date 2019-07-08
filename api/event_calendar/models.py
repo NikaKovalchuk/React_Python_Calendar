@@ -29,10 +29,13 @@ class Calendar(models.Model):
         return self.user
 
     def delete(self, using=None, keep_parents=False):
-        self.archived = True
-        self.archived_date = timezone.now()
-        self.show = False
-        self.save()
+        if not self.archived:
+            self.archived = True
+            self.archived_date = timezone.now()
+            self.show = False
+            self.save()
+        else:
+            raise PermissionError
 
     def copy(self, user):
         from api.event.models import Event
