@@ -11,6 +11,7 @@ from rest_framework.views import APIView
 
 from .models import Event, Calendar
 from .serializers import EventSerializer, NewEventSerializer
+from .enums import EventNotificationEnum, EventRepeatEnum
 
 
 class ElementAPI(APIView):
@@ -42,8 +43,6 @@ class ElementAPI(APIView):
 
 class ListAPI(APIView):
     permission_classes = [permissions.IsAuthenticated, ]
-    repeat = {'no': 0, 'day': 1, 'week': 2, 'month': 3, 'year': 4}
-    notifications = {'no': 0, 'day': 1, 'hour': 2, 'half-hour': 3, 'ten-minutes': 4}
 
     def get(self, request):
         notification = False
@@ -57,7 +56,7 @@ class ListAPI(APIView):
             notification = True
 
         events = Event.objects.filter(user=request.user.id, archived=False,
-                                      repeat=self.repeat['no'], calendar_id__in=calendars_id)
+                                      repeat=EventRepeatEnum.NO, calendar_id__in=calendars_id)
         events = list(events.filter(Q(start_date__gte=start_date, finish_date__lte=finish_date) |
                                     Q(start_date__lte=start_date, finish_date__gte=start_date) |
                                     Q(start_date__lte=finish_date, finish_date__gte=finish_date)))
@@ -96,15 +95,15 @@ class ListAPI(APIView):
                     days=abs(event.start_date.date() - event.finish_date.date()).days)
                 new_event.finish_date = finish_checked_date.replace(hour=new_event.finish_date.hour,
                                                                     minute=new_event.finish_date.minute)
-                if event.repeat == self.repeat['day']:
+                if event.repeat == EventRepeatEnum.DAY:
                     events.append(new_event)
-                if event.repeat == self.repeat['week']:
+                if event.repeat == EventRepeatEnum.WEEK:
                     if abs(event.start_date.date() - checked_start_date.date()).days % 7 == 0:
                         events.append(new_event)
-                if event.repeat == self.repeat['month']:
+                if event.repeat == EventRepeatEnum.MONTH:
                     if event.start_date.day == checked_start_date.day:
                         events.append(new_event)
-                if event.repeat == self.repeat['year']:
+                if event.repeat == EventRepeatEnum.YEAR:
                     if event.start_date.day == checked_start_date.day and event.start_date.month == checked_start_date.month:
                         events.append(new_event)
                 checked_start_date = checked_start_date + timedelta(days=1)
@@ -117,16 +116,16 @@ class ListAPI(APIView):
             if abs(event.start_date.date() - today.date()).days <= 1:
                 diff = datetime.combine(date.min, event.start_date.time()) - datetime.combine(date.min, today.time())
                 if event.notice:
-                    if event.notification == self.notifications['day']:
+                    if event.notification == EventNotificationEnum.DAY:
                         if diff.seconds < 60 * 60 * 24:
                             result.append(event)
-                    if event.notification == self.notifications['hour']:
+                    if event.notification == EventNotificationEnum.HOUR:
                         if diff.seconds < 60 * 60:
                             result.append(event)
-                    if event.notification == self.notifications['half-hour']:
+                    if event.notification == EventNotificationEnum.HALF_HOUR:
                         if diff.seconds < 60 * 30:
                             result.append(event)
-                    if event.notification == self.notifications['ten-minutes']:
+                    if event.notification == EventNotificationEnum.TEN_MINUTES:
                         if diff.seconds < 60 * 10:
                             result.append(event)
         return result
