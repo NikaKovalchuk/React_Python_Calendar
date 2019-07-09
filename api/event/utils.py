@@ -5,6 +5,11 @@ from datetime import datetime, timedelta, date
 from api.event.enums import EventRepeatEnum, EventNotificationEnum
 from api.event.models import Event
 
+secondsInMinute = 60
+minutesInHour = 60
+secondsInHour = secondsInMinute * minutesInHour
+hoursInDay = 60
+
 
 def repeated_events(start_date, finish_date, events, user, calendars_id):
     extra = Event.objects.filter(
@@ -19,9 +24,7 @@ def repeated_events(start_date, finish_date, events, user, calendars_id):
             days=(event.finish_date - event.start_date).days)
         while checked_start_date < finish_date:
             new_event = copy.copy(event)
-            new_event.start_date = checked_start_date.replace(
-                hour=new_event.start_date.hour,
-                minute=new_event.start_date.minute)
+            new_event.start_date = checked_start_date
             finish_checked_date = checked_start_date + timedelta(
                 days=abs(event.start_date.date()
                          - event.finish_date.date()).days)
@@ -51,17 +54,18 @@ def get_notification(events):
         if abs(event.start_date.date() - today.date()).days <= 1:
             diff = datetime.combine(date.min, event.start_date.time())\
                    - datetime.combine(date.min, today.time())
-            if event.notice:
-                if event.notification_type == EventNotificationEnum.DAY:
-                    if diff.seconds < 60 * 60 * 24:
-                        result.append(event)
-                if event.notification_type == EventNotificationEnum.HOUR:
-                    if diff.seconds < 60 * 60:
-                        result.append(event)
-                if event.notification_type == EventNotificationEnum.HALF_HOUR:
-                    if diff.seconds < 60 * 30:
-                        result.append(event)
-                if event.notification_type == EventNotificationEnum.TEN_MINUTES:
-                    if diff.seconds < 60 * 10:
-                        result.append(event)
+            if not event.notice:
+                continue
+            if event.notification_type == EventNotificationEnum.DAY:
+                if diff.seconds < secondsInHour * hoursInDay:
+                    result.append(event)
+            if event.notification_type == EventNotificationEnum.HOUR:
+                if diff.seconds < secondsInHour:
+                    result.append(event)
+            if event.notification_type == EventNotificationEnum.HALF_HOUR:
+                if diff.seconds < secondsInMinute * 30:
+                    result.append(event)
+            if event.notification_type == EventNotificationEnum.TEN_MINUTES:
+                if diff.seconds < secondsInMinute * 10:
+                    result.append(event)
     return result

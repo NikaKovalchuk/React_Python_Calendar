@@ -102,12 +102,12 @@ class Event extends Component {
     }
 
     selectNotification = () => {
-         const options = notificationOptions.map((option) => (
+         const options = notificationOptions ? notificationOptions.map((option) => (
             <option className="input"
                     key={Object.keys(option)[0]}
                     value={Object.keys(option)[0]}>
                 {Object.values(option)[0]}
-            </option>));
+            </option>)) : {};
         return <select className="input"
                        value={this.state.notification_type}
                        onChange={(e) => {
@@ -118,12 +118,12 @@ class Event extends Component {
     }
 
     selectRepeat = () => {
-        const options = repeatOptions.map((option) => (
+        const options = repeatOptions ? repeatOptions.map((option) => (
             <option className="input"
                     key={Object.keys(option)[0]}
                     value={Object.keys(option)[0]}>
                 {Object.values(option)[0]}
-            </option>));
+            </option>)) : {};
         return <select className="input"
                        value={this.state.repeat_type}
                        onChange={(e) => {
@@ -134,12 +134,12 @@ class Event extends Component {
     }
 
     selectCalendar = () => {
-        const options = this.state.calendars.map((calendar) => (
+        const options = this.state.calendars ? this.state.calendars.map((calendar) => (
             <option className="input"
                     key={calendar.id}
                     value={calendar.id}>
                 {calendar.title}
-            </option>));
+            </option>)) : {};
         return <select className="input"
                        value={this.state.calendarId}
                        onChange={(e) => this.changeCalendar(e.target.value)}>
@@ -148,7 +148,7 @@ class Event extends Component {
     };
 
     changeCalendar = (id) => {
-        this.state.calendars.map((calendar) => {
+        return this.state.calendars ? this.state.calendars.map((calendar) => {
             if (calendar.id === +id) {
                 this.setState({
                     calendar: calendar,
@@ -156,7 +156,7 @@ class Event extends Component {
                 })
             }
             return {};
-        })
+        }) : {};
     };
 
     onOk = () => {

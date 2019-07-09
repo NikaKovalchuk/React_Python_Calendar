@@ -50,12 +50,13 @@ class Calendar extends Component {
 
 
     selectAccess = () => {
-        const options = this.state.accessOptions.map((option) => (
+        const accessOptions = this.state.accessOptions
+        const options = accessOptions ? accessOptions.map((option) => (
             <option className="input"
                     key={Object.keys(option)[0]}
                     value={Object.keys(option)[0]}>
                 {Object.values(option)[0]}
-            </option>));
+            </option>)) : {};
         return <select className="input"
                        value={this.state.is_public}
                        onChange={(e) => {

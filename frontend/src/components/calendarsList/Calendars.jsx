@@ -11,7 +11,7 @@ import PropTypes from "prop-types";
  */
 class Calendars extends React.Component {
     render() {
-        const result = this.props.calendars.map((calendar) => {
+        const result = this.props.calendars ? this.props.calendars.map((calendar) => {
             const colorStyle = {backgroundColor: calendar.color};
             return (
                 <div
@@ -35,7 +35,7 @@ class Calendars extends React.Component {
                     </div>
                 </div>
             </div>)
-        });
+        }) : {};
         return <div className={'calendars-list'}>{result}</div>;
     };
 }

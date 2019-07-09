@@ -18,7 +18,7 @@ class Event extends Component {
             onEventClick,
         } = this.props;
 
-        const result = events.map((event) => {
+        const result = events ? events.map((event) => {
             const startDate = moment(event.start_date);
             const finishDate = moment(event.finish_date);
             let add = false;
@@ -65,7 +65,7 @@ class Event extends Component {
                 }
             }
             return null;
-        });
+        }) : null;
         return <div>{result}</div>;
     }
 }

@@ -47,7 +47,8 @@ class Import extends Component {
                 errorMessage: messages.import.error.noCalendar,
             })
         } else {
-            const calendarsId = this.state.chosenCalendars.map((calendar) => (calendar.id));
+            const calendarsId = this.state.chosenCalendars?
+                this.state.chosenCalendars.map((calendar) => (calendar.id)):{};
             this.props.onOk(calendarsId);
             this.cleanState()
         }
@@ -74,7 +75,7 @@ class Import extends Component {
     };
 
     search = () => {
-        const result = this.state.calendars.map((calendar) => {
+        const result = this.state.calendars ? this.state.calendars.map((calendar) => {
             const chosen = this.state.chosenCalendars.filter(
                 (chosenCalendar) => (calendar === chosenCalendar)).length > 0;
             const calendarClass = chosen ? "variant chosen" :  "variant";
@@ -86,7 +87,7 @@ class Import extends Component {
                 </div>
             }
             return {};
-        });
+        }) : {};
         return result;
     };
 
