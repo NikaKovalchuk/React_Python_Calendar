@@ -30,8 +30,8 @@ class Event extends Component {
             id: this.props.id,
             start_date: moment(),
             finish_date: moment(),
-            repeat: 0,
-            notification: 0,
+            repeat_type: 0,
+            notification_type: 0,
             notice: false,
 
             calendars: [],
@@ -63,8 +63,8 @@ class Event extends Component {
                 id: nextProps.event.id,
                 title: nextProps.event.title,
                 text: nextProps.event.text,
-                repeat: nextProps.event.repeat,
-                notification: nextProps.event.notification,
+                repeat_type: nextProps.event.repeat_type,
+                notification_type: nextProps.event.notification_type,
             })
         }
 
@@ -81,15 +81,15 @@ class Event extends Component {
                     finish_date: date.replace(searchValue, '')
                 })
             }
-            if (nextProps.event.notification !== notificationOptions['No']) {
+            if (nextProps.event.notification_type !== notificationOptions['No']) {
                 this.setState({notice: true})
             }
             this.setState({
                 id: nextProps.event.id,
                 title: nextProps.event.title,
                 text: nextProps.event.text,
-                repeat: nextProps.event.repeat,
-                notification: nextProps.event.notification,
+                repeat_type: nextProps.event.repeat_type,
+                notification_type: nextProps.event.notification_type,
                 calendar: nextProps.event.calendar,
                 calendarId: nextProps.event.calendar ? nextProps.event.calendar.id : 0,
             })
@@ -109,9 +109,9 @@ class Event extends Component {
                 {Object.values(option)[0]}
             </option>));
         return <select className="input"
-                       value={this.state.notification}
+                       value={this.state.notification_type}
                        onChange={(e) => {
-                           this.setState({notification: e.target.value})
+                           this.setState({notification_type: e.target.value})
                        }}>
             {options}
         </select>;
@@ -125,9 +125,9 @@ class Event extends Component {
                 {Object.values(option)[0]}
             </option>));
         return <select className="input"
-                       value={this.state.repeat}
+                       value={this.state.repeat_type}
                        onChange={(e) => {
-                           this.setState({repeat: e.target.value})
+                           this.setState({repeat_type: e.target.value})
                        }}>
             {options}
         </select>;
@@ -138,7 +138,7 @@ class Event extends Component {
             <option className="input"
                     key={calendar.id}
                     value={calendar.id}>
-                {calendar.name}
+                {calendar.title}
             </option>));
         return <select className="input"
                        value={this.state.calendarId}
@@ -166,9 +166,9 @@ class Event extends Component {
             text: this.state.text,
             start_date: this.state.start_date,
             finish_date: this.state.finish_date,
-            repeat: this.state.repeat,
-            notification: this.state.notification,
-            notice: this.state.notification !== notificationOptions['No'] ? true : false,
+            repeat_type: this.state.repeat_type,
+            notification_type: this.state.notification_type,
+            notice: this.state.notification_type !== notificationOptions['No'] ? true : false,
             calendar: this.state.calendar,
         };
         if (this.validate(event)) {

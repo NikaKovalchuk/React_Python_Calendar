@@ -12,9 +12,9 @@ class ListAPI(APIView):
     permission_classes = [permissions.IsAuthenticated, ]
 
     def get(self, request, httpStatus=None):
-        calendars = Calendar.objects.filter(user=request.user, archived=False)
+        calendars = Calendar.objects.filter(user=request.user, is_archived=False)
         if 'import' in request.query_params:
-            calendars = Calendar.objects.filter(archived=False, public=True).exclude(user=request.user)
+            calendars = Calendar.objects.filter(is_archived=False, is_public=True).exclude(user=request.user)
         serializer = CalendarSerializer(calendars, many=True)
         if not httpStatus:
             httpStatus = status.HTTP_200_OK
@@ -34,7 +34,7 @@ class ElementAPI(APIView):
 
     def get_object(self, pk, user):
         try:
-            return Calendar.objects.get(user=user, archived=False, pk=pk)
+            return Calendar.objects.get(user=user, is_archived=False, pk=pk)
         except Event.DoesNotExist:
             raise Http404()
 

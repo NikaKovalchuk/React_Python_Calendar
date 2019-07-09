@@ -11,7 +11,7 @@ class EventModelCreationTestCase(TestCase):
     def setUp(self):
         self.test_user = User.objects.create(username='TestUser')
         self.test_calendar = Calendar.objects.create(
-            name="event_calendar", user=self.test_user)
+            title="event_calendar", user=self.test_user)
         Event.objects.create(title="Test1", text="text",
                              user=self.test_user,
                              calendar=self.test_calendar)
@@ -46,7 +46,7 @@ class EventModelDeleteTestCase(TestCase):
     def setUp(self):
         self.test_user = User.objects.create(username='TestUser1')
         self.test_calendar = Calendar.objects.create(
-            name="event_calendar", user=self.test_user)
+            title="event_calendar", user=self.test_user)
         Event.objects.create(title="Test1", text="text",
                              user=self.test_user,
                              calendar=self.test_calendar)
@@ -54,7 +54,7 @@ class EventModelDeleteTestCase(TestCase):
     def test_archived_flag(self):
         event = Event.objects.get(title="Test1")
         event.delete()
-        self.assertTrue(event.archived)
+        self.assertTrue(event.is_archived)
 
     def test_archived_flag_for_deleted_event(self):
         event = Event.objects.get(title="Test1")

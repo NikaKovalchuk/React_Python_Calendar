@@ -12,19 +12,19 @@ class EventSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Event
         fields = ('id', 'title', 'text', 'start_date', 'finish_date',
-                  'archived', 'user', 'repeat', 'notification', 'notice', 'calendar')
+                  'is_archived', 'user', 'repeat_type', 'notification_type', 'notice', 'calendar')
 
 
 class ExportEventSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Event
-        fields = ('title', 'text', 'start_date', 'finish_date', 'repeat')
+        fields = ('title', 'text', 'start_date', 'finish_date', 'repeat_type')
 
 
 class NewEventSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Event
-        fields = ('title', 'text', 'start_date', 'finish_date', 'repeat', 'notification', 'notice')
+        fields = ('title', 'text', 'start_date', 'finish_date', 'repeat_type', 'notification_type', 'notice')
 
     def validate(self, value):
         if value['start_date']:

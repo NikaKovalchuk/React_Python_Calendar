@@ -27,9 +27,9 @@ class Main extends Component {
                 text: "",
                 startDate: moment().toISOString(),
                 finishDate: moment().hour(moment().hour() + 1).toISOString(),
-                repeat: 0,
+                repeat_type: 0,
                 notice: false,
-                notification: 0,
+                notification_type: 0,
                 calendar: this.props.calendars ? this.props.calendars[0] : undefined,
             },
 

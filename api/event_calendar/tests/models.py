@@ -11,23 +11,23 @@ class CalendarModelCreationTestCase(TestCase):
     def setUp(self):
         self.test_user = User.objects.create(username='TestUser')
         self.test_calendar = Calendar.objects.create(
-            name="Test1", user=self.test_user)
+            title="Test1", user=self.test_user)
 
     def test_calendar_str(self):
-        result = Calendar.objects.get(name="Test1")
-        self.assertEqual(result.name, str(result))
+        result = Calendar.objects.get(title="Test1")
+        self.assertEqual(result.title, str(result))
 
     def test_default_public_flag(self):
-        result = Calendar.objects.get(name="Test1")
-        self.assertFalse(result.public)
+        result = Calendar.objects.get(title="Test1")
+        self.assertFalse(result.is_public)
 
     def test_default_show_flag(self):
-        result = Calendar.objects.get(name="Test1")
+        result = Calendar.objects.get(title="Test1")
         self.assertTrue(result.show)
 
     def test_default_archived_flag(self):
-        result = Calendar.objects.get(name="Test1")
-        self.assertFalse(result.archived)
+        result = Calendar.objects.get(title="Test1")
+        self.assertFalse(result.is_archived)
 
     def test_create_and_update_dates(self):
         result = Calendar.objects.get(title="Test1")
@@ -41,15 +41,15 @@ class CalendarModelDeleteTestCase(TestCase):
     def setUp(self):
         self.test_user = User.objects.create(username='TestUser')
         self.test_calendar = Calendar.objects.create(
-            name="Test1", user=self.test_user)
+            title="Test1", user=self.test_user)
 
     def test_archived_flag(self):
-        result = Calendar.objects.get(name="Test1")
+        result = Calendar.objects.get(title="Test1")
         result.delete()
-        self.assertTrue(result.archived)
+        self.assertTrue(result.is_archived)
 
     def test_show_flag(self):
-        result = Calendar.objects.get(name="Test1")
+        result = Calendar.objects.get(title="Test1")
         result.delete()
         self.assertTrue(result.show)
 
@@ -79,22 +79,22 @@ class CalendarModelCopyTestCase(TestCase):
         self.test_user = User.objects.create(username='TestUser')
         self.test_user_2 = User.objects.create(username='TestUser2')
         self.test_calendar = Calendar.objects.create(
-            name="Test1", user=self.test_user)
+            title="Test1", user=self.test_user)
         Event.objects.create(title="Test1", text="text",
                              user=self.test_user,
                              calendar=self.test_calendar)
 
     def test_user(self):
-        calendar = Calendar.objects.get(name="Test1")
+        calendar = Calendar.objects.get(title="Test1")
         copied_calendar = calendar.copy(self.test_user_2)
         self.assertEqual(copied_calendar.user, self.test_user_2)
 
     def test_public_flag(self):
-        calendar = Calendar.objects.get(name="Test1")
+        calendar = Calendar.objects.get(title="Test1")
         copied_calendar = calendar.copy(self.test_user_2)
-        self.assertFalse(copied_calendar.public)
+        self.assertFalse(copied_calendar.is_public)
 
     def test_show_flag(self):
-        calendar = Calendar.objects.get(name="Test1")
+        calendar = Calendar.objects.get(title="Test1")
         copied_calendar = calendar.copy(self.test_user_2)
         self.assertTrue(copied_calendar.show)

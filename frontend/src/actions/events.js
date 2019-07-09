@@ -143,7 +143,7 @@ export const loadEvents = (date, calendars) => (dispatch, getState) => {
 export const loadNotifications = (date, calendars) => (dispatch, getState) => {
     var startDate = moment(date).startOf('month').startOf('week').toISOString();
     var finishDate = moment(date).endOf('month').endOf('week').toISOString()
-    let params = "?notification=true&startDate=" + startDate + "&finishDate=" + finishDate
+    let params = "?notification_type=true&startDate=" + startDate + "&finishDate=" + finishDate
     if (calendars.length !== 0) {
         params += "&calendar=" + calendars
     }

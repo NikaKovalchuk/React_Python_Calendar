@@ -13,7 +13,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = User.objects.create_user(validated_data['username'], None, validated_data['password'])
-        calendar = Calendar.objects.create(name="Default", user=user, color="#000000")
+        calendar = Calendar.objects.create(title="Default", user=user, color="#000000")
         calendar.save()
         return user
 

@@ -10,13 +10,13 @@ class Event(models.Model):
     text = models.TextField(max_length=1000, null=False, blank=True)
     start_date = models.DateTimeField(default=timezone.now, blank=True, null=True)
     finish_date = models.DateTimeField(default=timezone.now, blank=True, null=True)
-    repeat = models.IntegerField(default=0, blank=True, null=True)
-    notification = models.IntegerField(default=0, blank=True, null=True)
+    repeat_type = models.IntegerField(default=0, blank=True, null=True)
+    notification_type = models.IntegerField(default=0, blank=True, null=True)
 
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
     notice = models.BooleanField(null=False, blank=False, default=False)
-    archived = models.BooleanField(null=True, blank=True, default=False)
+    is_archived = models.BooleanField(null=True, blank=True, default=False)
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE)
@@ -30,9 +30,9 @@ class Event(models.Model):
     def __str__(self):
         return self.title
 
-    def delete(self, using=None, keep_parents=False):
-        if not self.archived:
-            self.archived = True
+    def delete(self):
+        if not self.is_archived:
+            self.is_archived = True
             self.archived_date = timezone.now()
             self.save()
         else:

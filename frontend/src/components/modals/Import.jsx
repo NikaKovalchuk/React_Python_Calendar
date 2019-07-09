@@ -78,11 +78,11 @@ class Import extends Component {
             const chosen = this.state.chosenCalendars.filter(
                 (chosenCalendar) => (calendar === chosenCalendar)).length > 0;
             const calendarClass = chosen ? "variant chosen" :  "variant";
-            if ((calendar.name.indexOf(this.state.search) + 1) || this.state.search === "") {
+            if ((calendar.title.indexOf(this.state.search) + 1) || this.state.search === "") {
                 return <div className={calendarClass}
                             key={calendar.id}
                             onClick={() => this.onClickCalendar(calendar)}>
-                    {calendar.name}
+                    {calendar.title}
                 </div>
             }
             return {};

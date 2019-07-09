@@ -19,7 +19,7 @@ class Calendars extends React.Component {
                     key={calendar.id}
                     onClick={() => this.props.toggleModal(calendar)}>
                 <div className={"name"}>
-                    {calendar.name}
+                    {calendar.title}
                 </div>
                 <div className={"control-panel"}>
                     <div

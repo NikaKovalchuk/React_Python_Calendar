@@ -16,7 +16,7 @@ class ElementAPI(APIView):
 
     def get_object(self, pk, user):
         try:
-            return Event.objects.get(user=user, archived=False, pk=pk)
+            return Event.objects.get(user=user, is_archived=False, pk=pk)
         except Event.DoesNotExist:
             raise Http404()
 
@@ -45,19 +45,19 @@ class ListAPI(APIView):
     permission_classes = [permissions.IsAuthenticated, ]
 
     def get(self, request):
-        notification = False
+        notification_type = False
         calendars_id = []
         start_date = dateutil.parser.parse(request.query_params['startDate'])
         finish_date = dateutil.parser.parse(request.query_params['finishDate'])
         if 'calendar' in request.query_params:
             calendars_id = request.query_params['calendar'].split(',')
-        if 'notification' in request.query_params:
-            notification = True
+        if 'notification_type' in request.query_params:
+            notification_type = True
 
         events = Event.objects.filter(
             user=request.user.id,
-            archived=False,
-            repeat=EventRepeatEnum.NO,
+            is_archived=False,
+            repeat_type=EventRepeatEnum.NO,
             calendar_id__in=calendars_id
         )
         events = list(events.filter(
@@ -73,7 +73,7 @@ class ListAPI(APIView):
             calendars_id=calendars_id
         )
 
-        if notification:
+        if notification_type:
             events = get_notification(events=events)
         events = sorted(events, key=lambda x: x.start_date)
         serializer = EventSerializer(events, many=True)

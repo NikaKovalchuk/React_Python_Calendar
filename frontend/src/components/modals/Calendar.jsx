@@ -20,9 +20,9 @@ import {getRandomColor} from "../../lib/general";
 class Calendar extends Component {
 
     state = {
-        name: "",
+        title: "",
         id: undefined,
-        public: false,
+        is_public: false,
         color: this.getRandomColor,
         isOpen: false,
         accessOptions: [{true: 'Public'}, {false: 'Private'}],
@@ -33,15 +33,15 @@ class Calendar extends Component {
     componentWillReceiveProps(nextProps, nextContext) {
         if (nextProps.calendar !== undefined && nextProps.calendar.id !== undefined) {
             this.setState({
-                name: nextProps.calendar.name,
-                public: nextProps.calendar.public,
+                title: nextProps.calendar.title,
+                is_public: nextProps.calendar.is_public,
                 color: nextProps.calendar.color,
                 id: nextProps.calendar.id,
             })
         } else {
             this.setState({
-                name: "",
-                public: false,
+                title: "",
+                is_public: false,
                 color: getRandomColor(),
                 id: undefined,
             })
@@ -57,9 +57,9 @@ class Calendar extends Component {
                 {Object.values(option)[0]}
             </option>));
         return <select className="input"
-                       value={this.state.public}
+                       value={this.state.is_public}
                        onChange={(e) => {
-                           this.setState({public: e.target.value})
+                           this.setState({is_public: e.target.value})
                        }}>
             {options}
         </select>
@@ -68,11 +68,11 @@ class Calendar extends Component {
     onOk = () => {
         let calendar = {
             id: this.state.id,
-            name: this.state.name,
-            public: this.state.public,
+            title: this.state.title,
+            is_public: this.state.is_public,
             color: this.state.color,
         };
-        if (this.state.name === ""){
+        if (this.state.title === ""){
              this.setState({
                 isOpenError: true,
                 errorMessage: messages.calendar.error.emptyField
@@ -101,7 +101,7 @@ class Calendar extends Component {
                 <button className={"btn btn-secondary"} onClick={this.props.onCancel}> CANCEL</button>
                 <button className={"btn btn-secondary"} onClick={this.onOk}> OK</button>
             </div>;
-        const label = this.state.id ? <h1>Edit calendar "{this.props.calendar.name}"</h1> : <h1>New calendar</h1>;
+        const label = this.state.id ? <h1>Edit calendar "{this.props.calendar.title}"</h1> : <h1>New calendar</h1>;
 
         return (
             <div className="backdrop">
@@ -114,9 +114,9 @@ class Calendar extends Component {
                             <form>
                                 <div key={'gname'} className="group">
                                     <label className="label" key={'lname'} htmlFor={'name'}> Name </label>
-                                    <input className="input" type={'text'} key={'name'} value={this.state.name}
+                                    <input className="input" type={'text'} key={'name'} value={this.state.title}
                                            onChange={(e) => {
-                                               this.setState({name: e.target.value})
+                                               this.setState({title: e.target.value})
                                            }}/>
                                 </div>
 
@@ -142,8 +142,8 @@ class Calendar extends Component {
                         show={this.state.isOpen}
                         onCancel={this.toggleModal}
                         onOk={this.delete}
-                        header={"Remove calendar \"" + this.state.name + "\""}>
-                        Are you sure you want to delete the calendar "{this.state.name}"?
+                        header={"Remove calendar \"" + this.state.title + "\""}>
+                        Are you sure you want to delete the calendar "{this.state.title}"?
                     </Modal>
                     <Modal
                         show={this.state.isOpenError}
