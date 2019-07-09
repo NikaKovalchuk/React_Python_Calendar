@@ -4,7 +4,6 @@ import moment from "moment";
 import PropTypes from "prop-types";
 import MonthEvent from "./MonthEvent";
 import {endOfMonth, endOfWeek, startOfMonth, startOfWeek} from "../../lib/date.js";
-import {getDayIndexesForWeek} from "../../lib/schedule";
 
 class Month extends Component {
     render() {
@@ -17,24 +16,24 @@ class Month extends Component {
         let week = [];
         let day = startDate;
 
-        const dayIndexes = getDayIndexesForWeek();
         while (day <= endDate) {
-            week = dayIndexes.map((day) => {
-                const date = moment(selectedDate).add(day, 'day');
-                return (
+            for (let i = 0; i < 7; i++) {
+                const cloneDay = day;
+                week.push(
                     <div className={`month-view-day`}
-                         onClick={() => this.props.onDateClick(date, null)}
+                         onClick={() => this.props.onDateClick(cloneDay, null)}
                          key={day}>
                         <div className="number"
-                             onClick={(e) => this.props.viewDay(e, date)}>{moment(day).format("D")}</div>
-                        <MonthEvent today={date}
+                             onClick={(e) => this.props.viewDay(e, cloneDay)}>{moment(day).format("D")}</div>
+                        <MonthEvent today={cloneDay}
                                     events={this.props.events}
                                     onEventClick={this.props.onEventClick}
                                     viewDay={this.props.viewDay}
                         />
                     </div>
-                )
-            });
+                );
+                day = moment(day).add(1, 'day');
+            }
             month.push(<div className="row" key={day + "row"}> {week} </div>);
             week = [];
         }

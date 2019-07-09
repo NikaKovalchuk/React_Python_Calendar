@@ -11,6 +11,31 @@ const eventHeight = 25;
 const eventWidth = cellWidth - 2 * eventMargin;
 
 class MonthEvent extends Component {
+
+    getNumberOfDays = (start, finish, weekStart, weekEnd) => {
+        if (finish < weekEnd &&
+            finish > weekStart &&
+            start > weekStart &&
+            start < weekEnd)
+            return finish.day() - start.day()
+        else if (
+            start > weekStart &&
+            start < weekEnd) return weekEnd.day() - start.day()
+        else if (
+            finish < weekEnd &&
+            finish > weekStart) return finish.day() - weekStart.day()
+        else return weekEnd.day() - weekStart.day()
+    };
+
+    getStylesForMoreEventsButton = (results, limit) => {
+        if (results < limit - 1) {
+            let margin = 1;
+            if (results === 0) margin = 30;
+            return {marginTop: margin + '%',}
+        }
+        return {}
+    };
+
     render() {
         const today = this.props.today;
         const weekStart = startOfWeek(today);
@@ -24,19 +49,9 @@ class MonthEvent extends Component {
                 let event = events[index];
                 let finishDate = moment(event.finish_date);
                 let startDate = moment(event.start_date);
-                let numberOfDays = 0;
                 let currentClass = "month-event";
 
-                if (finishDate < weekEnd && finishDate > weekStart && startDate > weekStart && startDate < weekEnd) {
-                    numberOfDays = finishDate.day() - startDate.day()
-                } else if (startDate > weekStart && startDate < weekEnd) {
-                    numberOfDays = weekEnd.day() - startDate.day()
-                } else if (finishDate < weekEnd && finishDate > weekStart) {
-                    numberOfDays = finishDate.day() - weekStart.day()
-                } else {
-                    numberOfDays = weekEnd.day() - weekStart.day()
-                }
-
+                const numberOfDays = this.getNumberOfDays(startDate, finishDate, weekStart, weekEnd)
                 let width = eventWidth + numberOfDays * cellWidth;
                 if (startDate < endOfDay(today) && finishDate > startOfDay(today)) {
                     eventsForToday.push(event)
@@ -45,13 +60,7 @@ class MonthEvent extends Component {
                 if (startDate <= endOfDay(today) && startDate >= startOfDay(today)) {
                     if (eventsForToday.length > eventsLimit) {
                         result.pop();
-
-                        let buttonStyle = {};
-                        if (result.length < eventsLimit - 1) {
-                            let margin = 1;
-                            if (result.length === 0) margin = 30;
-                            buttonStyle = {marginTop: margin + '%',}
-                        }
+                        const buttonStyle = this.getStylesForMoreEventsButton(result.length, eventsLimit)
                         result.push(<div className={"more-events"} style={buttonStyle}
                                          onClick={(e) => {this.props.viewDay(e, today)}}
                                          key={"more"}> View all events </div>)
