@@ -3,7 +3,7 @@ import "../../css/schedule.css";
 import moment from "moment";
 import Event from "./Event";
 import PropTypes from "prop-types";
-import {endOfDay, startOfDay} from "../../../lib/date";
+import {getHourIndexes} from "../../lib/schedule";
 
 class Day extends Component {
     render() {
@@ -14,36 +14,34 @@ class Day extends Component {
             onEventClick,
         } = this.props;
 
-        const hours = [];
-
-        hours.push(
-            <div className="day-title" key={selectedDate}>
-                <span>{moment(selectedDate).format("D")}</span>
-            </div>);
-
-        let hour = startOfDay(selectedDate);
-
-        while (hour <= endOfDay(selectedDate)) {
-            const cloneHour = hour;
-            hours.push(
+        const hours = getHourIndexes();
+        const day = hours.map((hour) => {
+            return (
                 <div className="row" key={'row' + hour}>
-                    <div className={'day-view-time'} key={'day-view-time'}>
+                    <div className={'day-view-time'}
+                         key={'day-view-time'}>
                         <span>{moment(hour).format("hh:mm A")}</span>
                     </div>
-                    <div className={'day-view-data'} key={'day-view-data'}
-                         onClick={() => onDateClick(selectedDate, cloneHour)}>
+                    <div className={'day-view-data'}
+                         key={'day-view-data'}
+                         onClick={() => onDateClick(selectedDate, hour)}>
                         <Event events={events}
                                day={selectedDate}
-                               hour={cloneHour}
+                               hour={hour}
                                onEventClick={onEventClick}
                         />
                     </div>
                 </div>
-            );
-            hour = moment(hour).add(1, 'hour')
-        }
+            )});
 
-        return <div className="table">{hours}</div>;
+        return (
+            <div className="table">
+                <div className="day-title" key={selectedDate}>
+                    <span>{moment(selectedDate).format("D")}</span>
+                </div>
+                {day}
+            </div>
+        )
     }
 }
 

@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import Enum, IntEnum
 
 
-class EventRepeatEnum(Enum):
+class EventRepeatEnum(IntEnum):
 
     NO = 0
     DAY = 1
@@ -10,7 +10,7 @@ class EventRepeatEnum(Enum):
     YEAR = 4
 
 
-class EventNotificationEnum(Enum):
+class EventNotificationEnum(IntEnum):
 
     NO = 0
     DAY = 1

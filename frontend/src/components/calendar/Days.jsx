@@ -2,7 +2,7 @@ import React from "react";
 import '../../css/calendar.css';
 import moment from "moment";
 import PropTypes from "prop-types";
-import {endOfMonth, startOfMonth, startOfWeek} from "../../../lib/date";
+import {endOfMonth, startOfMonth, startOfWeek} from "../../lib/date.js";
 
 const dateFormat = "D";
 

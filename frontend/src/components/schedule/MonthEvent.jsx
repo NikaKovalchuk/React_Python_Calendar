@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import "../../css/schedule.css"
 import moment from "moment";
 import PropTypes from "prop-types";
-import {endOfDay, startOfDay, startOfWeek, endOfWeek} from "../../../lib/date";
+import {endOfDay, startOfDay, startOfWeek, endOfWeek} from "../../lib/date.js";
 
 const cellWidth = 100;
 const eventsLimit = 3;

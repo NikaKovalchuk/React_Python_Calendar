@@ -1,7 +1,7 @@
 import React from "react";
 import '../../css/calendar.css';
 import moment from "moment";
-import {startOfWeek} from "../../../lib/date";
+import {startOfWeek} from "../../lib/date.js";
 
 /**
  * Component for days name row.

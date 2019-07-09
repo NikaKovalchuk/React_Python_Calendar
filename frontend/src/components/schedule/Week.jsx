@@ -3,57 +3,51 @@ import "../../css/schedule.css";
 import moment from "moment";
 import PropTypes from "prop-types";
 import Event from "./Event";
-import {endOfDay, startOfDay, startOfWeek} from "../../../lib/date";
+import {startOfWeek} from "../../lib/date.js";
+import {
+    getDayIndexesForWeek,
+    getHourIndexes
+} from "../../lib/schedule";
 
 class Week extends Component {
     render() {
         const selectedDate = this.props.selectedDate;
-        const hours = [];
-
-        let week = [];
-        let hour = startOfDay(selectedDate);
-        let day = startOfWeek(selectedDate);
-
-        week.push(<div className="empty-week-title" key={'empty'}></div>);
-        for (let i = 0; i < 7; i++) {
-            week.push(
-                <div className="week-view-day-title" key={day + '-week-view-day-title'}>
-                    <span>{moment(day).format("D")}</span>
-                </div>
-            );
-            day = moment(day).add(1, 'day')
-        }
-        hours.push(<div className="row" key={day}> {week} </div>);
-        week = [];
-
-        while (hour <= endOfDay(selectedDate)) {
-            let day = startOfWeek(selectedDate);;
-            week.push(
+        const weekStart = startOfWeek(selectedDate);
+        const emptyRow = <div className="empty-week-title" key={'empty'}></div>;
+        const dayIndexes = getDayIndexesForWeek();
+        const daysHeader = dayIndexes.map((day) => {
+            const date = moment(weekStart).add(day, 'day');
+            return (<div className="week-view-day-title" key={date + '-week-view-day-title'}>
+                <span>{moment(date).format("D")}</span>
+            </div>)
+        });
+        const header = <div className="row" key={"header"}> {emptyRow} {daysHeader} </div>;
+        const hours = getHourIndexes();
+        const week = hours.map((hour) => {
+            const sideMenu =
                 <div className="day-view-time" key={hour + "-day-view-time"}>
-                    <span>{moment(hour).format("hh:mm A")}</span>
-                </div>
-            );
-
-            for (let i = 0; i < 7; i++) {
-                const cloneHour = hour;
-                const cloneDay = day;
-                week.push(
-                    <div className="week-view-day" key={day + '-week-view-day'}
-                         onClick={() => this.onDateClick(cloneDay, cloneHour)}>
-                        <Event events={this.props.events}
-                                day={cloneDay}
-                                hour={cloneHour}
-                                onEventClick={this.props.onEventClick}
+                   <span>{moment(hour).format("hh:mm A")}</span>
+                </div>;
+            const row = dayIndexes.map((day) => {
+                const date = moment(weekStart).add(day, 'day');
+                return (
+                    <div
+                        className="week-view-day"
+                        key={day + '-week-view-day'}
+                        onClick={() => this.onDateClick(date, hour)}
+                    >
+                        <Event
+                            events={this.props.events}
+                            day={date}
+                            hour={hour}
+                            onEventClick={this.props.onEventClick}
                         />
                     </div>
-                );
-                day = moment(day).add(1, 'day');
-            }
-            hours.push(<div className="row" key={day + ' ' + hour}> {week} </div>);
-            week = [];
-            hour = moment(hour).add(1, 'hour');
-        }
-        return <div className="table">{hours}</div>;
+                )
+            });
+            return <div className="row" key={hour}> {sideMenu}{row} </div>;
+        });
+        return <div className="table">{header}{week}</div>;
     }
 }
 

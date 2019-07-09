@@ -1,5 +1,5 @@
 import moment from "moment";
-import {ISOstring} from "../../lib/date";
+import {ISOstring} from "../lib/date.js";
 const API_BASE = 'http://localhost:8000/api/';
 const API_ENDPOINT_TYPE = 'event/'
 const API_URL = API_BASE + API_ENDPOINT_TYPE
