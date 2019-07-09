@@ -1,8 +1,7 @@
-from enum import Enum, IntEnum
+from enum import IntEnum
 
 
 class EventRepeatEnum(IntEnum):
-
     NO = 0
     DAY = 1
     WEEK = 2
@@ -11,7 +10,6 @@ class EventRepeatEnum(IntEnum):
 
 
 class EventNotificationEnum(IntEnum):
-
     NO = 0
     DAY = 1
     HOUR = 2
