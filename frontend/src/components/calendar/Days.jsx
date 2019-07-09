@@ -2,6 +2,7 @@ import React from "react";
 import '../../css/calendar.css';
 import moment from "moment";
 import PropTypes from "prop-types";
+import {endOfMonth, startOfMonth, startOfWeek} from "../../../lib/date";
 
 const dateFormat = "D";
 
@@ -21,16 +22,14 @@ class Days extends React.Component {
             onDateClick,
         } = this.props;
 
-        const monthStart = moment(viewDate).startOf('month');
-        const startDate = moment(monthStart).startOf('week');
-        const endDate = moment(monthStart).endOf('month');
+        const monthStart = startOfMonth(viewDate);
 
         let rows = [];
         let days = [];
-        let day = startDate;
+        let day = startOfWeek(monthStart);
         let formattedDate = "";
 
-        while (day <= endDate) {
+        while (day <= endOfMonth(monthStart)) {
             for (let i = 0; i<7; i++) {
                 const cloneDay = day;
                 formattedDate = moment(day).format(dateFormat);

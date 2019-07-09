@@ -3,6 +3,7 @@ import "../../css/schedule.css";
 import moment from "moment";
 import Event from "./Event";
 import PropTypes from "prop-types";
+import {endOfDay, startOfDay} from "../../../lib/date";
 
 class Day extends Component {
     render() {
@@ -13,8 +14,6 @@ class Day extends Component {
             onEventClick,
         } = this.props;
 
-        const dayStart = moment(selectedDate).startOf('day')
-        const dayEnd = moment(selectedDate).endOf('day');
         const hours = [];
 
         hours.push(
@@ -22,8 +21,9 @@ class Day extends Component {
                 <span>{moment(selectedDate).format("D")}</span>
             </div>);
 
-        let hour = dayStart;
-        while (hour <= dayEnd) {
+        let hour = startOfDay(selectedDate);
+
+        while (hour <= endOfDay(selectedDate)) {
             const cloneHour = hour;
             hours.push(
                 <div className="row" key={'row' + hour}>

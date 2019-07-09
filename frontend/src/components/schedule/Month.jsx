@@ -3,14 +3,14 @@ import "../../css/schedule.css";
 import moment from "moment";
 import PropTypes from "prop-types";
 import MonthEvent from "./MonthEvent";
+import {endOfMonth, endOfWeek, startOfMonth, startOfWeek} from "../../../lib/date";
 
 class Month extends Component {
     render() {
         const selectedDate = this.props.selectedDate;
-        const monthStart = moment(selectedDate).startOf('month');
-        const monthEnd = moment(monthStart).endOf('month');
-        const startDate = moment(monthStart).startOf('week')
-        const endDate = moment(monthEnd).endOf('week');
+        const monthStart = startOfMonth(selectedDate);
+        const startDate = startOfWeek(monthStart);
+        const endDate = endOfWeek(endOfMonth(monthStart));
 
         let month = [];
         let week = [];

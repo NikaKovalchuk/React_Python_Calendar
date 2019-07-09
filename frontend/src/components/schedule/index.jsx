@@ -164,12 +164,14 @@ class Main extends Component {
 
     changeView = (view) => this.setState({view: view})
 
+    setToday = () => this.props.changeDate(moment().startOf('day'))
+
     render() {
         return (
             <div className={'scheduler'}>
                 <ControlPanel
                     changeView={this.changeView}
-                    changeDate={this.props.changeDate}/>
+                    setToday={this.setToday}/>
                 <ScheduleTable
                     view={this.state.view}
                     selectedDate={this.props.selectedDate}

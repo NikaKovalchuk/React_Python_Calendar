@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import "../../css/schedule.css";
-import moment from "moment";
 import PropTypes from "prop-types";
 import {viewTypes} from "./types";
+import Button from "./Button";
 
 /**
  * Schedule control panel.
  *
- * @param {func} changeDate
+ * @param {func} setToday
  * @param {func} changeView
  */
 class ControlPanel extends Component {
@@ -16,33 +16,26 @@ class ControlPanel extends Component {
             <div>
                 <div className={'today-button'}>
                     <div className="btn-group btn-group-toggle" data-toggle="buttons">
-                        <button type="button" className="btn btn-secondary btn-sm"
-                                onClick={() => this.props.changeDate(moment().startOf('day'))}>
-                            Today
-                        </button>
+                        <Button
+                            title={"Today"}
+                            onClick={() => this.props.setToday()}/>
                     </div>
                 </div>
 
                 <div className={'view-buttons'}>
                     <div className="btn-group btn-group-toggle" data-toggle="buttons">
-                        <button
-                            type="button"
-                            className="btn btn-secondary btn-sm"
-                            onClick={() => this.props.changeView(viewTypes.day)}>
-                            Day
-                        </button>
-                        <button
-                            type="button"
-                            className="btn btn-secondary btn-sm"
-                            onClick={() => this.props.changeView(viewTypes.week)}>
-                            Week
-                        </button>
-                        <button
-                            type="button"
-                            className="btn btn-secondary btn-sm"
-                            onClick={() => this.props.changeView(viewTypes.month)}>
-                            Month
-                        </button>
+                        <Button
+                            title={"Day"}
+                            onClick={() => this.props.changeView(viewTypes.day)}
+                        />
+                        <Button
+                            title={"Week"}
+                            onClick={() => this.props.changeView(viewTypes.week)}
+                        />
+                        <Button
+                            title={"Month"}
+                            onClick={() => this.props.changeView(viewTypes.month)}
+                        />
                     </div>
                 </div>
             </div>
@@ -51,7 +44,7 @@ class ControlPanel extends Component {
 }
 
 ControlPanel.propTypes = {
-    changeDate: PropTypes.func,
+    setToday: PropTypes.func,
     changeView: PropTypes.func,
 };
 

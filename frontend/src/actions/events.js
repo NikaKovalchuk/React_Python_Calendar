@@ -1,4 +1,5 @@
 import moment from "moment";
+import {ISOstring} from "../../lib/date";
 const API_BASE = 'http://localhost:8000/api/';
 const API_ENDPOINT_TYPE = 'event/'
 const API_URL = API_BASE + API_ENDPOINT_TYPE
@@ -14,8 +15,8 @@ const API_ENDPOINTS = {
 const post = (url, body, dispatch, getState, convertDate = false) => {
     let headers = {"Content-Type": "application/json"};
     if (convertDate) {
-        body.start_date = moment(body.start_date).toISOString()
-        body.finish_date = moment(body.finish_date).toISOString()
+        body.start_date = ISOstring(body.start_date)
+        body.finish_date = ISOstring(body.finish_date)
     }
     body = JSON.stringify(body)
     let {token} = getState().auth;
@@ -52,8 +53,8 @@ const get = (url, dispatch, getState) => {
 const put = (url, body, dispatch, getState, convertDate = false) => {
     let headers = {"Content-Type": "application/json"};
     if (convertDate) {
-        body.start_date = moment(body.start_date).toISOString()
-        body.finish_date = moment(body.finish_date).toISOString()
+        body.start_date = ISOstring(body.start_date)
+        body.finish_date = ISOstring(body.finish_date)
     }
     body = JSON.stringify(body)
     let {token} = getState().auth;

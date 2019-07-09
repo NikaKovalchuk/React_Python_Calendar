@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import "../../css/schedule.css"
 import moment from "moment";
 import PropTypes from "prop-types";
+import {endOfDay, startOfDay, startOfWeek, endOfWeek} from "../../../lib/date";
 
 const cellWidth = 100;
 const eventsLimit = 3;
@@ -12,14 +13,12 @@ const eventWidth = cellWidth - 2 * eventMargin;
 class MonthEvent extends Component {
     render() {
         const today = this.props.today;
-        const beginOfToday = moment(today).startOf('day');
-        const endOfToday = moment(today).endOf('day');
-        const beginOfWeek = moment(today).startOf('week');
-        const endOfWeek = moment(today).endOf('week');
+        const weekStart = startOfWeek(today);
+        const weekEnd = endOfWeek(today);
         const result = [];
-
         let eventsForToday = [];
-        let events = this.props.events
+        let events = this.props.events;
+
         if (events) {
             for (let index = 0; index < events.length; index++) {
                 let event = events[index];
@@ -28,22 +27,22 @@ class MonthEvent extends Component {
                 let numberOfDays = 0;
                 let currentClass = "month-event";
 
-                if (finishDate < endOfWeek && finishDate > beginOfWeek && startDate > beginOfWeek && startDate < endOfWeek) {
+                if (finishDate < weekEnd && finishDate > weekStart && startDate > weekStart && startDate < weekEnd) {
                     numberOfDays = finishDate.day() - startDate.day()
-                } else if (startDate > beginOfWeek && startDate < endOfWeek) {
-                    numberOfDays = endOfWeek.day() - startDate.day()
-                } else if (finishDate < endOfWeek && finishDate > beginOfWeek) {
-                    numberOfDays = finishDate.day() - beginOfWeek.day()
+                } else if (startDate > weekStart && startDate < weekEnd) {
+                    numberOfDays = weekEnd.day() - startDate.day()
+                } else if (finishDate < weekEnd && finishDate > weekStart) {
+                    numberOfDays = finishDate.day() - weekStart.day()
                 } else {
-                    numberOfDays = endOfWeek.day() - beginOfWeek.day()
+                    numberOfDays = weekEnd.day() - weekStart.day()
                 }
 
                 let width = eventWidth + numberOfDays * cellWidth;
-                if (startDate < endOfToday && finishDate > beginOfToday) {
+                if (startDate < endOfDay(today) && finishDate > startOfDay(today)) {
                     eventsForToday.push(event)
                 }
 
-                if (startDate <= endOfToday && startDate >= beginOfToday) {
+                if (startDate <= endOfDay(today) && startDate >= startOfDay(today)) {
                     if (eventsForToday.length > eventsLimit) {
                         result.pop();
 
@@ -57,7 +56,7 @@ class MonthEvent extends Component {
                                          onClick={(e) => {this.props.viewDay(e, today)}}
                                          key={"more"}> View all events </div>)
                     } else {
-                        if (finishDate > endOfWeek) {
+                        if (finishDate > weekEnd) {
                             currentClass += " begin";
                             width += 5
                         }
@@ -81,9 +80,9 @@ class MonthEvent extends Component {
                                          onClick={(e) => this.props.onEventClick(e, event)}>{event.title}</div>)
                     }
 
-                } else if (startDate < beginOfWeek && finishDate > beginOfWeek && beginOfToday <= beginOfWeek) {
+                } else if (startDate < weekStart && finishDate > weekStart && startOfDay(today) <= weekStart) {
                     let classToAdd = " end";
-                    if (finishDate > endOfWeek) {
+                    if (finishDate > weekEnd) {
                         classToAdd = " middle";
                         width = width + eventMargin
                     }

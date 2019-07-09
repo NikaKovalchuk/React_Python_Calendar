@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import "../../css/schedule.css";
 import moment from "moment";
 import PropTypes from "prop-types";
+import {startOfDay, endOfDay} from "../../../lib/date";
 
 const eventHeight = 20;
 const betweenDaysHeight = 10;
@@ -17,21 +18,19 @@ class Event extends Component {
             onEventClick,
         } = this.props;
 
-        const startOfDay = moment(day).startOf('day');
-        const endOfDay = moment(day).endOf('day');
         const result = events.map((event) => {
             const startDate = moment(event.start_date);
             const finishDate = moment(event.finish_date);
             let add = false;
             let eventStyle = [];
             let height = eventHeight;
-            if (startDate <= endOfDay && finishDate >= startOfDay) {
+            if (startDate <= endOfDay(day) && finishDate >= startOfDay(day)) {
                 let currentClass = "week-and-day-event";
-                if (startDate >= startOfDay) {
+                if (startDate >= startOfDay(day)) {
                     if (startDate.hour() === hour.hour()) {
                         add = true
                     }
-                    if (finishDate <= endOfDay) {
+                    if (finishDate <= endOfDay(day)) {
                         height = height + (finishDate.hour() - hour.hour()) * (eventHeight + betweenDaysHeight)
                     } else {
                         height = height + (dayLength - hour.hour()) * (eventHeight + betweenDaysHeight) + eventMargin;
@@ -39,11 +38,11 @@ class Event extends Component {
                     }
                 }
 
-                if (startDate < startOfDay) {
-                    if (startOfDay.hour() === hour.hour()) {
+                if (startDate < startOfDay(day)) {
+                    if (startOfDay(day).hour() === hour.hour()) {
                         add = true
                     }
-                    if (finishDate <= endOfDay) {
+                    if (finishDate <= endOfDay(day)) {
                         height = height + (finishDate.hour() - hour.hour()) * (eventHeight + betweenDaysHeight) + eventMargin;
                         currentClass += " end"
                     } else
@@ -66,7 +65,7 @@ class Event extends Component {
                 }
             }
             return {};
-        })
+        });
         return <div>{result}</div>;
     }
 }
