@@ -18,17 +18,6 @@ class Calendar extends React.Component {
         viewDate: this.props.selectedDate,
     };
 
-    componentWillReceiveProps(props) {
-        if (props.selectedDate) {
-            if (props.selectedDate !== this.state.selectedDate) {
-                this.setState({
-                    selectedDate: props.selectedDate,
-                    viewDate: props.selectedDate
-                });
-            }
-        }
-    };
-
     onDateClick = selectedDate => {
         this.setState({selectedDate});
         this.props.changeDate(selectedDate);

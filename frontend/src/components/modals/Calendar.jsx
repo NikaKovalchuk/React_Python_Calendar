@@ -6,6 +6,7 @@ import Modal from "./index";
 import {modal as messages} from "../../messages";
 import PropTypes from "prop-types";
 import {getRandomColor} from "../../lib/general";
+import {accessOptions} from "./types";
 
 /**
  * Calendar modal window
@@ -17,40 +18,29 @@ import {getRandomColor} from "../../lib/general";
  * @param {func} updateCalendars    updateCalendars function.
  *
  */
+
+const initCalendar = {
+    title: "",
+    is_public: false,
+    color: getRandomColor(),
+};
+
 class Calendar extends Component {
 
     state = {
-        title: "",
-        id: undefined,
-        is_public: false,
-        color: this.getRandomColor,
+        calendar: initCalendar,
         isOpen: false,
-        accessOptions: [{true: 'Public'}, {false: 'Private'}],
         isOpenError: false,
         errorMessage: null,
     };
 
     componentWillReceiveProps(nextProps, nextContext) {
-        if (nextProps.calendar !== undefined && nextProps.calendar.id !== undefined) {
-            this.setState({
-                title: nextProps.calendar.title,
-                is_public: nextProps.calendar.is_public,
-                color: nextProps.calendar.color,
-                id: nextProps.calendar.id,
-            })
-        } else {
-            this.setState({
-                title: "",
-                is_public: false,
-                color: getRandomColor(),
-                id: undefined,
-            })
+        if (nextProps.calendar) {
+            this.setState({calendar: nextProps.calendar})
         }
     }
 
-
     selectAccess = () => {
-        const accessOptions = this.state.accessOptions
         const options = accessOptions ? accessOptions.map((option) => (
             <option className="input"
                     key={Object.keys(option)[0]}
@@ -58,32 +48,30 @@ class Calendar extends Component {
                 {Object.values(option)[0]}
             </option>)) : {};
         return <select className="input"
-                       value={this.state.is_public}
+                       value={this.state.calendar.is_public}
                        onChange={(e) => {
-                           this.setState({is_public: e.target.value})
+                           this.setState({
+                               calendar: {
+                                   ...this.state.calendar,
+                                   is_public: e.target.value
+                               }})
                        }}>
             {options}
         </select>
     };
 
     onOk = () => {
-        let calendar = {
-            id: this.state.id,
-            title: this.state.title,
-            is_public: this.state.is_public,
-            color: this.state.color,
-        };
-        if (this.state.title === ""){
+        if (this.state.calendar.title.length === 0){
              this.setState({
                 isOpenError: true,
                 errorMessage: messages.calendar.error.emptyField
             })
         }
-        else this.props.onOk(calendar)
+        else this.props.onOk(this.state.calendar)
     };
 
     delete = () => {
-        this.props.deleteCalendar(this.state.id).then(() => {
+        this.props.deleteCalendar(this.state.calendar.id).then(() => {
             this.props.updateCalendars(this.props.calendars.data)
             this.props.onCancel()
         })
@@ -94,7 +82,7 @@ class Calendar extends Component {
     render() {
         if (!this.props.show) return null;
 
-        const buttons = this.state.id ? <div className={'button-group'}>
+        const buttons = this.state.calendar.id ? <div className={'button-group'}>
                 <button className={"btn btn-secondary"} onClick={this.props.onCancel}> CANCEL</button>
                 <button className={"btn btn-danger"} onClick={this.toggleModal}> DELETE</button>
                 <button className={"btn btn-secondary"} onClick={this.onOk}> OK</button>
@@ -102,7 +90,7 @@ class Calendar extends Component {
                 <button className={"btn btn-secondary"} onClick={this.props.onCancel}> CANCEL</button>
                 <button className={"btn btn-secondary"} onClick={this.onOk}> OK</button>
             </div>;
-        const label = this.state.id ? <h1>Edit calendar "{this.props.calendar.title}"</h1> : <h1>New calendar</h1>;
+        const label = this.state.calendar.id ? <h1>Edit calendar "{this.props.calendar.title}"</h1> : <h1>New calendar</h1>;
 
         return (
             <div className="backdrop">
@@ -115,17 +103,23 @@ class Calendar extends Component {
                             <form>
                                 <div key={'gname'} className="group">
                                     <label className="label" key={'lname'} htmlFor={'name'}> Name </label>
-                                    <input className="input" type={'text'} key={'name'} value={this.state.title}
+                                    <input className="input" type={'text'} key={'name'} value={this.state.calendar.title}
                                            onChange={(e) => {
-                                               this.setState({title: e.target.value})
+                                               this.setState({calendar: {
+                                                   ...this.state.calendar,
+                                                       title: e.target.value,
+                                                   }})
                                            }}/>
                                 </div>
 
                                 <div key={'gcolor'} className="group">
                                     <label className="label" key={'lcolor'}
                                            htmlFor={'color'}> Color </label>
-                                    <input className="input" type="color" value={this.state.color} onChange={(e) => {
-                                        this.setState({color: e.target.value})
+                                    <input className="input" type="color" value={this.state.calendar.color} onChange={(e) => {
+                                        this.setState({ calendar:
+                                                {...this.state.calendar,
+                                                    color: e.target.value,
+                                                }})
                                     }}></input>
                                 </div>
                                 <div key={'gaccess'} className="group">
@@ -143,8 +137,8 @@ class Calendar extends Component {
                         show={this.state.isOpen}
                         onCancel={this.toggleModal}
                         onOk={this.delete}
-                        header={"Remove calendar \"" + this.state.title + "\""}>
-                        Are you sure you want to delete the calendar "{this.state.title}"?
+                        header={"Remove calendar \"" + this.state.calendar.title + "\""}>
+                        Are you sure you want to delete the calendar "{this.state.calendar.title}"?
                     </Modal>
                     <Modal
                         show={this.state.isOpenError}
@@ -162,18 +156,18 @@ const mapDispatchToProps = dispatch => {
     return {
         deleteCalendar: (id) => dispatch(calendars.deleteCalendar(id)),
     }
-}
+};
 
 const mapStateToProps = state => {
     return {
         events: state.events,
-        calendars: state.calendars
+        calendars: state.calendars,
     }
-}
+};
 
 Calendar.propTypes = {
     show : PropTypes.bool,
-    calendar: PropTypes.any,
+    calendar: PropTypes.object,
 
     onCancel: PropTypes.func,
     onOk : PropTypes.func,

@@ -77,7 +77,7 @@ class Auth extends PureComponent {
 Auth.propTypes = {
     auth: PropTypes.func,
     footer: PropTypes.any,
-    errors: PropTypes.object,
+    errors: PropTypes.array,
     link: PropTypes.string,
     title: PropTypes.string,
     redirect: PropTypes.string,

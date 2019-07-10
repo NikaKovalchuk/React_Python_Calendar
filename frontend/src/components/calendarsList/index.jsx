@@ -34,9 +34,10 @@ class CalendarsList extends React.Component {
             this.setState({calendars: this.props.calendars.data});
             this.props.changeCalendars(this.props.calendars.data)
         });
-    }
+    };
 
     toggleModal = (calendar) => {
+        console.log(calendar)
         this.setState({
             calendar: calendar ? calendar : {},
             isOpen: !this.state.isOpen
@@ -80,8 +81,8 @@ class CalendarsList extends React.Component {
         });
     };
 
-
     render() {
+        console.log(this.state.calendar)
         return (
             <div className={'calendars'}>
                 <ControlPanel
