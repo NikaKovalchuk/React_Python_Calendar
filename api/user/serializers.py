@@ -8,12 +8,24 @@ from api.event.models import Calendar
 class CreateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'password')
+        fields = (
+            'id',
+            'username',
+            'password'
+        )
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        user = User.objects.create_user(validated_data['username'], None, validated_data['password'])
-        calendar = Calendar.objects.create(title="Default", user=user, color="#000000")
+        user = User.objects.create_user(
+            validated_data['username'],
+            None,
+            validated_data['password']
+        )
+        calendar = Calendar.objects.create(
+            title="Default",
+            user=user,
+            color="#000000"
+        )
         calendar.save()
         return user
 
@@ -21,7 +33,10 @@ class CreateUserSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username')
+        fields = (
+            'id',
+            'username'
+        )
 
 
 class LoginUserSerializer(serializers.Serializer):
