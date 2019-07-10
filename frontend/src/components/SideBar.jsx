@@ -7,17 +7,13 @@ import PropTypes from "prop-types";
 class SideBar extends Component {
     render() {
         const {
-            selectedDate,
-            changeDate,
             changeCalendars,
             calendars,
         } = this.props;
 
         return (
             <div className={'side-bar'}>
-                <Calendar
-                    selectedDate={selectedDate}
-                    changeDate={changeDate}/>
+                <Calendar/>
                 <CalendarsList
                     calendars={calendars}
                     changeCalendars={changeCalendars} />
@@ -27,8 +23,6 @@ class SideBar extends Component {
 }
 
 SideBar.propTypes = {
-    selectedDate: PropTypes.any,
-    changeDate: PropTypes.func,
     calendars: PropTypes.array,
     changeCalendars: PropTypes.func,
 };

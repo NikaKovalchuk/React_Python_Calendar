@@ -124,7 +124,8 @@ const mapDispatchToProps = dispatch => {
 };
 
 CalendarsList.propTypes = {
-    calendars: PropTypes.any,
+    calendars: PropTypes.array,
+
     changeShow: PropTypes.func,
     changeCalendars: PropTypes.func
 };

@@ -47,12 +47,10 @@ class Main extends Component {
         let update = false;
         let calendarsId = []
         if (props.selectedDate) {
-            if (props.selectedDate !== this.state.selectedDate) {
-                if (moment(props.selectedDate).month() !== moment(this.state.selectedDate).month()) {
-                    update = true
-                }
-                this.setState({selectedDate: props.selectedDate});
+            if (moment(props.selectedDate).month() !== moment(this.state.selectedDate).month()) {
+                update = true
             }
+            this.setState({selectedDate: props.selectedDate});
         }
         if (props.calendars.data) {
             if (props.calendars.data !== this.state.calendars) {
@@ -174,7 +172,6 @@ class Main extends Component {
                     setToday={this.setToday}/>
                 <ScheduleTable
                     view={this.state.view}
-                    selectedDate={this.props.selectedDate}
                     events={this.props.events.data}
                     viewDay={this.viewDay}
                     onDateClick={this.onDateClick}
@@ -207,6 +204,7 @@ const mapStateToProps = state => {
     return {
         events: state.events,
         calendars: state.calendars,
+        selectedDate: state.calendars.selectedDate,
     }
 };
 

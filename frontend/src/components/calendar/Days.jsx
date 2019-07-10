@@ -3,6 +3,8 @@ import '../../css/calendar.css';
 import moment from "moment";
 import PropTypes from "prop-types";
 import {endOfMonth, startOfMonth, startOfWeek} from "../../lib/date.js";
+import {calendars} from "../../actions";
+import {connect} from "react-redux";
 
 const dateFormat = "D";
 
@@ -19,7 +21,7 @@ class Days extends React.Component {
         const {
             viewDate,
             selectedDate,
-            onDateClick,
+            updateDate,
         } = this.props;
 
         const monthStart = startOfMonth(viewDate);
@@ -39,7 +41,7 @@ class Days extends React.Component {
                             moment(day).isSame(selectedDate, 'day') ? "selected" : ""}
                             ${moment(day).isSame(moment().startOf('day'), 'day') ? "today" : ""}`}
                         key={day}
-                        onClick={() => onDateClick(cloneDay._d)}>
+                        onClick={() => updateDate(cloneDay._d)}>
                         <span className="number">{formattedDate}</span>
                     </div>
                 );
@@ -55,11 +57,24 @@ class Days extends React.Component {
         return <div className="body">{rows}</div>;
     }
 }
+const mapDispatchToProps = dispatch => {
+    return {
+        updateDate: (date) => dispatch(calendars.updateSelectedDate(date)),
+    }
+};
+
+const mapStateToProps = state => {
+    return {
+        viewDate: state.calendars.viewDate,
+        selectedDate: state.calendars.selectedDate,
+    }
+};
+
 
 Days.propTypes = {
     viewDate: PropTypes.object,
     selectedDate: PropTypes.object,
-    onDateClick: PropTypes.func
+    updateDate: PropTypes.func
 };
 
-export default Days;
+export default connect(mapStateToProps, mapDispatchToProps)(Days);

@@ -25,7 +25,6 @@ class ScheduleTable extends Component {
 
 ScheduleTable.propTypes = {
     view: PropTypes.number,
-    selectedDate: PropTypes.object,
     events: PropTypes.any,
 
     onDateClick: PropTypes.func,

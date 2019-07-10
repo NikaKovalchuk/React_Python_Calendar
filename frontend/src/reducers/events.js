@@ -13,6 +13,7 @@ export default function events(state = initialState, action) {
             return {...state, errors: action.data};
 
         case 'ADD_EVENT':
+            console.log(state)
             return [...state];
 
         case 'UPDATE_EVENT':

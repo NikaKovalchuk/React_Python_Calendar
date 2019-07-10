@@ -4,6 +4,7 @@ import moment from "moment";
 import Event from "./Event";
 import PropTypes from "prop-types";
 import {getHourIndexes} from "../../lib/schedule";
+import {connect} from "react-redux";
 
 class Day extends Component {
     render() {
@@ -45,12 +46,17 @@ class Day extends Component {
     }
 }
 
-Day.propTypes = {
-    selectedDate: PropTypes.object,
-    events: PropTypes.any,
+const mapStateToProps = state => {
+    return {
+        selectedDate: state.calendars.selectedDate
+    }
+};
 
+Day.propTypes = {
+    events: PropTypes.any,
+    selectedDate: PropTypes.any,
     onDateClick: PropTypes.func,
     onEventClick: PropTypes.func
 };
 
-export default Day;
+export default connect(mapStateToProps, null)(Day);

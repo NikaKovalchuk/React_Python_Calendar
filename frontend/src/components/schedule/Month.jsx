@@ -4,6 +4,7 @@ import moment from "moment";
 import PropTypes from "prop-types";
 import MonthEvent from "./MonthEvent";
 import {endOfMonth, endOfWeek, startOfMonth, startOfWeek} from "../../lib/date.js";
+import {connect} from "react-redux";
 
 class Month extends Component {
     render() {
@@ -41,6 +42,12 @@ class Month extends Component {
     }
 }
 
+const mapStateToProps = state => {
+    return {
+        selectedDate: state.calendars.selectedDate
+    }
+};
+
 Month.propTypes = {
     selectedDate: PropTypes.object,
     events: PropTypes.any,
@@ -48,4 +55,4 @@ Month.propTypes = {
     onEventClick: PropTypes.func,
     viewDay: PropTypes.func
 };
-export default Month;
+export default connect(mapStateToProps, null)(Month);

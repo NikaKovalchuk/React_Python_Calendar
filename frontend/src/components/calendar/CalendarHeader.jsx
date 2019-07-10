@@ -2,6 +2,8 @@ import React from "react";
 import '../../css/calendar.css';
 import moment from "moment";
 import PropTypes from "prop-types";
+import {calendars} from "../../actions";
+import {connect} from "react-redux";
 
 /**
  * Component for calendar header.
@@ -14,14 +16,14 @@ class CalendarHeader extends React.Component {
     render() {
         const dateFormat = "MMM YYYY";
         const {
-            onChangeDate,
+            updateDate,
             viewDate
         } = this.props;
 
         return (
             <div className="header row flex-middle">
                 <div className="col col-start"
-                     onClick={() => onChangeDate(moment(viewDate).add(-1, 'month'))}>
+                     onClick={() => updateDate(moment(viewDate).add(-1, 'month'))}>
                     <div className={"icon"}> Prev</div>
                 </div>
                 <div className="col col-center">
@@ -30,7 +32,7 @@ class CalendarHeader extends React.Component {
             </span>
                 </div>
                 <div className="col col-end"
-                     onClick={() => onChangeDate(moment(viewDate).add(1, 'month'))}>
+                     onClick={() => updateDate(moment(viewDate).add(1, 'month'))}>
                     <div className="icon">Next</div>
                 </div>
             </div>
@@ -39,9 +41,22 @@ class CalendarHeader extends React.Component {
     }
 }
 
-CalendarHeader.propTypes = {
-    viewDate: PropTypes.object,
-    onChangeDate: PropTypes.func
+const mapDispatchToProps = dispatch => {
+    return {
+        updateDate: (date) => dispatch(calendars.updateViewDate(date)),
+    }
 };
 
-export default CalendarHeader;
+const mapStateToProps = state => {
+    return {
+        viewDate: state.calendars.viewDate
+    }
+};
+
+
+CalendarHeader.propTypes = {
+    viewDate: PropTypes.object,
+    updateDate: PropTypes.func
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CalendarHeader);

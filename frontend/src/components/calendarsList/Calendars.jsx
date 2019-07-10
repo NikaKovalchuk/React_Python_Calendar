@@ -11,37 +11,13 @@ import PropTypes from "prop-types";
  */
 class Calendars extends React.Component {
     render() {
-        const result = this.props.calendars ? this.props.calendars.map((calendar) => {
-            const colorStyle = {backgroundColor: calendar.color};
-            return (
-                <div
-                    className={"element"}
-                    key={calendar.id}
-                    onClick={() => this.props.toggleModal(calendar)}>
-                <div className={"name"}>
-                    {calendar.title}
-                </div>
-                <div className={"control-panel"}>
-                    <div
-                        className={"show"}
-                        onClick={(e) => this.props.changeShow(e, calendar)}>
-                        <input
-                            type="checkbox"
-                            checked={calendar.show}/>
-                    </div>
-                    <div
-                        className={"color"}
-                        style={colorStyle}>
-                    </div>
-                </div>
-            </div>)
-        }) : {};
+        const result =  "";
         return <div className={'calendars-list'}>{result}</div>;
     };
 }
 
 Calendars.propTypes = {
-    calendars: PropTypes.any,
+    calendars: PropTypes.array,
     changeShow: PropTypes.func,
     toggleModal: PropTypes.func,
 };

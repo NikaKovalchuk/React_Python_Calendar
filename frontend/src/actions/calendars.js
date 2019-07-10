@@ -152,3 +152,17 @@ export const importCalendars = (calendarsId) => (dispatch, getState) => {
         }
     })
 }
+
+export const updateSelectedDate = (date) => (dispatch) => {
+    dispatch({
+        type: 'UPDATE_SELECTED_DATE',
+        selectedDate: date
+    });
+};
+
+export const updateViewDate = (date) => (dispatch) => {
+    dispatch({
+        type: 'UPDATE_VIEW_DATE',
+        viewDate: date
+    });
+};

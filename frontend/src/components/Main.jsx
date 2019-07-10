@@ -7,10 +7,8 @@ import SideBar from "./SideBar";
 class Main extends Component {
     state = {
         calendars: [],
-        selectedDate: new Date(new Date().setHours(0, 0, 0)),
     };
 
-    changeDate = (date) => this.setState({selectedDate: date});
     changeCalendars = (calendars) => this.setState({calendars: calendars});
 
     render() {
@@ -18,13 +16,9 @@ class Main extends Component {
             <div className={"main-content"}>
                 <SideBar
                     calendars={this.state.calendars}
-                    changeCalendars={this.changeCalendars}
-                    selectedDate={this.state.selectedDate}
-                    changeDate={this.changeDate} />
+                    changeCalendars={this.changeCalendars} />
                 <Schedule
-                    selectedDate={this.state.selectedDate}
-                    calendars={this.state.calendars}
-                    changeDate={this.changeDate} />
+                    calendars={this.state.calendars}/>
             </div>
         )
     }

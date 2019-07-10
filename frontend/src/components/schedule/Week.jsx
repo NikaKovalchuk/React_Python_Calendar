@@ -8,6 +8,7 @@ import {
     getDayIndexesForWeek,
     getHourIndexes
 } from "../../lib/schedule";
+import {connect} from "react-redux";
 
 class Week extends Component {
     render() {
@@ -59,4 +60,11 @@ Week.propTypes = {
     onEventClick: PropTypes.func
 };
 
-export default Week;
+const mapStateToProps = state => {
+    return {
+        selectedDate: state.calendars.selectedDate
+    }
+};
+
+
+export default connect(mapStateToProps, null)(Week);
