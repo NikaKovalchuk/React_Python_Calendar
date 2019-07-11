@@ -10,6 +10,10 @@ import ControlPanel from "./ControlPanel";
 import ScheduleTable from "./ScheduleTable";
 import {viewTypes} from "./types";
 
+/**
+ * Main schedule component.
+ */
+
 class Main extends Component {
 
     constructor(props) {

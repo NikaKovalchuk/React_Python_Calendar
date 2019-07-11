@@ -6,6 +6,9 @@ import Month from "./Month"
 import PropTypes from "prop-types";
 import {viewTypes} from "./types";
 
+/**
+ * Component for schedule views
+ */
 class ScheduleTable extends Component {
     render() {
         const {

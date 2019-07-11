@@ -3,6 +3,9 @@ import {connect} from 'react-redux';
 import {auth} from "../actions";
 import PropTypes from 'prop-types';
 
+/**
+ * Toolbar component
+ */
 class ToolBar extends Component {
 
     render() {

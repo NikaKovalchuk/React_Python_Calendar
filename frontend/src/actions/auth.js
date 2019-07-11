@@ -6,7 +6,7 @@ const API_ENDPOINTS = {
     REGISTER: API_URL + 'signup/',
     LOGIN: API_URL + 'login/',
     CURRENT: API_URL + 'current/',
-}
+};
 
 const post = (url, body, dispatch, getState) => {
     let headers = {"Content-Type": "application/json"};

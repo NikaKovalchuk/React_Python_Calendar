@@ -3,6 +3,9 @@ import Calendar from "./calendar";
 import CalendarsList from "./calendarsList";
 import "../css/main.css";
 
+/**
+ * Sidebar component
+ */
 class SideBar extends Component {
     render() {
         return (

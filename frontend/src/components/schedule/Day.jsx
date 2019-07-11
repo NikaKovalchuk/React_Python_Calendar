@@ -6,6 +6,13 @@ import PropTypes from "prop-types";
 import {getHourIndexes} from "../../lib/schedule";
 import {connect} from "react-redux";
 
+/**
+ * Day schedule view.
+ *
+ * @param {} selectedDate
+ * @param {func} onDateClick
+ * @param {func} onEventClick
+ */
 class Day extends Component {
     render() {
         const {

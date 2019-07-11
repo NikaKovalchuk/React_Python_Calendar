@@ -6,6 +6,14 @@ import MonthEvent from "./MonthEvent";
 import {endOfMonth, endOfWeek, startOfMonth, startOfWeek} from "../../lib/date.js";
 import {connect} from "react-redux";
 
+/**
+ * Month schedule view.
+ *
+ * @param {} selectedDate
+ * @param {func} onDateClick
+ * @param {func} onEventClick
+ * @param {func} viewDay
+ */
 class Month extends Component {
     render() {
         const selectedDate = this.props.selectedDate;

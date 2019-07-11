@@ -11,6 +11,9 @@ const eventMargin = 5;
 const eventHeight = 25;
 const eventWidth = cellWidth - 2 * eventMargin;
 
+/**
+ * Component for events for month view
+ */
 class MonthEvent extends Component {
 
     getNumberOfDays = (start, finish, weekStart, weekEnd) => {

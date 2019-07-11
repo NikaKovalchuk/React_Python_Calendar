@@ -10,6 +10,9 @@ import {
 } from "../../lib/schedule";
 import {connect} from "react-redux";
 
+/**
+ * Component for week schedule
+ */
 class Week extends Component {
     render() {
         const selectedDate = this.props.selectedDate;

@@ -10,6 +10,9 @@ const betweenDaysHeight = 10;
 const dayLength = 23;
 const eventMargin = 5;
 
+/**
+ * Component for events for day and week views
+ */
 class Event extends Component {
     render() {
         const {
