@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Schedule from "./schedule"
-import "../css/main.css"
+import "./css/main.css"
 import SideBar from "./SideBar";
 
 /**

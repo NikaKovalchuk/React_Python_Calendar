@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {events} from "../../actions";
-import "../../css/schedule.css";
+import {events} from "../../state/actions";
+import "../css/schedule.css";
 import EventModal from "../modals/Event";
 import moment from "moment";
 import PropTypes from "prop-types";
@@ -49,18 +49,18 @@ class Main extends Component {
 
     updateEvents(date, calendars) {
         this.props.loadEvents(date, calendars)
-        this.props.loadNotifications(date, calendars).then(() => {
-            this.setState({notifications: this.props.notifications});
-            if (this.props.notifications !== []) {
-                let event = this.props.notifications[this.props.notifications.length - 1];
-                if (event) {
-                    this.setState({
-                        isOpenNotification: true,
-                        notificationEvent: event,
-                    });
-                }
-            }
-        });
+        // this.props.loadNotifications(date, calendars).then(() => {
+        //     this.setState({notifications: this.props.notifications});
+        //     if (this.props.notifications !== []) {
+        //         let event = this.props.notifications[this.props.notifications.length - 1];
+        //         if (event) {
+        //             this.setState({
+        //                 isOpenNotification: true,
+        //                 notificationEvent: event,
+        //             });
+        //         }
+        //     }
+        // });
     };
 
     viewDay = (e, day) => {
@@ -175,8 +175,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        loadEvents: (date, calendars) => dispatch(events.loadEvents(date, calendars)),
-        loadNotifications: (date, calendars) => dispatch(events.loadNotifications(date, calendars)),
+        // loadEvents: (date, calendars) => dispatch(events.loadEvents(date, calendars)),
+        loadEvents: (date, calendars) => {},
+        loadNotifications: (date, calendars) => {},
+        // loadNotifications: (date, calendars) => dispatch(events.loadNotifications(date, calendars)),
         addEvent: (model) => dispatch(events.addEvent(model)),
         updateEvent: (id, model) => dispatch(events.updateEvent(id, model)),
     }

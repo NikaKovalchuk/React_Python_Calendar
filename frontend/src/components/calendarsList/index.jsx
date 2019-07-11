@@ -1,6 +1,6 @@
 import React from "react";
-import '../../css/calendars.css';
-import {calendars} from "../../actions";
+import '../css/calendars.css';
+import {calendars} from "../../state/actions";
 import {connect} from "react-redux";
 import Calendar from "../modals/Calendar";
 import Import from "../modals/Import";
@@ -85,7 +85,8 @@ class CalendarsList extends React.Component {
 
 const mapDispatchToProps = dispatch => {
     return {
-        loadCalendars: (isImport) => dispatch(calendars.loadCalendars(isImport)),
+        // loadCalendars: (isImport) => dispatch(calendars.loadCalendars(isImport)),
+        loadCalendars: (isImport) => {},
         importCalendars: (calendarsId) => dispatch(
             calendars.importCalendars(calendarsId)),
         updateCalendar: (id, obj) => dispatch(calendars.updateCalendar(id, obj)),

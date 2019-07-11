@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {auth} from "../actions";
+import {auth} from "../state/actions";
 import PropTypes from 'prop-types';
 
 /**

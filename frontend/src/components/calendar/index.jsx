@@ -1,5 +1,5 @@
 import React from "react";
-import '../../css/calendar.css';
+import '../css/calendar.css';
 import NameOfDays from "./NameOfDays";
 import CalendarHeader from "./CalendarHeader";
 import Days from "./Days";

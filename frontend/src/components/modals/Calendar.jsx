@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import "../../css/form.css"
-import {calendars} from "../../actions";
+import "../css/form.css"
+import {calendars} from "../../state/actions";
 import {connect} from "react-redux";
 import Modal from "./index";
 import {modal as messages} from "../../messages";

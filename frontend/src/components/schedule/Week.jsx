@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import "../../css/schedule.css";
+import "../css/schedule.css";
 import moment from "moment";
 import PropTypes from "prop-types";
 import Event from "./Event";

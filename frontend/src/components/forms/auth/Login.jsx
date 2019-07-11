@@ -2,8 +2,8 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {Redirect} from 'react-router-dom';
 import {auth as messages} from "../../../messages";
-import {auth} from "../../../actions";
-import "../../../css/form.css"
+import {auth} from "../../../state/actions";
+import "../../css/form.css"
 import Auth from "./index";
 import PropTypes from "prop-types";
 

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {BrowserRouter, Redirect, Route, Switch} from 'react-router-dom';
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
-import {auth} from "../actions";
+import {auth} from "../state/actions";
 import ToolBar from "./ToolBar";
 import Login from "./forms/auth/Login"
 import Main from "./Main"
@@ -59,7 +59,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        loadUser: () => dispatch(auth.loadUser()),
+        // loadUser: () => dispatch(auth.loadUser()),
+        loadUser: () => {}
     }
 };
 

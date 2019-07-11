@@ -3,11 +3,8 @@ import events from "./events";
 import auth from "./auth";
 import calendars from "./calendars"
 
-
-const app = combineReducers({
+export const reducers = combineReducers({
     events,
     auth,
     calendars,
 });
-
-export default app;

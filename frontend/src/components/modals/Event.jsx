@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import "../../css/form.css";
-import {events} from "../../actions";
+import "../css/form.css";
+import {events} from "../../state/actions";
 import {connect} from "react-redux";
 import moment from "moment";
 import {repeatOptions, notificationOptions} from "./types";

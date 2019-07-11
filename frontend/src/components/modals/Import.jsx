@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import "../../css/form.css";
-import {calendars} from "../../actions";
+import "../css/form.css";
+import {calendars} from "../../state/actions";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {modal as messages} from "../../messages";
@@ -133,7 +133,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        loadCalendars: () => dispatch(calendars.loadCalendars(true)),
+        loadCalendars: () => {},
+        // loadCalendars: () => dispatch(calendars.loadCalendars(true)),
     }
 };
 

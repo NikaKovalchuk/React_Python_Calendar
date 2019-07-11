@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import "../../css/schedule.css"
+import "../css/schedule.css"
 import Day from "./Day"
 import Week from "./Week"
 import Month from "./Month"

@@ -1,8 +1,8 @@
 import React from "react";
-import '../../css/calendar.css';
+import '../css/calendar.css';
 import moment from "moment";
 import PropTypes from "prop-types";
-import {calendars} from "../../actions";
+import {calendars} from "../../state/actions";
 import {connect} from "react-redux";
 
 /**

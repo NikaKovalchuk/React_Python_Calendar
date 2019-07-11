@@ -1,6 +1,6 @@
 import React, {PureComponent} from "react";
 import {Link, Redirect} from 'react-router-dom';
-import "../../../css/form.css";
+import "../../css/form.css";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 

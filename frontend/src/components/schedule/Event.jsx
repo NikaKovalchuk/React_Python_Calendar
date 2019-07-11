@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import "../../css/schedule.css";
+import "../css/schedule.css";
 import moment from "moment";
 import PropTypes from "prop-types";
 import {startOfDay, endOfDay} from "../../lib/date.js";

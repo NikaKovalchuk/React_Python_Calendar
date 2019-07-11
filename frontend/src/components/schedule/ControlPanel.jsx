@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import "../../css/schedule.css";
+import "../css/schedule.css";
 import PropTypes from "prop-types";
 import {viewTypes} from "./types";
 import Button from "./Button";
