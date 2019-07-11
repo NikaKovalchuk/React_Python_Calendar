@@ -132,6 +132,7 @@ export const loadEvents = (date, calendars) => (dispatch, getState) => {
         params += "&calendar=" + calendarIds
     }
     return get(API_ENDPOINTS.LOAD_EVENTS + params, dispatch, getState).then(res => {
+        console.log(res)
         if (res.status === 200) {
             dispatch({type: 'LOAD_EVENTS', events: res.data});
             return res.data;

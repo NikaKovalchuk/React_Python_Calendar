@@ -21,71 +21,34 @@ import Modal from "./index";
  */
 class Event extends Component {
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
+    state = {
+        event: {
             title: "",
             text: "",
-            id: this.props.id,
             start_date: moment(),
             finish_date: moment(),
             repeat_type: 0,
             notification_type: 0,
             notice: false,
+        },
+        calendar: {},
+        isOpen: false,
+        isOpenError: false,
+        errorMessage: null,
+    };
 
-            calendar: {},
-            calendarId: undefined,
-
-            isOpen: false,
-            isOpenError: false,
-            errorMessage: null,
-        };
-    }
-
-    componentWillReceiveProps = (nextProps, nextContext) => {
-        if (nextProps.date != null) {
-            /* Convert date to ISOformat to use it in datetime-local component*/
-            let date = moment(nextProps.date).format();
-            this.setState({
-                start_date: new Date(date)
-            });
-            date = date.hours(date.hours() + 1).format();
-            this.setState({
-                finish_date: date,
-                calendar: nextProps.calendars ? nextProps.calendars[0] : undefined,
-                calendarId: nextProps.calendars[0] ? nextProps.calendars[0].id : undefined,
-                id: nextProps.event.id,
-                title: nextProps.event.title,
-                text: nextProps.event.text,
-                repeat_type: nextProps.event.repeat_type,
-                notification_type: nextProps.event.notification_type,
-            })
-        }
-
-        if (nextProps.event.id) {
-            if (nextProps.event.start_date) {
-                let date = moment(nextProps.event.start_date).format();
-                this.setState({
-                    start_date: date
-                })
-            }
-            if (nextProps.event.finish_date) {
-                let date = moment(nextProps.event.finish_date).format();
-                this.setState({
-                    finish_date: date})
-            }
-            if (nextProps.event.notification_type !== notificationOptions['No']) {
-                this.setState({notice: true})
-            }
-            this.setState({
-                id: nextProps.event.id,
-                title: nextProps.event.title,
-                text: nextProps.event.text,
-                repeat_type: nextProps.event.repeat_type,
-                notification_type: nextProps.event.notification_type,
-                calendar: nextProps.event.calendar,
-                calendarId: nextProps.event.calendar ? nextProps.event.calendar.id : 0,
+    componentWillReceiveProps = (nextProps) => {
+        if (nextProps.date) {
+            const startDate = new Date();
+            const finishDate = new Date();
+            const calendar = nextProps.calendars[0];
+            this.setState({ event: {
+                ...this.state.event,
+                ...nextProps.event,
+                    finish_date: finishDate,
+                    start_date: startDate,
+                    calendar: calendar
+                },
             })
         }
     };
@@ -98,9 +61,12 @@ class Event extends Component {
                 {Object.values(option)[0]}
             </option>)) : {};
         return <select className="input"
-                       value={this.state.notification_type}
+                       value={this.state.event.notification_type}
                        onChange={(e) => {
-                           this.setState({notification_type: e.target.value})
+                           this.setState({event: {
+                               ...this.state.event,
+                                   notification_type: e.target.value
+                           }})
                        }}>
             {options}
         </select>;
@@ -114,9 +80,12 @@ class Event extends Component {
                 {Object.values(option)[0]}
             </option>)) : {};
         return <select className="input"
-                       value={this.state.repeat_type}
+                       value={this.state.event.repeat_type}
                        onChange={(e) => {
-                           this.setState({repeat_type: e.target.value})
+                           this.setState({event: {
+                               ...this.state.event,
+                                   repeat_type: e.target.value
+                           }})
                        }}>
             {options}
         </select>;
@@ -130,7 +99,7 @@ class Event extends Component {
                 {calendar.title}
             </option>));
         return <select className="input"
-                       value={this.state.calendarId}
+                       value={this.state.event.calendar.id}
                        onChange={(e) => this.changeCalendar(e.target.value)}>
             {options}
         </select>;
@@ -141,7 +110,6 @@ class Event extends Component {
             if (calendar.id === +id) {
                 this.setState({
                     calendar: calendar,
-                    calendarId: calendar.id
                 })
             }
             return "";
@@ -149,20 +117,8 @@ class Event extends Component {
     };
 
     onOk = () => {
-        const event = {
-            id: this.state.id,
-            title: this.state.title,
-            text: this.state.text,
-            start_date: this.state.start_date,
-            finish_date: this.state.finish_date,
-            repeat_type: this.state.repeat_type,
-            notification_type: this.state.notification_type,
-            notice: this.state.notification_type !== notificationOptions['No'] ? true : false,
-            calendar: this.state.calendar,
-        };
-        if (this.validate(event)) {
-            this.props.onOk(event)
-        }
+        console.log(this.state.event)
+        if (this.validate(this.state.event)) this.props.onOk(this.state.event)
     };
 
     showError = (error) => this.setState({ isOpenError: true, errorMessage: error });
@@ -172,14 +128,14 @@ class Event extends Component {
             this.showError(messages.event.error.dateOrder);
             return false;
         }
-        if (event.title === "" || !event.title || event.text === "" || !event.text) {
+        if (!event.title.length && !event.text.length) {
             this.showError(messages.event.error.fillFields);
             return false;
         }
         return true
     };
 
-    delete = () => this.props.deleteEvent(this.state.id).then(() => this.props.onCancel());
+    delete = () => this.props.deleteEvent(this.state.event.id).then(() => this.props.onCancel());
 
     toggleModal = () => this.setState({isOpen: !this.state.isOpen});
 
@@ -207,17 +163,23 @@ class Event extends Component {
                             <form>
                                 <div key={'gtitle'} className="group">
                                     <label className="label" key={'ltitle'} htmlFor={'title'}> Title </label>
-                                    <input className="input" type={'text'} key={'title'} value={this.state.title}
+                                    <input className="input" type={'text'} key={'title'} value={this.state.event.title}
                                            onChange={(e) => {
-                                               this.setState({title: e.target.value})
+                                               this.setState({event: {
+                                                   ...this.state.event,
+                                                       title: e.target.value
+                                                   }})
                                            }}/>
                                 </div>
 
                                 <div key={'gtext'} className="group">
                                     <label className="label" key={'ltext'} htmlFor={'text'}> Text </label>
-                                    <input className="input" type={'text'} key={'text'} value={this.state.text}
+                                    <input className="input" type={'text'} key={'text'} value={this.state.event.text}
                                            onChange={(e) => {
-                                               this.setState({text: e.target.value})
+                                               this.setState({event: {
+                                                   ...this.state.event,
+                                                       text: e.target.value
+                                                   }})
                                            }}/>
                                 </div>
 
@@ -225,9 +187,12 @@ class Event extends Component {
                                     <label className="label" key={'lstart_date'} htmlFor={'start_date'}> Start
                                         Date </label>
                                     <input className="input" type={'datetime-local'} key={'start_date'}
-                                           value={this.state.start_date}
+                                           value={this.state.event.start_date}
                                            onChange={(e) => {
-                                               this.setState({start_date: e.target.value})
+                                               this.setState({event: {
+                                                   ...this.state.event,
+                                                       start_date: e.target.value
+                                                   }})
                                            }}/>
                                 </div>
 
@@ -235,9 +200,12 @@ class Event extends Component {
                                     <label className="label" key={'lfinish_date'} htmlFor={'finish_date'}> Finish
                                         Date </label>
                                     <input className="input" type={'datetime-local'} key={'finish_date'}
-                                           value={this.state.finish_date}
-                                           onChange={(e) => {
-                                               this.setState({finish_date: e.target.value})
+                                           value={this.state.event.finish_date}
+                                            onChange={(e) => {
+                                               this.setState({event: {
+                                                   ...this.state.event,
+                                                       finish_date: e.target.value
+                                                   }})
                                            }}/>
                                 </div>
 
@@ -268,8 +236,8 @@ class Event extends Component {
                         show={this.state.isOpen}
                         onCancel={this.toggleModal}
                         onOk={this.delete}
-                        header={"Remove event \"" + this.state.title + "\""}>
-                        Are you sure you want to delete the event "{this.state.title}"?
+                        header={"Remove event \"" + this.state.event.title + "\""}>
+                        Are you sure you want to delete the event "{this.state.event.title}"?
                     </Modal>
 
                     <Modal

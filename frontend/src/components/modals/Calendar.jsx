@@ -5,7 +5,6 @@ import {connect} from "react-redux";
 import Modal from "./index";
 import {modal as messages} from "../../messages";
 import PropTypes from "prop-types";
-import {getRandomColor} from "../../lib/general";
 import {accessOptions} from "./types";
 
 /**
@@ -18,25 +17,25 @@ import {accessOptions} from "./types";
  *
  */
 
+
 const initCalendar = {
     title: "",
     is_public: false,
-    color: getRandomColor(),
+    color: null,
 };
 
 class Calendar extends Component {
 
     state = {
-        calendar: initCalendar,
+        calendar: {...initCalendar},
         isOpen: false,
         isOpenError: false,
         errorMessage: null,
     };
 
     componentWillReceiveProps(nextProps, nextContext) {
-        if (nextProps.calendar) {
-            this.setState({calendar: nextProps.calendar})
-        }
+        if (nextProps.calendar)
+            this.setState({calendar: nextProps.calendar});
     }
 
     selectAccess = () => {
