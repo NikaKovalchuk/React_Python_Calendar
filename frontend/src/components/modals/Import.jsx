@@ -29,7 +29,7 @@ class Import extends Component {
     state = {...this.initState};
 
 
-    cleanState = () => this.setState(this.initState);
+    cleanState = () => this.setState({...this.initState});
 
     onOk = () => {
         if (this.state.chosenCalendars.length === 0) {
@@ -41,6 +41,7 @@ class Import extends Component {
             const calendarsId = this.state.chosenCalendars?
                 this.state.chosenCalendars.map((calendar) => (calendar.id)):{};
             this.props.onOk(calendarsId);
+            console.log(this.state)
             this.cleanState()
         }
     };
@@ -53,9 +54,7 @@ class Import extends Component {
     onClickCalendar = (calendar) => {
         let chosenCalendars = this.state.chosenCalendars;
         const add = this.state.chosenCalendars.filter((chosenCalendar) => (calendar === chosenCalendar)).length === 0;
-        if (add) {
-            chosenCalendars.push(calendar);
-        }
+        if (add) chosenCalendars.push(calendar);
         else {
             const index = chosenCalendars.indexOf(calendar);
             chosenCalendars.splice(index, 1);
@@ -66,7 +65,7 @@ class Import extends Component {
     };
 
     search = () => {
-        const result =  this.props.calendars.import ?  this.props.calendars.import.map((calendar) => {
+        const result = this.props.calendars ?  this.props.calendars.map((calendar) => {
             const chosen = this.state.chosenCalendars.filter(
                 (chosenCalendar) => (calendar === chosenCalendar)).length > 0;
             const calendarClass = chosen ? "variant chosen" :  "variant";
@@ -84,7 +83,6 @@ class Import extends Component {
 
     render() {
         if (!this.props.show) return null;
-
         return (
             <div className="backdrop">
                 <div className="modal-window event">

@@ -44,19 +44,15 @@ class Event extends Component {
     }
 
     componentWillReceiveProps = (nextProps, nextContext) => {
-        let searchValue = /\+[0-9]*:[0-9]*/
-
         if (nextProps.date != null) {
             /* Convert date to ISOformat to use it in datetime-local component*/
             let date = moment(nextProps.date).format();
             this.setState({
-                start_date: date.replace(searchValue, '')
-            })
-
-            date = moment(date)
+                start_date: new Date(date)
+            });
             date = date.hours(date.hours() + 1).format();
             this.setState({
-                finish_date: date.replace(searchValue, ''),
+                finish_date: date,
                 calendar: nextProps.calendars ? nextProps.calendars[0] : undefined,
                 calendarId: nextProps.calendars[0] ? nextProps.calendars[0].id : undefined,
                 id: nextProps.event.id,
@@ -71,14 +67,13 @@ class Event extends Component {
             if (nextProps.event.start_date) {
                 let date = moment(nextProps.event.start_date).format();
                 this.setState({
-                    start_date: date.replace(searchValue, '')
+                    start_date: date
                 })
             }
             if (nextProps.event.finish_date) {
                 let date = moment(nextProps.event.finish_date).format();
                 this.setState({
-                    finish_date: date.replace(searchValue, '')
-                })
+                    finish_date: date})
             }
             if (nextProps.event.notification_type !== notificationOptions['No']) {
                 this.setState({notice: true})

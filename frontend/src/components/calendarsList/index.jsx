@@ -21,7 +21,10 @@ class CalendarsList extends React.Component {
         calendar: {},
     };
 
-    componentDidMount = () => this.props.loadCalendars();
+    componentDidMount = () => {
+        this.props.loadCalendars(false);
+        this.props.loadCalendars(true);
+    };
 
     toggleModalImport = () => this.setState({
         isOpenImport: !this.state.isOpenImport
@@ -82,7 +85,7 @@ class CalendarsList extends React.Component {
 
 const mapDispatchToProps = dispatch => {
     return {
-        loadCalendars: () => dispatch(calendars.loadCalendars()),
+        loadCalendars: (isImport) => dispatch(calendars.loadCalendars(isImport)),
         importCalendars: (calendarsId) => dispatch(
             calendars.importCalendars(calendarsId)),
         updateCalendar: (id, obj) => dispatch(calendars.updateCalendar(id, obj)),

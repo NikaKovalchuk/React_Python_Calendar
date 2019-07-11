@@ -94,10 +94,10 @@ export const addEvent = (body) => (dispatch, getState) => post(API_ENDPOINTS.ADD
 
 
 export const updateEvent = (index, body) => (dispatch, getState) => {
-    let params = index + "/"
+    let params = index + "/";
     return put(API_ENDPOINTS.UPDATE_EVENT + params, body, dispatch, getState, true).then(res => {
         if (res.status === 200) {
-            dispatch({type: 'UPDATE_EVENT'});
+            dispatch({type: 'UPDATE_EVENT', events: res.data});
             return res.data;
         } else {
             dispatch({type: 'EVENT_ERROR', data: res.data});
@@ -111,7 +111,7 @@ export const deleteEvent = (id) => (dispatch, getState) => {
     let params = id + "/"
     return del(API_ENDPOINTS.DELETE_EVENT + params, dispatch, getState).then(res => {
         if (res.status === 200) {
-            dispatch({type: 'DELETE_EVENT'});
+            dispatch({type: 'DELETE_EVENT', events: res.data});
             return res.data;
         } else {
             dispatch({type: 'EVENT_ERROR', data: res.data});
@@ -133,7 +133,7 @@ export const loadEvents = (date, calendars) => (dispatch, getState) => {
     }
     return get(API_ENDPOINTS.LOAD_EVENTS + params, dispatch, getState).then(res => {
         if (res.status === 200) {
-            dispatch({type: 'LOAD_EVENTS', data: res.data});
+            dispatch({type: 'LOAD_EVENTS', events: res.data});
             return res.data;
         } else {
             dispatch({type: 'EVENT_ERROR', data: res.data});
@@ -148,8 +148,12 @@ export const loadNotifications = (date, calendars) => (dispatch, getState) => {
     var startDate = moment(date).startOf('month').startOf('week').toISOString();
     var finishDate = moment(date).endOf('month').endOf('week').toISOString()
     let params = "?notification_type=true&startDate=" + startDate + "&finishDate=" + finishDate
-    if (calendars.length !== 0) {
-        params += "&calendar=" + calendars
+    const calendarIds = calendars.map((calendar) => {
+        if (calendar.show === true) return calendar.id;
+        return null
+    });
+    if (calendarIds.length !== 0) {
+        params += "&calendar=" + calendarIds
     }
     return get(API_ENDPOINTS.LOAD_NOTIFICATIONS + params, dispatch, getState).then(res => {
         if (res.status === 200) {
