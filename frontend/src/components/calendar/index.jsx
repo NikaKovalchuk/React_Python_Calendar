@@ -7,9 +7,6 @@ import Days from "./Days";
 /**
  * Component for calendar picker.
  * Contains table with days.
- *
- * @param {object} selectedDate   Selected date.
- * @param {func} changeDate       onChange function.
  */
 class Calendar extends React.Component {
     render() {

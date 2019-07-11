@@ -41,7 +41,7 @@ class Main extends Component {
 
     componentDidMount() {
         this.updateEvents(this.props.selectedDate, this.props.calendars)
-    }
+    };
 
     updateEvents(date, calendars) {
         this.props.loadEvents(date, calendars)
@@ -57,7 +57,7 @@ class Main extends Component {
                 }
             }
         });
-    }
+    };
 
     viewDay = (e, day) => {
         this.setState({view: viewTypes.day});

@@ -93,7 +93,7 @@ class Event extends Component {
                 calendarId: nextProps.event.calendar ? nextProps.event.calendar.id : 0,
             })
         }
-    }
+    };
 
     selectNotification = () => {
          const options = notificationOptions ? notificationOptions.map((option) => (
@@ -109,7 +109,7 @@ class Event extends Component {
                        }}>
             {options}
         </select>;
-    }
+    };
 
     selectRepeat = () => {
         const options = repeatOptions ? repeatOptions.map((option) => (
@@ -125,7 +125,7 @@ class Event extends Component {
                        }}>
             {options}
         </select>;
-    }
+    };
 
     selectCalendar = () => {
         const options = this.props.calendars.map((calendar) => (
@@ -294,13 +294,13 @@ const mapStateToProps = state => {
         events: state.events,
         calendars: state.calendars.calendars,
     }
-}
+};
 
 const mapDispatchToProps = dispatch => {
     return {
         deleteEvent: (id) => dispatch(events.deleteEvent(id)),
     }
-}
+};
 
 Event.propTypes = {
     date: PropTypes.object,

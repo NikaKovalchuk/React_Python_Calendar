@@ -12,7 +12,8 @@ class ControlPanel extends React.Component {
     render() {
         return (
             <div>
-                <div className=" btn-group wide btn-group-toggle btn-group-center" data-toggle="buttons">
+                <div className="btn-group wide btn-group-toggle btn-group-center"
+                     data-toggle="buttons">
                     <button type="button"
                             className="btn wide btn-secondary btn-sm"
                             onClick={() => this.props.toggleModal()}>

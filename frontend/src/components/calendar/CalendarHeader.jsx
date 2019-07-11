@@ -23,16 +23,18 @@ class CalendarHeader extends React.Component {
         return (
             <div className="header row flex-middle">
                 <div className="col col-start"
-                     onClick={() => updateDate(moment(viewDate).add(-1, 'month'))}>
+                     onClick={() => updateDate(
+                         moment(viewDate).add(-1, 'month'))}>
                     <div className={"icon"}> Prev</div>
                 </div>
                 <div className="col col-center">
-            <span>
-              {moment(viewDate).format(dateFormat)}
-            </span>
+                    <span>
+                        {moment(viewDate).format(dateFormat)}
+                    </span>
                 </div>
                 <div className="col col-end"
-                     onClick={() => updateDate(moment(viewDate).add(1, 'month'))}>
+                     onClick={() => updateDate(
+                         moment(viewDate).add(1, 'month'))}>
                     <div className="icon">Next</div>
                 </div>
             </div>
@@ -41,17 +43,13 @@ class CalendarHeader extends React.Component {
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
+const mapDispatchToProps = dispatch => ({
         updateDate: (date) => dispatch(calendars.updateViewDate(date)),
-    }
-};
+    });
 
-const mapStateToProps = state => {
-    return {
+const mapStateToProps = state => ({
         viewDate: state.calendars.viewDate
-    }
-};
+    });
 
 
 CalendarHeader.propTypes = {

@@ -40,7 +40,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        register: (username, password) => dispatch(auth.register(username, password)),
+        register: (username, password) => dispatch(
+            auth.register(username, password)),
     };
 };
 

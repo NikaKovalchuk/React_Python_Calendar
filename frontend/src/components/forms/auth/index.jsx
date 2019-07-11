@@ -7,7 +7,8 @@ import {connect} from "react-redux";
 
 /**
  * Common component for auth forms.
- * Contains username and password fields, submit button and link to another auth form.
+ * Contains username and password fields, submit button and
+ * link to another auth form.
  *
  * @param {func} auth           onSubmit function.
  * @param {object} errors       Actual form errors.
@@ -52,20 +53,32 @@ class Auth extends PureComponent {
                             </ul>
                         )}
                         <div className={'group'}>
-                            <label className={'label'} htmlFor="username">Username</label>
+                            <label className={'label'} htmlFor="username">
+                                Username
+                            </label>
                             <input
                                 className={'input'}
                                 type="text" id="username"
-                                onChange={e => this.setState({username: e.target.value})}/>
+                                onChange={e => this.setState({
+                                    username: e.target.value
+                                })}/>
                         </div>
                         <div className={'group'}>
-                            <label className={'label'} htmlFor="password">Password</label>
+                            <label className={'label'} htmlFor="password">
+                                Password
+                            </label>
                             <input
                                 className={'input'}
                                 type="password" id="password"
-                                onChange={e => this.setState({password: e.target.value})}/>
+                                onChange={e => this.setState({
+                                    password: e.target.value
+                                })}/>
                         </div>
-                        <div><button className={'btn btn-secondary'} type="submit">{title}</button></div>
+                        <div><button
+                            className={'btn btn-secondary'}
+                            type="submit">
+                            {title}
+                        </button></div>
                         <div>{footer} <Link to={link}>{redirect}</Link> </div>
                     </fieldset>
                 </form>
@@ -84,7 +97,8 @@ Auth.propTypes = {
 };
 
 const mapStateToProps = state => {
-    const errors = state.auth.loginErrors ? Object.keys(state.auth.loginErrors).map(field => {
+    const errors = state.auth.loginErrors ?
+        Object.keys(state.auth.loginErrors).map(field => {
         return {field, message: state.auth.loginErrors[field]};
     }) : [];
     return {
