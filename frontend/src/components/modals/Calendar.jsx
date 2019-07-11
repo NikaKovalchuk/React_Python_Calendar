@@ -15,7 +15,6 @@ import {accessOptions} from "./types";
  * @param {} calendars              Actual calendar options.
  * @param {func} onCancel           onCancel function.
  * @param {func} onOK               onOk function.
- * @param {func} updateCalendars    updateCalendars function.
  *
  */
 
@@ -71,10 +70,8 @@ class Calendar extends Component {
     };
 
     delete = () => {
-        this.props.deleteCalendar(this.state.calendar.id).then(() => {
-            this.props.updateCalendars(this.props.calendars.data)
-            this.props.onCancel()
-        })
+        this.props.deleteCalendar(this.state.calendar.id)
+        this.props.onCancel()
     };
 
     toggleModal = () => this.setState({isOpen: !this.state.isOpen});
@@ -161,17 +158,17 @@ const mapDispatchToProps = dispatch => {
 const mapStateToProps = state => {
     return {
         events: state.events,
-        calendars: state.calendars,
+        calendars: state.calendars.calendars,
     }
 };
 
 Calendar.propTypes = {
     show : PropTypes.bool,
     calendar: PropTypes.object,
+    calendars: PropTypes.array,
 
     onCancel: PropTypes.func,
     onOk : PropTypes.func,
-    updateCalendars : PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Calendar);

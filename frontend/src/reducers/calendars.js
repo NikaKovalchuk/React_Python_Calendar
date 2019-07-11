@@ -2,7 +2,7 @@ const initialState = {
     selectedDate: new Date(new Date().setHours(0, 0, 0)),
     viewDate: new Date(new Date().setHours(0, 0, 0)),
     calendars: [],
-    importCalendars: [],
+    import: [],
 };
 
 export default function calendars(state = initialState, action) {
@@ -19,10 +19,10 @@ export default function calendars(state = initialState, action) {
         case 'IMPORT_CALENDAR_SUCCESSFUL':
         case 'DELETE_CALENDAR_SUCCESSFUL':
         case "LOAD_CALENDARS_SUCCESSFUL":
-            return {...state,calendars: action.calendars, data: action.calendars};
+            return {...state, calendars: action.calendars};
 
         case 'LOAD_IMPORT_CALENDARS_SUCCESSFUL':
-            return {...state,  importCalendars: action.importCalendars ,import: action.importCalendars};
+            return {...state, import: action.import};
 
         case 'CALENDAR_ERROR':
             return {...state, errors: action.calendars};

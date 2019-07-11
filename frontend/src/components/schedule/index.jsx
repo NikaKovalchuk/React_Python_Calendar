@@ -16,11 +16,8 @@ class Main extends Component {
         super(props);
         this.state = {
             view: viewTypes.month,
-            selectedDate: this.props.selectedDate,
             clickedDate: null,
             id: null,
-            calendars: this.props.calendars,
-            calendarsId: [],
             emptyEvent: {
                 id: null,
                 title: "",
@@ -43,43 +40,15 @@ class Main extends Component {
         };
     }
 
-    componentWillReceiveProps(props) {
-        let update = false;
-        let calendarsId = []
-        if (props.selectedDate) {
-            if (moment(props.selectedDate).month() !== moment(this.state.selectedDate).month()) {
-                update = true
-            }
-            this.setState({selectedDate: props.selectedDate});
-        }
-        if (props.calendars.data) {
-            if (props.calendars.data !== this.state.calendars) {
-                this.setState({
-                    calendars: this.props.calendars.data
-                })
-                for (let index = 0; index < props.calendars.data.length; index++) {
-                    let calendar = props.calendars.data[index]
-                    if (calendar.show === true) {
-                        calendarsId.push(calendar.id)
-                    }
-                }
-                update = true
-            }
-        }
-        if (update) {
-            this.setState({
-                calendars: props.calendars.data,
-                calendarsId: calendarsId
-            });
-            this.updateEvents(props.selectedDate, calendarsId)
-        }
+    componentDidMount() {
+        this.updateEvents(this.props.selectedDate, this.props.calendars)
     }
 
-    updateEvents(date, calendarsId) {
-        this.props.loadEvents(date, calendarsId).then(() => {
+    updateEvents(date, calendars) {
+        this.props.loadEvents(date, calendars).then(() => {
             this.setState({events: this.props.events.data});
         });
-        this.props.loadNotifications(date, calendarsId).then(() => {
+        this.props.loadNotifications(date, calendars).then(() => {
             this.setState({notifications: this.props.events.notifications});
             if (this.props.events.notifications !== []) {
                 let event = this.props.events.notifications[this.props.events.notifications.length - 1];
@@ -94,11 +63,7 @@ class Main extends Component {
     }
 
     viewDay = (e, day) => {
-        const date = day._d;
-        this.setState({
-            selectedDate: date,
-            view: viewTypes.day
-        });
+        this.setState({view: viewTypes.day});
         e.stopPropagation();
     };
 
@@ -122,9 +87,9 @@ class Main extends Component {
     toggleModal = () => {
         if (this.state.isOpen) {
             this.setState({event: this.state.emptyEvent,});
-            this.updateEvents(this.state.selectedDate, this.state.calendarsId)
+            this.updateEvents(this.props.selectedDate, this.props.calendars)
         } else {
-            if (this.state.calendars.length === 0) {
+            if (this.props.calendars.length === 0) {
                 this.toggleNoCalendarsModal()
                 return
             }
@@ -181,8 +146,7 @@ class Main extends Component {
                     onCancel={this.toggleModal}
                     onOk={this.complete}
                     event={this.state.event}
-                    date={this.state.clickedDate}
-                    calendars={this.state.calendars}/>
+                    date={this.state.clickedDate}/>
                 <Modal
                     show={this.state.isOpenNotification}
                     onOk={this.dismissNotification}
@@ -203,7 +167,7 @@ class Main extends Component {
 const mapStateToProps = state => {
     return {
         events: state.events,
-        calendars: state.calendars,
+        calendars: state.calendars.calendars,
         selectedDate: state.calendars.selectedDate,
     }
 };

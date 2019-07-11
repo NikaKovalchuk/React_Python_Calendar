@@ -123,9 +123,13 @@ export const deleteEvent = (id) => (dispatch, getState) => {
 export const loadEvents = (date, calendars) => (dispatch, getState) => {
     var startDate = moment(date).startOf('month').startOf('week').toISOString();
     var finishDate = moment(date).endOf('month').endOf('week').toISOString()
-    let params = "?startDate=" + startDate + "&finishDate=" + finishDate
-    if (calendars.length !== 0) {
-        params += "&calendar=" + calendars
+    let params = "?startDate=" + startDate + "&finishDate=" + finishDate;
+    const calendarIds = calendars.map((calendar) => {
+        if (calendar.show === true) return calendar.id;
+        return null
+    });
+    if (calendarIds.length !== 0) {
+        params += "&calendar=" + calendarIds
     }
     return get(API_ENDPOINTS.LOAD_EVENTS + params, dispatch, getState).then(res => {
         if (res.status === 200) {
