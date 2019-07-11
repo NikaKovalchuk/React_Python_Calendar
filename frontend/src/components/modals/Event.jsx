@@ -34,7 +34,6 @@ class Event extends Component {
             notification_type: 0,
             notice: false,
 
-            calendars: [],
             calendar: {},
             calendarId: undefined,
 
@@ -94,12 +93,7 @@ class Event extends Component {
                 calendarId: nextProps.event.calendar ? nextProps.event.calendar.id : 0,
             })
         }
-        if (nextProps.calendars) {
-            this.setState({
-                calendars: nextProps.calendars,
-            })
-        }
-    }
+    };
 
     selectNotification = () => {
          const options = notificationOptions ? notificationOptions.map((option) => (
@@ -115,7 +109,7 @@ class Event extends Component {
                        }}>
             {options}
         </select>;
-    }
+    };
 
     selectRepeat = () => {
         const options = repeatOptions ? repeatOptions.map((option) => (
@@ -131,15 +125,15 @@ class Event extends Component {
                        }}>
             {options}
         </select>;
-    }
+    };
 
     selectCalendar = () => {
-        const options = this.state.calendars ? this.state.calendars.map((calendar) => (
+        const options = this.props.calendars.map((calendar) => (
             <option className="input"
                     key={calendar.id}
                     value={calendar.id}>
                 {calendar.title}
-            </option>)) : {};
+            </option>));
         return <select className="input"
                        value={this.state.calendarId}
                        onChange={(e) => this.changeCalendar(e.target.value)}>
@@ -148,15 +142,15 @@ class Event extends Component {
     };
 
     changeCalendar = (id) => {
-        return this.state.calendars ? this.state.calendars.map((calendar) => {
+        return this.props.calendars.map((calendar) => {
             if (calendar.id === +id) {
                 this.setState({
                     calendar: calendar,
                     calendarId: calendar.id
                 })
             }
-            return {};
-        }) : {};
+            return "";
+        });
     };
 
     onOk = () => {
@@ -298,14 +292,15 @@ class Event extends Component {
 const mapStateToProps = state => {
     return {
         events: state.events,
+        calendars: state.calendars.calendars,
     }
-}
+};
 
 const mapDispatchToProps = dispatch => {
     return {
         deleteEvent: (id) => dispatch(events.deleteEvent(id)),
     }
-}
+};
 
 Event.propTypes = {
     date: PropTypes.object,

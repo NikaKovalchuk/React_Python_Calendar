@@ -8,7 +8,7 @@ const API_ENDPOINTS = {
     UPDATE_CALENDAR: API_URL,
     DELETE_CALENDAR: API_URL,
     IMPORT_CALENDAR: API_URL + 'import/'
-}
+};
 
 const post = (url, body, dispatch, getState) => {
     let headers = {"Content-Type": "application/json"};
@@ -27,7 +27,7 @@ const post = (url, body, dispatch, getState) => {
             return {status: res.status, data};
         })
     })
-}
+};
 
 const get = (url, dispatch, getState) => {
     let headers = {"Content-Type": "application/json"};
@@ -44,7 +44,7 @@ const get = (url, dispatch, getState) => {
             return {status: res.status, data};
         })
     })
-}
+};
 
 const put = (url, body, dispatch, getState) => {
     let headers = {"Content-Type": "application/json"};
@@ -62,7 +62,7 @@ const put = (url, body, dispatch, getState) => {
             return {status: res.status, data};
         })
     })
-}
+};
 
 const del = (url, dispatch, getState) => {
     let headers = {"Content-Type": "application/json"};
@@ -79,7 +79,7 @@ const del = (url, dispatch, getState) => {
             return {status: res.status, data};
         })
     })
-}
+};
 
 
 export const addCalendar = (body) => (dispatch, getState) => post(API_ENDPOINTS.ADD_CALENDAR, body, dispatch, getState).then(res => {
@@ -87,7 +87,7 @@ export const addCalendar = (body) => (dispatch, getState) => post(API_ENDPOINTS.
         dispatch({type: 'ADD_CALENDAR_SUCCESSFUL', calendars: res.data});
         return res.data;
     }
-})
+});
 
 
 export const loadCalendars = (importCalendar = false) => (dispatch, getState) => {
@@ -109,11 +109,11 @@ export const loadCalendars = (importCalendar = false) => (dispatch, getState) =>
         }
 
     })
-}
+};
 
 
 export const updateCalendar = (index, body) => (dispatch, getState) => {
-    let params = index + "/"
+    let params = index + "/";
     return put(API_ENDPOINTS.UPDATE_CALENDAR + params, body, dispatch, getState).then(res => {
         if (res.status === 200) {
             dispatch({type: 'UPDATE_CALENDAR_SUCCESSFUL', calendars: res.data});
@@ -122,8 +122,8 @@ export const updateCalendar = (index, body) => (dispatch, getState) => {
             dispatch({type: 'CALENDAR_ERROR', calendars: res.data});
             return res.data;
         }
-    })
-}
+    });
+};
 
 
 export const deleteCalendar = (id) => (dispatch, getState) => {
@@ -137,7 +137,7 @@ export const deleteCalendar = (id) => (dispatch, getState) => {
             return res.data;
         }
     })
-}
+};
 
 
 export const importCalendars = (calendarsId) => (dispatch, getState) => {
@@ -151,4 +151,18 @@ export const importCalendars = (calendarsId) => (dispatch, getState) => {
             return res.data;
         }
     })
-}
+};
+
+export const updateSelectedDate = (date) => (dispatch) => {
+    dispatch({
+        type: 'UPDATE_SELECTED_DATE',
+        selectedDate: date
+    });
+};
+
+export const updateViewDate = (date) => (dispatch) => {
+    dispatch({
+        type: 'UPDATE_VIEW_DATE',
+        viewDate: date
+    });
+};

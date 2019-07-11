@@ -20,7 +20,6 @@ class Import extends Component {
 
     initState = {
             search: "",
-            calendars: [],
             chosenCalendars: [],
             isOpen: false,
             isOpenError: false,
@@ -29,14 +28,6 @@ class Import extends Component {
 
     state = {...this.initState};
 
-
-    componentDidMount(nextProps, nextContext) {
-        this.props.loadCalendars().then(() => {
-            this.setState({
-                calendars: this.props.calendars.import,
-            });
-        });
-    }
 
     cleanState = () => this.setState(this.initState);
 
@@ -75,7 +66,7 @@ class Import extends Component {
     };
 
     search = () => {
-        const result = this.state.calendars ? this.state.calendars.map((calendar) => {
+        const result =  this.props.calendars.import ?  this.props.calendars.import.map((calendar) => {
             const chosen = this.state.chosenCalendars.filter(
                 (chosenCalendar) => (calendar === chosenCalendar)).length > 0;
             const calendarClass = chosen ? "variant chosen" :  "variant";
@@ -86,8 +77,8 @@ class Import extends Component {
                     {calendar.title}
                 </div>
             }
-            return {};
-        }) : {};
+            return "";
+        }) : "";
         return result;
     };
 
@@ -138,7 +129,7 @@ class Import extends Component {
 
 const mapStateToProps = state => {
     return {
-        calendars: state.calendars,
+        calendars: state.calendars.import,
     }
 };
 
@@ -150,7 +141,8 @@ const mapDispatchToProps = dispatch => {
 
 Import.propTypes = {
     show: PropTypes.bool,
-    calendars: PropTypes.any,
+    calendars: PropTypes.array,
+
     onCancel: PropTypes.func,
     loadCalendars: PropTypes.func,
     onOk: PropTypes.func

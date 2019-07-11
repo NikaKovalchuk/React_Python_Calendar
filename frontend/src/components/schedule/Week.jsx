@@ -8,7 +8,11 @@ import {
     getDayIndexesForWeek,
     getHourIndexes
 } from "../../lib/schedule";
+import {connect} from "react-redux";
 
+/**
+ * Component for week schedule
+ */
 class Week extends Component {
     render() {
         const selectedDate = this.props.selectedDate;
@@ -37,7 +41,6 @@ class Week extends Component {
                         onClick={() => this.onDateClick(date, hour)}
                     >
                         <Event
-                            events={this.props.events}
                             day={date}
                             hour={hour}
                             onEventClick={this.props.onEventClick}
@@ -53,10 +56,15 @@ class Week extends Component {
 
 Week.propTypes = {
     selectedDate: PropTypes.object,
-    events: PropTypes.any,
-
     onDateClick: PropTypes.func,
     onEventClick: PropTypes.func
 };
 
-export default Week;
+const mapStateToProps = state => {
+    return {
+        selectedDate: state.calendars.selectedDate
+    }
+};
+
+
+export default connect(mapStateToProps, null)(Week);

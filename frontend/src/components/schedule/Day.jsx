@@ -4,12 +4,19 @@ import moment from "moment";
 import Event from "./Event";
 import PropTypes from "prop-types";
 import {getHourIndexes} from "../../lib/schedule";
+import {connect} from "react-redux";
 
+/**
+ * Day schedule view.
+ *
+ * @param {} selectedDate
+ * @param {func} onDateClick
+ * @param {func} onEventClick
+ */
 class Day extends Component {
     render() {
         const {
             selectedDate,
-            events,
             onDateClick,
             onEventClick,
         } = this.props;
@@ -25,8 +32,7 @@ class Day extends Component {
                     <div className={'day-view-data'}
                          key={'day-view-data'}
                          onClick={() => onDateClick(selectedDate, hour)}>
-                        <Event events={events}
-                               day={selectedDate}
+                        <Event day={selectedDate}
                                hour={hour}
                                onEventClick={onEventClick}
                         />
@@ -45,12 +51,16 @@ class Day extends Component {
     }
 }
 
-Day.propTypes = {
-    selectedDate: PropTypes.object,
-    events: PropTypes.any,
+const mapStateToProps = state => {
+    return {
+        selectedDate: state.calendars.selectedDate
+    }
+};
 
+Day.propTypes = {
+    selectedDate: PropTypes.any,
     onDateClick: PropTypes.func,
     onEventClick: PropTypes.func
 };
 
-export default Day;
+export default connect(mapStateToProps, null)(Day);

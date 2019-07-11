@@ -3,6 +3,8 @@ import '../../css/calendar.css';
 import moment from "moment";
 import PropTypes from "prop-types";
 import {endOfMonth, startOfMonth, startOfWeek} from "../../lib/date.js";
+import {calendars} from "../../actions";
+import {connect} from "react-redux";
 
 const dateFormat = "D";
 
@@ -15,31 +17,41 @@ const dateFormat = "D";
  * @param {func} onDateClick      onClick function.
  */
 class Days extends React.Component {
+
+    getStyle = (day, monthStart, selectedDate) => {
+        const isSelected = !moment(day).isSame(monthStart, 'month') ?
+                "disabled" :
+                moment(day).isSame(selectedDate, 'day') ?
+                    "selected" :
+                    "";
+        const isToday = moment(day).isSame(
+            moment().startOf('day'), 'day') ? " today" : "";
+        return isSelected + isToday;
+    };
+
     render() {
         const {
             viewDate,
             selectedDate,
-            onDateClick,
+            updateDate,
         } = this.props;
 
         const monthStart = startOfMonth(viewDate);
+        let day = startOfWeek(monthStart);
 
         let rows = [];
         let days = [];
-        let day = startOfWeek(monthStart);
-        let formattedDate = "";
 
         while (day <= endOfMonth(monthStart)) {
             for (let i = 0; i<7; i++) {
                 const cloneDay = day;
-                formattedDate = moment(day).format(dateFormat);
+                let formattedDate = moment(day).format(dateFormat);
+                const style = this.getStyle(day, monthStart, selectedDate);
                 days.push(
                     <div
-                        className={`col cell ${!moment(day).isSame(monthStart, 'month') ? "disabled" :
-                            moment(day).isSame(selectedDate, 'day') ? "selected" : ""}
-                            ${moment(day).isSame(moment().startOf('day'), 'day') ? "today" : ""}`}
+                        className={`col cell ${style}`}
                         key={day}
-                        onClick={() => onDateClick(cloneDay._d)}>
+                        onClick={() => updateDate(cloneDay._d)}>
                         <span className="number">{formattedDate}</span>
                     </div>
                 );
@@ -55,11 +67,22 @@ class Days extends React.Component {
         return <div className="body">{rows}</div>;
     }
 }
+const mapDispatchToProps = dispatch => ({
+        updateDate: (date) => dispatch(calendars.updateSelectedDate(date)),
+    });
+
+const mapStateToProps = state => {
+    return {
+        viewDate: state.calendars.viewDate,
+        selectedDate: state.calendars.selectedDate,
+    }
+};
+
 
 Days.propTypes = {
     viewDate: PropTypes.object,
     selectedDate: PropTypes.object,
-    onDateClick: PropTypes.func
+    updateDate: PropTypes.func
 };
 
-export default Days;
+export default connect(mapStateToProps, mapDispatchToProps)(Days);

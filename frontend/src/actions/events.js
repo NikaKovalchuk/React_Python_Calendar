@@ -31,7 +31,7 @@ const post = (url, body, dispatch, getState, convertDate = false) => {
         }
         return res
     })
-}
+};
 
 const get = (url, dispatch, getState) => {
     let headers = {"Content-Type": "application/json"};
@@ -48,7 +48,7 @@ const get = (url, dispatch, getState) => {
             return {status: res.status, data};
         })
     })
-}
+};
 
 const put = (url, body, dispatch, getState, convertDate = false) => {
     let headers = {"Content-Type": "application/json"};
@@ -68,7 +68,7 @@ const put = (url, body, dispatch, getState, convertDate = false) => {
         }
         return res
     })
-}
+};
 
 const del = (url, dispatch, getState) => {
     let headers = {"Content-Type": "application/json"};
@@ -83,14 +83,14 @@ const del = (url, dispatch, getState) => {
         }
         return res
     })
-}
+};
 
 export const addEvent = (body) => (dispatch, getState) => post(API_ENDPOINTS.ADD_EVENT, body, dispatch, getState, true).then(res => {
     if (res.status === 200) {
         dispatch({type: 'ADD_EVENT'});
         return res.data;
     }
-})
+});
 
 
 export const updateEvent = (index, body) => (dispatch, getState) => {
@@ -104,7 +104,7 @@ export const updateEvent = (index, body) => (dispatch, getState) => {
             return res.data;
         }
     })
-}
+};
 
 
 export const deleteEvent = (id) => (dispatch, getState) => {
@@ -118,14 +118,18 @@ export const deleteEvent = (id) => (dispatch, getState) => {
             return res.data;
         }
     })
-}
+};
 
 export const loadEvents = (date, calendars) => (dispatch, getState) => {
     var startDate = moment(date).startOf('month').startOf('week').toISOString();
     var finishDate = moment(date).endOf('month').endOf('week').toISOString()
-    let params = "?startDate=" + startDate + "&finishDate=" + finishDate
-    if (calendars.length !== 0) {
-        params += "&calendar=" + calendars
+    let params = "?startDate=" + startDate + "&finishDate=" + finishDate;
+    const calendarIds = calendars.map((calendar) => {
+        if (calendar.show === true) return calendar.id;
+        return null
+    });
+    if (calendarIds.length !== 0) {
+        params += "&calendar=" + calendarIds
     }
     return get(API_ENDPOINTS.LOAD_EVENTS + params, dispatch, getState).then(res => {
         if (res.status === 200) {
@@ -137,7 +141,7 @@ export const loadEvents = (date, calendars) => (dispatch, getState) => {
         }
 
     })
-}
+};
 
 
 export const loadNotifications = (date, calendars) => (dispatch, getState) => {

@@ -3,6 +3,7 @@ import "../../css/schedule.css"
 import moment from "moment";
 import PropTypes from "prop-types";
 import {endOfDay, startOfDay, startOfWeek, endOfWeek} from "../../lib/date.js";
+import {connect} from "react-redux";
 
 const cellWidth = 100;
 const eventsLimit = 3;
@@ -10,6 +11,9 @@ const eventMargin = 5;
 const eventHeight = 25;
 const eventWidth = cellWidth - 2 * eventMargin;
 
+/**
+ * Component for events for month view
+ */
 class MonthEvent extends Component {
 
     getNumberOfDays = (start, finish, weekStart, weekEnd) => {
@@ -111,11 +115,16 @@ class MonthEvent extends Component {
     }
 }
 
+const mapStateToProps = state => {
+    return {
+        events: state.events.events
+    }
+};
+
 MonthEvent.propTypes = {
     today: PropTypes.object,
-    events: PropTypes.any,
-
+    events: PropTypes.array,
     onEventClick: PropTypes.func
 };
 
-export default MonthEvent;
+export default connect(mapStateToProps, null)(MonthEvent);

@@ -6,6 +6,9 @@ import Month from "./Month"
 import PropTypes from "prop-types";
 import {viewTypes} from "./types";
 
+/**
+ * Component for schedule views
+ */
 class ScheduleTable extends Component {
     render() {
         const {
@@ -25,7 +28,6 @@ class ScheduleTable extends Component {
 
 ScheduleTable.propTypes = {
     view: PropTypes.number,
-    selectedDate: PropTypes.object,
     events: PropTypes.any,
 
     onDateClick: PropTypes.func,

@@ -1,6 +1,7 @@
 import React from "react";
 import '../../css/calendars.css';
 import PropTypes from "prop-types";
+import {connect} from "react-redux";
 
 /**
  * Component for list of calendars.
@@ -11,7 +12,7 @@ import PropTypes from "prop-types";
  */
 class Calendars extends React.Component {
     render() {
-        const result = this.props.calendars ? this.props.calendars.map((calendar) => {
+        const result = this.props.calendars.map((calendar) => {
             const colorStyle = {backgroundColor: calendar.color};
             return (
                 <div
@@ -35,15 +36,22 @@ class Calendars extends React.Component {
                     </div>
                 </div>
             </div>)
-        }) : {};
+        });
         return <div className={'calendars-list'}>{result}</div>;
     };
 }
 
+const mapStateToProps = state => {
+    return {
+        calendars: state.calendars.calendars
+    }
+};
+
 Calendars.propTypes = {
-    calendars: PropTypes.any,
+    calendars: PropTypes.array,
+
     changeShow: PropTypes.func,
     toggleModal: PropTypes.func,
 };
 
-export default Calendars;
+export default connect(mapStateToProps, null)(Calendars);

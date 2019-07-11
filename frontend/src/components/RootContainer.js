@@ -9,6 +9,9 @@ import Main from "./Main"
 import Register from "./forms/auth/Registration"
 import NotFound from "./NotFound"
 
+/**
+ * Component for roots control
+ */
 class RootContainer extends Component {
     componentDidMount = () => this.props.loadUser();
 

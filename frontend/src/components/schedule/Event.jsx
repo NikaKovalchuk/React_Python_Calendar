@@ -3,12 +3,16 @@ import "../../css/schedule.css";
 import moment from "moment";
 import PropTypes from "prop-types";
 import {startOfDay, endOfDay} from "../../lib/date.js";
+import {connect} from "react-redux";
 
 const eventHeight = 20;
 const betweenDaysHeight = 10;
 const dayLength = 23;
 const eventMargin = 5;
 
+/**
+ * Component for events for day and week views
+ */
 class Event extends Component {
     render() {
         const {
@@ -18,7 +22,7 @@ class Event extends Component {
             onEventClick,
         } = this.props;
 
-        const result = events ? events.map((event) => {
+        const result = events.map((event) => {
             const startDate = moment(event.start_date);
             const finishDate = moment(event.finish_date);
             let add = false;
@@ -65,10 +69,17 @@ class Event extends Component {
                 }
             }
             return null;
-        }) : null;
+        });
         return <div>{result}</div>;
     }
 }
+
+const mapStateToProps = state => {
+    return {
+        events: state.events.events,
+    }
+};
+
 
 Event.propTypes = {
     day: PropTypes.object,
@@ -78,4 +89,4 @@ Event.propTypes = {
 };
 
 
-export default Event;
+export default connect(mapStateToProps, null)(Event);
