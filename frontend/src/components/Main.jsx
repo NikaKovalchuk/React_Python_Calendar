@@ -4,10 +4,6 @@ import "../css/main.css"
 import SideBar from "./SideBar";
 
 class Main extends Component {
-    state = {
-        calendars: [],
-    };
-
     render() {
         return (
             <div className={"main-content"}>

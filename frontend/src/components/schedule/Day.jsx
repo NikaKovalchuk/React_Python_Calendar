@@ -10,7 +10,6 @@ class Day extends Component {
     render() {
         const {
             selectedDate,
-            events,
             onDateClick,
             onEventClick,
         } = this.props;
@@ -26,8 +25,7 @@ class Day extends Component {
                     <div className={'day-view-data'}
                          key={'day-view-data'}
                          onClick={() => onDateClick(selectedDate, hour)}>
-                        <Event events={events}
-                               day={selectedDate}
+                        <Event day={selectedDate}
                                hour={hour}
                                onEventClick={onEventClick}
                         />
@@ -53,7 +51,6 @@ const mapStateToProps = state => {
 };
 
 Day.propTypes = {
-    events: PropTypes.any,
     selectedDate: PropTypes.any,
     onDateClick: PropTypes.func,
     onEventClick: PropTypes.func

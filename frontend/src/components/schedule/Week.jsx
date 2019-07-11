@@ -38,7 +38,6 @@ class Week extends Component {
                         onClick={() => this.onDateClick(date, hour)}
                     >
                         <Event
-                            events={this.props.events}
                             day={date}
                             hour={hour}
                             onEventClick={this.props.onEventClick}
@@ -54,8 +53,6 @@ class Week extends Component {
 
 Week.propTypes = {
     selectedDate: PropTypes.object,
-    events: PropTypes.any,
-
     onDateClick: PropTypes.func,
     onEventClick: PropTypes.func
 };

@@ -27,7 +27,6 @@ class Month extends Component {
                         <div className="number"
                              onClick={(e) => this.props.viewDay(e, cloneDay)}>{moment(day).format("D")}</div>
                         <MonthEvent today={cloneDay}
-                                    events={this.props.events}
                                     onEventClick={this.props.onEventClick}
                                     viewDay={this.props.viewDay}
                         />
@@ -50,7 +49,6 @@ const mapStateToProps = state => {
 
 Month.propTypes = {
     selectedDate: PropTypes.object,
-    events: PropTypes.any,
     onDateClick: PropTypes.func,
     onEventClick: PropTypes.func,
     viewDay: PropTypes.func

@@ -33,7 +33,6 @@ class Main extends Component {
             event: {},
             notificationEvent: {},
             notifications: [],
-            events: [],
             isOpen: false,
             isOpenNotification: false,
             isOpenNoCalendars: false
@@ -45,13 +44,11 @@ class Main extends Component {
     }
 
     updateEvents(date, calendars) {
-        this.props.loadEvents(date, calendars).then(() => {
-            this.setState({events: this.props.events.data});
-        });
+        this.props.loadEvents(date, calendars)
         this.props.loadNotifications(date, calendars).then(() => {
-            this.setState({notifications: this.props.events.notifications});
-            if (this.props.events.notifications !== []) {
-                let event = this.props.events.notifications[this.props.events.notifications.length - 1];
+            this.setState({notifications: this.props.notifications});
+            if (this.props.notifications !== []) {
+                let event = this.props.notifications[this.props.notifications.length - 1];
                 if (event) {
                     this.setState({
                         isOpenNotification: true,
@@ -137,7 +134,6 @@ class Main extends Component {
                     setToday={this.setToday}/>
                 <ScheduleTable
                     view={this.state.view}
-                    events={this.props.events.data}
                     viewDay={this.viewDay}
                     onDateClick={this.onDateClick}
                     onEventClick={this.onEventClick}/>
@@ -166,7 +162,8 @@ class Main extends Component {
 
 const mapStateToProps = state => {
     return {
-        events: state.events,
+        events: state.events.events,
+        notifications: state.events.notifications,
         calendars: state.calendars.calendars,
         selectedDate: state.calendars.selectedDate,
     }
