@@ -13,7 +13,7 @@ django-webpack==3.1.1
 django-webpack-helper==0.2.2
 django-webpack-loader==0.6.0
 django-webpack-plugin==0.4
-djangorestframework==3.9.4
+djangorestframework==3.11.2
 djangorestframework-jwt==1.11.0
 enum34==1.1.6
 et-xmlfile==1.0.1
