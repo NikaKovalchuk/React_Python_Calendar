@@ -33,7 +33,7 @@ pexpect==4.6.0
 Pillow==6.2.0
 ptyprocess==0.6.0
 pycparser==2.19
-Pygments==2.3.1
+Pygments==2.7.4
 PyJWT==1.7.1
 pyRFC3339==1.1
 python-dateutil==2.7.5
